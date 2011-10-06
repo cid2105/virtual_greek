@@ -125,6 +125,10 @@ def getPagedTopics(request, topics):
 	base_url = reverse('uni_org_index', args=[uni.name, slugify(org.name)])
 	paginator = Paginator(topics, PAGE_SIZE)
 	page = request.GET.get('page')	
+	if not page in request.GET:
+		page = 1
+	else:
+		page = request.GET.get('page')
 	try:
 		topics = paginator.page(page)
 	except PageNotAnInteger:
