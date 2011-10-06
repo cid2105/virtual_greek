@@ -219,7 +219,7 @@ var text = self.find('b').text();
 </script>
 
 <div class="replies">
-{% for reply in replies %}
+{% for reply in replies.object_list %}
 	
 
 <div post-type="reply" id="reply{{ forloop.counter }}" class="stream-item" media="true" style="margin-bottom:5px;">
