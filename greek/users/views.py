@@ -134,7 +134,6 @@ def getPagedTopics(request, topics):
 	dict = {'base_url':base_url, 'uni_name':uni.name, 'page':page,'title': 'home', 'topics':topics, 'uni':uni, 'org':org, 'hash_tags':getHashes()}
 	if len(Announcement.objects.filter(university = uni, organization=org)) > 0:
 		dict = paginateCollection(request, dict, Announcement.objects.filter(university = uni, organization=org), 'announcements')
-	dict = paginateCollection(request, dict, announcements, 'announcements')
 	return dict
 
 
