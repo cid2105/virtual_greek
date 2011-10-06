@@ -341,7 +341,8 @@ $(document).ready(function()
 {% endif %}
 
 <span class="current">
-    Page {{ announcements.number }} of {{ announcements.paginator.num_pages }}
+
+{% if announcements %}    Page {{ announcements.number }} of {{ announcements.paginator.num_pages }} {% endif %}
 	{% if announcements.has_next %}
 	    <a href="?page={{ announcements.next_page_number }}" id="next_announcement_page">Next</a>
 	{% endif %}
