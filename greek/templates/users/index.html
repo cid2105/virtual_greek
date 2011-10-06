@@ -350,6 +350,7 @@ $(document).ready(function()
 </div>
 
 <div announcements>
+	{% if announcements %}
 {% for announcement in announcements %}
 <div style="margin-top:6px;" announcement>
 	<a style="">
@@ -392,6 +393,7 @@ var qtip_content = '<span style="font-family:Century Gothic; font-size:11px; tex
 	      });
 </script>
 {% endfor %}
+{% endif %} 
 </div>
 
 
