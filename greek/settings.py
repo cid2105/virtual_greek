@@ -10,7 +10,7 @@ PROFILE_PIC_DIR = 'profile_pictures/'
 PROJECT_ROOT= os.path.abspath(os.path.dirname(__file__))
 STATIC_PATH = os.path.join( PROJECT_ROOT, MEDIA_DIR )
 PROFILE_PATH = os.path.join( STATIC_PATH, PROFILE_PIC_DIR )
-STATIC_ADMIN_PATH = os.path.join( STATIC_PATH, 'admin/' )
+#STATIC_ADMIN_PATH = os.path.join( STATIC_PATH, 'admin/' )
 TEMPLATE_PATH = os.path.join(PROJECT_ROOT, 'templates/')
 AUTH_PROFILE_MODULE = 'users.UserProfile'
 
@@ -101,7 +101,6 @@ STATICFILES_DIRS = (
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
 	STATIC_PATH,
-	STATIC_ADMIN_PATH,
 )
 
 # List of finder classes that know how to find static files in
