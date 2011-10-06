@@ -53,7 +53,7 @@ def getDict(request, uni_name, org_name, Title=True):
 		chapter = Chapter(organization=org, university = uni)
 		chapter.save()
 	dict = {'base_url': base_url, 'uni_name': uni_name, 'org_name':org_name, 'org':org, 'uni':uni, 'title':title, 'hash_tags':getHashes(), 'chapter':chapter}
-	if Announcement.objects.filter(university = uni, organization=org):
+	if len(Announcement.objects.filter(university = uni, organization=org)) > 0:
 		dict = paginateCollection(request, dict, Announcement.objects.filter(university = uni, organization=org), 'announcements')
 	return dict
 
