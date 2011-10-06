@@ -1,6 +1,7 @@
 from django.shortcuts import *
 from unis.models import *
 from organization.models import *
+from organization.view import *
 from users.forms import RegistrationForm
 from django.utils import simplejson
 from datetime import *
@@ -15,7 +16,10 @@ STATIC_URL = '/media/'
 def index(request):
 	if request.user.is_authenticated():
 		topics = Topic.objects.filter(organization=request.user.get_profile().organization, university=request.user.get_profile().university, members = request.user)
-		dict = getPagedTopics(request, topics)
+		if topics:
+			dict = getPagedTopics(request, topics)
+		else:
+			dict = getDict(request, request.user.get_profile().university.name, request.user.get_profile().organization.name)
 		dict.update({'title':home})
 		return render_to_response('users/index.html', dict, context_instance=RequestContext(request))
 	return render_to_response('home/index.html', {}, context_instance=RequestContext(request))

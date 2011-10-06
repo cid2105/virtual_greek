@@ -74,7 +74,7 @@ class UserProfile(models.Model):
 	raw_data = models.TextField(blank=True, null=True)
 	conversations = models.ManyToManyField(Conversation, blank=True, null=True, related_name='user_private_messages')
 	linkedin = models.ForeignKey(Linkedin, unique=True, null=True, blank=True)
-	ip = models.IPAddressField(blank=True, null=True)
+	ip = models.IPAddressField(blank=True, null=True, default=127.0.0.1)
 	role = models.CharField(max_length=100, choices=ROLE_CHOICES)
 	canvas = models.TextField(blank=True, null=True)
 	phone_number = models.IntegerField(blank=True, null=True)
