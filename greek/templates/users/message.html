@@ -95,7 +95,7 @@ $("#message1").effect("highlight", {}, 3000);
 
 
 <div class="messages">
-{% for message in messages %}
+{% for message in messages.object_list %}
 	
 
 <div post-type="message" id="message{{ forloop.counter }}" style="margin-top: 5px;" class="stream-item" media="true" message>
