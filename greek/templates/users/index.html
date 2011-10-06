@@ -351,7 +351,7 @@ $(document).ready(function()
 
 <div announcements>
 	{% if announcements %}
-{% for announcement in announcements %}
+{% for announcement in announcements.object_list %}
 <div style="margin-top:6px;" announcement>
 	<a style="">
 <p class="bubble" style="color: #333;font-size: 11px; font-family: 'Century Gothic'; text-align:left;">
@@ -472,8 +472,8 @@ var qtip_content = '<span style="font-family:Century Gothic; font-size:11px; tex
 
 <div class="discussions" >
 <div class="board_topics">
-	
-{% for topic in topics %}
+{% if topics %}
+{% for topic in topics.object_list %}
 <div class="topic" {% if forloop.first %} highlight {% endif %} {% if topic in unviewed %} unviewed {% endif %}>
 <div id="topic{{topic.id}}" class="board_topic first clearfix">
 
@@ -500,7 +500,7 @@ var qtip_content = '<span style="font-family:Century Gothic; font-size:11px; tex
 </div>
 </div>
 {% endfor %}
-
+{% endfor %}
 
 </div>
 </div>
