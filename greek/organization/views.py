@@ -71,7 +71,7 @@ def paginateCollection(request, dict, collection, key, photos = False, announcem
 		paginator = Paginator(collection, ANNOUNCEMENT_SIZE)
 	else:
 		paginator = Paginator(collection, PAGE_SIZE) if not photos else Paginator(collection, PHOTO_SIZE)
-	if not page in request.GET:
+	if not 'page' in request.GET:
 		page = 1
 	else:
 		page = request.GET.get('page')	
