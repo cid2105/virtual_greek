@@ -125,14 +125,15 @@ def getPagedTopics(request, topics):
 	base_url = reverse('uni_org_index', args=[uni.name, slugify(org.name)])
 	paginator = Paginator(topics, PAGE_SIZE)
 	page = request.GET.get('page')	
-	announcements = Announcement.objects.filter(university = uni, organization=org)
 	try:
 		topics = paginator.page(page)
 	except PageNotAnInteger:
 		topics = paginator.page(1)
 	except EmptyPage:
 		topics = paginator.page(paginator.num_pages)
-	dict = {'base_url':base_url, 'uni_name':uni.name, 'page':page,'title': 'home', 'topics':topics, 'uni':uni, 'org':org, 'hash_tags':getHashes(), 'announcements':announcements}
+	dict = {'base_url':base_url, 'uni_name':uni.name, 'page':page,'title': 'home', 'topics':topics, 'uni':uni, 'org':org, 'hash_tags':getHashes()}
+	if len(Announcement.objects.filter(university = uni, organization=org)) > 0:
+		dict = paginateCollection(request, dict, Announcement.objects.filter(university = uni, organization=org), 'announcements')
 	dict = paginateCollection(request, dict, announcements, 'announcements')
 	return dict
 
