@@ -73,7 +73,7 @@ class UserProfile(models.Model):
 	date_of_birth = models.DateField(blank=True, null=True)
 	raw_data = models.TextField(blank=True, null=True)
 	conversations = models.ManyToManyField(Conversation, blank=True, null=True, related_name='user_private_messages')
-	linkedin = models.OneToOneField(Linkedin, unique=True, blank=True)
+	linkedin = models.ForeignKey(Linkedin, unique=True, null=True, blank=True)
 	ip = models.IPAddressField(blank=True, null=True)
 	role = models.CharField(max_length=100, choices=ROLE_CHOICES)
 	canvas = models.TextField(blank=True, null=True)
