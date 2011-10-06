@@ -1,0 +1,711 @@
+{% extends "users/index.html" %}
+{% load extract %}
+{% load getFacebookID %}
+{% load getYear %}
+{% load static %}
+{% load slug %}
+{% load thumbnail %}
+{% load get_range %}
+{% load subtract %}
+{% load toString %}
+
+
+
+{% block extra_assets %}
+<script type="text/javascript" src="{% get_static_prefix %}js/jquery.dock.js"></script>
+<script type="text/javascript" src="{% get_static_prefix %}js/jquery.fisheye.js"></script>
+<!--<link href='http://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>-->
+<link rel="stylesheet" type="text/css" href="{% get_static_prefix %}css/captify.css" media="screen" title="style (screen)" />
+<script src="{% get_static_prefix %}js/facebook.js" type="text/javascript"></script>
+<script src="{% get_static_prefix %}js/jquery.captify.js" type="text/javascript"></script>
+<link rel="stylesheet" type="text/css" href="{% get_static_prefix %}css/uniform.aristo.css" media="screen" title="style (screen)" />
+<script type="text/javascript">
+	$(function(){
+		var jqDockOpts = {align: 'right', duration: 200, labels: 'tc', size: 50, distance: 35};
+		$('#jqDock').jqDock(jqDockOpts);
+		
+	});
+	
+	
+	
+	var display_name = "{{user.get_profile}}", phone_number = "{{user.get_profile.phone_number}}", major="{{user.get_profile.major}}", graduate_year = "{{user.get_profile.linkedin.graduate_year}}", matriculate_year = "{{user.get_profile.linkedin.matriculate_year}}";
+	
+
+	
+	
+	$(document).ready(function()
+	{
+
+		facebookAppId = '{{ FACEBOOK_APP_ID }}';
+		function facebookJSLoaded(){
+		FB.init({appId: facebookAppId, status: false, cookie: true, xfbml: true});
+		}
+		window.fbAsyncInit = facebookJSLoaded;
+		F = new facebookClass(facebookAppId);
+		F.load();
+		
+				$('img.captify').captify({});
+				
+				$('img.captify').click(function(e)
+				{
+					e.preventDefault();					
+					jQuery.facebox({ image: '/{{user.get_profile.profile_picture}}' });
+				});
+			
+		$('#update_profile_picture_link').click(function(e)
+		{
+			e.preventDefault();
+			jQuery.facebox({ ajax: '{% url upload_profile_picture %}', loadingImage : '{% get_static_prefix %}images/loading.gif',
+		      closeImage   : '{% get_static_prefix %}images/closelabel.png'});
+		});
+		
+	
+		
+		$(this).change(function()
+		{
+			
+			
+		
+			if($("select option:selected").text().length > 0)
+			{
+			$("select option:selected").each(function (index) {
+	                if(index==0)
+					{
+						matriculate_year = $(this).text();
+					}
+					else
+					{
+						graduate_year = $(this).text();
+						$.post('{% url profile %}', {'matriculate_year': matriculate_year, 'graduate_year':graduate_year}, function(json){});
+					}
+						
+			});
+			}
+
+		});
+		
+		
+		          
+
+		
+		$("span[editable]").click(function()
+		{
+			var id = $(this).attr("position");
+			var type = $(this).attr("type");
+		
+			if($(this).children().size() == 0)
+			{
+				if(type == "position_title")
+				{
+					var title = $(this).attr("position_title");
+					$(this).html('<input value="' + title +'" />');
+				}
+				else
+				{
+					var company = $(this).attr("position_company");
+					$(this).html('<input value="' + company + '" />');
+				}
+			}
+		}).focusout(function()
+		{
+			var value = $(this).find('input').val();
+			$.post('{% url profile %}', {'position': $(this).attr("position"), 'type': $(this).attr("type"), 'value':value});
+			$(this).html(value);
+		});
+		
+		$('.countable').jqEasyCounter({
+			'maxChars': 209,
+			    'maxCharsWarning': 200,
+			    'msgFontSize': '11px',
+			    'msgTextAlign': 'left',
+			    'msgWarningColor': '#F00',
+			    'msgAppendMethod': 'insertAfter'
+		}).focusout(function()
+		{
+			$.post("{% url profile %}", {description:$(this).val()}, function(json)
+			{
+				
+			})
+		});	
+		
+		$("textarea#description").val("{{request.user.get_profile.description|safe}}");
+		$(".jqEasyCounterMsg:first").remove();
+		
+		$('.edit_icon').click(function()
+		{
+			$(this).closest('.content_editable').trigger('click');
+		});
+		
+		
+		$('#resume span').click(function()
+		{
+			
+				var html = '(' + matriculate_year + ' - ' + graduate_year +')';
+				$('#college_duration').attr('input_mode', 'false');
+				$('#college_duration').html(html);			
+				
+		});
+		
+		$('.select_edit_icon').click(function()
+		{
+				if($('#college_duration').attr('input_mode') == "false")
+			{
+				var html = '<select class="resume_selector">{% for i in step|get_range %}<option value="{{curr_year|subtract_incr:forloop.counter}}" {% ifequal curr_year|subtract_incr:forloop.counter user.get_profile.linkedin.matriculate_year %} selected="selected" {% endifequal %}> 	{{curr_year|subtract_incr:forloop.counter}} {% endfor %} </select> - <select class="resume_selector">{% for i in step|get_range %}<option value="{{curr_year|add:forloop.counter}}" {% ifequal curr_year|add:forloop.counter user.get_profile.linkedin.graduate_year %} selected="selected" {% endifequal %}> {{curr_year|add:forloop.counter}} {% endfor %}</select>';
+				$('#college_duration').attr('input_mode', 'true');
+				
+					
+			}
+			else
+			{
+				var html = '(' + matriculate_year + ' - ' + graduate_year + ')';
+				$('#college_duration').attr('input_mode', 'false');
+			}
+			
+			$('#college_duration').html(html);				
+
+		});
+		
+	
+		
+		$('.content_editable').click(function(e) {
+			
+			if($(this).attr('input_mode') == "false")
+			{
+				$(this).attr('input_mode', 'true');	
+				var value="";
+				if($(this).attr('field_id') == "display_name")
+					value = display_name;
+				else if($(this).attr('field_id') == "phone_number")
+					value = phone_number;
+				else if($(this).attr('field_id') == "major")
+				{
+					value = major;
+					$(this).html('<br/><input value="' + value + '">');	
+					return;
+				}
+					
+				$(this).html('<input value="' + value + '">');	
+			}
+			
+
+		}).focusout(function()
+		{
+			var img = '<img src="{% get_static_prefix %}images/edit.png" class="edit_icon"/>';
+			  	if($(this).attr('field_id') == "display_name")
+				{
+					display_name = $(this).find('input').val();
+					$.post("{% url profile %}", {display_name:display_name}, function(json)
+					{
+						
+					})
+					$(this).html(img + display_name);
+				}
+				else if($(this).attr('field_id') == "phone_number")
+				{
+					phone_number = $(this).find('input').val();
+					$.post("{% url profile %}", {phone_number:phone_number}, function(json)
+					{
+					
+					})
+					$(this).html(img + phone_number);
+				}
+				
+				else if($(this).attr('field_id') == "major")
+				{
+					major = $(this).find('input').val();
+					$.post("{% url profile %}", {major:major}, function(json)
+					{
+					
+					})
+					$(this).html(img + '<br/>' + major);
+				}
+			
+				$(this).attr('input_mode', 'false');			
+		});
+		
+	});
+	
+	
+</script>
+{% endblock %}
+
+{% block content %}
+<script>
+{% if not user.get_profile.linkedin %}
+  $.sticky('<span style="text-align:center;">Just joined? Click <a href="{% url start %}" rel="facebox">here</a> to begin.</span>', {'autoclose':false, 'speed':'slow'});
+{% endif %}
+</script>
+<div id="facebox_profile_picture" style="display:none;">
+	<img src="{{user.get_profile.profile_picture}}">
+</div>
+
+{% block content_header %}
+<div class="uiProfileHeader">My Profile</div>
+{% endblock %}
+
+
+<!-- dockContainer >
+<div id="dockContainer">
+	<ul id="jqDock" style="list-style: none;">
+		<li><a class="dockItem" onclick="$('[rel*=secondary_content]').hide(); $('.whiteboard').fadeIn(1500);"  ><img  src="{% get_static_prefix %}images/home.png" alt="linkedin" title="Home" /></a></li>
+		<li><a class="dockItem" onclick="$('[rel*=secondary_content]').hide(); $('#message').fadeIn(1500);" ><img src="{% get_static_prefix %}images/email-sm.png" alt="Contact" title="Message" /></a></li>
+		<li><a class="dockItem" onclick="$('[rel*=secondary_content]').hide(); $('#resume, #resume span').fadeIn(1500);"><img src="{% get_static_prefix %}images/portfolio-sm.png" alt="portfolio" title="Resume" /></a></li>
+		<li><a class="dockItem" href="#facebook_befriend" rel="facebox"><img src="{% get_static_prefix %}images/facebook.png" alt="facebook" title="Facebook" /></a></li>
+				<li><a class="dockItem" onclick="$('[rel*=secondary_content]').hide(); $('.home').fadeIn(1500);"><img src="{% get_static_prefix %}images/user_icon.png" alt="settings" title="About" /></a></li>
+	</ul>
+</div>
+-->
+
+
+
+
+
+<div class="profile_container" >
+	
+
+		<div class="infobox-container">
+		<div class="triangle-l"></div>
+		<div class="triangle-r"></div>
+		<div class="infobox" style="background:none; -moz-border-radius:none; -moz-box-shadow:none;">
+		<h3 id="toc2"><span>{{user.get_profile}}</span></h3>
+		</div>
+		</div>
+				
+	<blockquote class="home adjust" rel="secondary_content" style="">
+	<p style="margin-top:20px;">&nbsp;</p>
+
+
+<a href="/{{user.get_profile.profile_picture}}" id="cropped_profile_picture" style="" title="{{user.get_profile.facebook_name}}">
+
+
+{% thumbnail user.get_profile.profile_picture "180x154" crop="center" as im %}
+<img  class="captify"  src="/{{user.get_profile.profile_picture}}" alt="<a rel='facebox' style='color:#999;' id='update_profile_picture_link'>Update profile picture</a>" style="margin-left:6px;" onError="this.src='{% get_static_prefix %}{% get_static_prefix %}images/default.png';this.title='Add a profile picture';" width="{{ im.width }}" height="{{ im.height }}">
+{% endthumbnail %}
+</a>
+
+
+<input type="hidden" value="{% url profile %}" name="next" /></form>
+<br/><br/>
+<div class="networks">{{user.get_profile.organization.name}}, {{user.get_profile.university.name}} {{user.get_profile.linkedin.graduate_year|getYear}}
+<div style="font-weight:bold;">Brother</div>
+</div>
+
+</blockquote>
+
+
+<div class="profile_pic_right">
+	
+	<div class="fb_tabs_container">
+	<div class="fbtab" onclick="$('#settings, #resume').hide(); $('#about').fadeIn(1500);" >About</div>
+	<div class="fbtab" onclick="$('#about, #settings').hide(); $('#resume').fadeIn(1500);">Resume</div>
+	<div class="fbtab" onclick="$('#about, #resume').hide(); $('#settings').fadeIn(1500);">Settings</div>
+	</div>
+	
+	<div id="profile_content">
+	<!--- ABOUT -->
+	<blockquote id="about" class="home" rel="secondary_content" style="position: relative;">
+						<div style="color:#999999;">	
+							Display Name:<br/><span class="content_editable" field_id="display_name" input_mode="false"><img src="{% get_static_prefix %}images/edit.png" class="edit_icon">{% if user.get_profile.facebook_name %}{{user.get_profile}}{% else %}<input>{% endif%}</span></a><br/>
+								
+							Email:<br/> <span  style="color:#333;">{{user.username}}</span><br/>
+							Phone:<br/><span class="content_editable" field_id="phone_number" 			 	
+							input_mode="false"><img src="{% get_static_prefix %}images/edit.png" class="edit_icon" />{% if user.get_profile.phone_number %}
+							{{user.get_profile.phone_number|phone_format}}{% else %}<input>{% endif%}</span>
+							<br/>
+							Description:<br/> <textarea rel="resizeable1" id="description" class="countable"></textarea><br/>
+						</div>
+	</blockquote>
+	<!--- -->
+	</div>
+	
+	<div id="fb-root"></div>
+	
+	<!--- message -->
+	<blockquote id="settings" class="home" rel="secondary_content" style=" position:relative; display:none; ">
+		<span style="color:#777;">Email notifications</span><br/><hr/>
+
+		<input type="checkbox" value="New Messages" style="width:auto;"/>New Messages<br/>
+		<input type="checkbox" value="New Threads" style="width:auto;" />New Threads<br/>
+		<input type="checkbox" value="New Threads" style="width:auto;" />Daily Digest<br/>
+		<br/>
+			<span style="color:#777;">Sync Social Media Accounts</span><br/><hr/>
+			<form action="{% url facebook_connect %}?facebook_login=1" method="post" >
+			{% csrf_token %}
+			<a  rel="tipsy" href="javascript:void(0);" onclick="F.connect(this.parentNode);" title="Sync Facebook"><img align="left;" src="{% get_static_prefix %}images/facebook_icon.png"/></a>
+			<a href="{% url socialauth_begin "linkedin" %}" rel="tipsy" title="Sync Linkedin"><img align="left;" style="height:24px; position:relative;top:1px;" src="{% get_static_prefix %}images/linkedin_icon.png"/></a><br/></form>
+			
+			
+			
+			
+
+	</blockquote>
+	<!--- -->
+	
+	
+	<!--- resume -->
+	<blockquote id="resume" class="home" rel="secondary_content" style=" position:relative; display:none; color:#999999;">	
+							Education:<img src="{% get_static_prefix %}images/edit.png" class="select_edit_icon"><br/> <span  style="color:#333;">{{user.get_profile.university.name}} 
+								<span id="college_duration" 
+								{% if user.get_profile.linkedin.matriculate_year and user.get_profile.linkedin.graduate_year %}
+								input_mode="false">
+								({{user.get_profile.linkedin.matriculate_year}} - {{user.get_profile.linkedin.graduate_year}})
+								{% else %}
+								input_mode="true">
+								<select class="resume_selector">
+								 {% for i in step|get_range %}<option value="{{curr_year|subtract:i}}"> 	 
+								  {{curr_year|subtract:i}} 
+								{% endfor %}
+								</select> - 
+								
+								<select class="resume_selector">
+								 {% for i in step|get_range %}<option value="{{curr_year|add:forloop.counter}}"> 	 
+								  {{curr_year|add:forloop.counter}} 
+								{% endfor %}
+								</select>
+
+								{% endif %}
+								</span>
+						  	</span>
+							<br/>
+							Major: <span class="content_editable" field_id="major" input_mode="false"><img src="{% get_static_prefix %}images/edit.png" class="edit_icon"/><br/>{% if user.get_profile.major %}{{user.get_profile.major}}{% else %}<input>
+							{% endif %}</span></a><br/>
+							Job History:<img rel="tipsy" title="Click a Field to Edit" src="{% get_static_prefix %}images/edit.png" id="edit_job_history" class="edit_icon"><br/><span style="color:#333;">
+							{% for position in user.get_profile.linkedin.position_set.all %}
+ 							{{forloop.counter}})
+ 							<span  field_id="company{{forloop.counter}}" 			 	
+							input_mode="false" position="{{position.id}}" type="position_company" position_company="{{position.company}}" editable>{{position.company}}</span></a><br/>
+							<span style="font-size:11px; text-align:center;" field_id="position{{forloop.counter}}" 	 
+							input_mode="false" position="{{position.id}}" position_title="{{position.title}}" type="position_title" editable>{{position.title}}</span><br/>
+							
+							{% endfor %}
+							<br/>
+							<a style="font-size:11px; " qtip="true" rel="facebox" href="#upload_resume">- {% if not user.get_profile.resume %}upload resume{% else %}update resume{% endif %} -</a>
+							</span>
+	</blockquote>
+	
+
+	
+	
+</div>
+</div>
+
+
+<div id="upload_resume" style="display:none;" >
+	<h1 style="font-size:20px;"> Upload your resume </h1><hr/>
+<form  name="resume_form" enctype="multipart/form-data" method="post" action="{% url upload_resume %}">
+	{% csrf_token %}
+<span style="color:#999; font-size:12px;">Browse:</span> <input type="file" name="resume"/>
+<div><br/><input type="submit" value="Post" class="fb_form_button"></div>
+</form><br/><br/>
+</div>
+
+
+<div class="secondary_content">
+
+<!--- whiteboard -->
+
+	
+
+<!--- bio -->
+
+<!--- resume -->
+
+<h2 class="uiResume" id="resume" style="display:none;" rel="secondary_content" >
+<div id="scribble" contenteditable="true" style="overflow:auto;" onkeyup="storeUserScribble(this.id);">
+<u>Education</u>
+<div class="linkedin_description">
+{{user.get_profile.university.name}}:
+{{user.get_profile.linkedin.matriculate_year}} - {{user.get_profile.linkedin.graduate_year}}
+<div> Major: {{user.get_profile.major}} </div>
+</div><div style="margin-top:3px;"></div>
+<u>Job History</u>
+{% for position in user.get_profile.linkedin.position_set.all %}
+
+<div class="linkedin_description">{{forloop.counter}}) {{position.title}}, {{position.company}}</div>
+
+{% endfor %}
+<div style="margin-top:3px;"></div>
+<u style="text-align:center; padding-top:5px;">Honors</u><br/>
+<div class="linkedin_description">{{user.get_profile.linkedin.honors}}</div>
+<br/>
+</div>
+
+{{user.email}}
+{% if user.get_profile.linkedin.pk > 0 %}
+<a href="{% url socialauth_begin "linkedin" %}">refresh resume</a>
+{% endif %}
+<img  title="View {{user.get_profile.facebook_name}}'s public profile" src="{% get_static_prefix %}images/linkedin.png" style="position:absolute; top: 0px; right:0px; height:20px; width:20px; cursor:pointer;" onclick="window.location='{{ user.get_profile.linkedin.public_profile_url}}'" rel="tipsy">
+
+</h2>
+
+<!--- facebook -->
+<div id="facebook_befriend" style="display:none; width:375px;" >
+<div style="font-weight:bold;" class="fbgreybox" style="">
+Are you sure you want to add {{user.get_profile.facebook_name}} as a friend?
+<div style="padding-top:10px;" align="center">
+<button onmouseover="this.style.textDecoration='underline';" onmouseout="this.style.textDecoration='none';" onclick="window.location='http://www.facebook.com/addfriend.php?id={{user.get_profile.facebook_profile_url|getFacebookID}}'" class="add_friend" align="left">+1 Add Friend</button> 
+<button onmouseover="this.style.textDecoration='underline';" onmouseout="this.style.textDecoration='none';" onclick="jQuery(document).trigger('close.facebox')" class="add_friend" align="right">Cancel</button></div></div>
+</div>
+
+<!-- tab partials end -->
+
+</div>
+
+{% endblock %}
+
+
+{% block extra_scripts %}
+
+<!-- canvas script -->
+<script>
+var count = 2;
+var isDragged = false;
+var isPenClicked = false;
+var isEraserClicked = false;
+var dropped = false;
+
+$("#marker img").mousedown(function(e){
+      isPenClicked = true;
+	  dropped = false;
+});
+
+$("#eraser img").mousedown(function(e){
+      isEraserClicked = true;
+	  droppped = false;	  
+		$('#eraser img').css('position', 'fixed');
+	      $('#eraser img').css('top', e.clientY).css('left', e.clientX+3);
+
+});
+
+$("#box #inner_eraser").hover(function(e){
+	if(isEraserClicked)
+	{
+		 dropped = true;
+	}
+});
+
+$("#box #inner_pen").hover(function(e){
+	if(isPenClicked)
+	{
+		 dropped = true;
+	}
+});
+
+$("body").mousemove(function(e){
+
+	if(isPenClicked)
+	{
+	  var x = parseInt(e.clientX);
+	  var y = parseInt(e.clientY);
+	
+	  if(dropped)
+	  {
+		isPenClicked = false;
+		$('#marker img').css('position', 'absolute').css('top', '-5px').css('left', '80px');
+	  }
+	  else
+	  {
+		  $('#marker img').css('position', 'fixed');
+	      $('#marker img').css('top', e.clientY).css('left', e.clientX+3);	
+	   }    
+	}
+	if(isEraserClicked)
+	{
+	  var x = parseInt(e.clientX);
+	  var y = parseInt(e.clientY);
+	  
+	  if(dropped)
+	  {
+		$('#eraser img').css('position', 'absolute').css('top', '-9px').css('left', '18px');;
+		isEraserClicked = false;
+		dropped = false;
+	  }
+	  else
+	  {
+		  $('#eraser img').css('position', 'fixed');
+	      $('#eraser img').css('top', e.clientY).css('left', e.clientX+3);	
+	   }    
+	}
+});
+
+/*
+$( "#marker" ).draggable({ revert: true, cursorAt: { bottom: 0, left: 0 }, drop:false });
+
+$( "#marker" ).bind( "dragstart",
+function(event, ui) { isDragged = true; }
+);
+
+$( "#marker" ).bind( "dragstop",
+function(event, ui) { isDragged = false; }
+);
+*/
+
+/* Â© 2009 ROBO Design
+ * http://www.robodesign.ro
+ */
+
+// Keep everything in anonymous function, called on window load.
+if(window.addEventListener) {
+window.addEventListener('load', function () {
+  var canvas, context, tool, strDataURI;
+  function init () {
+    // Find the canvas element.
+    canvas = document.getElementById('imageView');
+	canvas.width = 160;
+	canvas.height = 200;
+    if (!canvas) {
+     
+      return;
+    }
+
+    if (!canvas.getContext) {
+     
+      return;
+    }
+
+    // Get the 2D canvas context.
+    context = canvas.getContext('2d');
+    if (!context) {
+      
+      return;
+    }
+	
+	strDataURI = "{{user.get_profile.canvas}}";
+	var img = new Image;
+	img.onload = function(){
+	  context.drawImage(img,0,0); // Or at whatever offset you like
+	};
+	img.src = strDataURI;
+	
+    // Pencil tool instance.
+    tool = new tool_pencil();
+ 	  	
+    // Attach the mousedown, mousemove and mouseup event listeners.
+    canvas.addEventListener('mousedown', ev_canvas, false);
+    canvas.addEventListener('mousemove', ev_canvas, false);
+    canvas.addEventListener('mouseup',   ev_canvas, false);
+  }
+
+
+  // This painting tool works like a drawing pencil which tracks the mouse 
+  // movements.
+  function tool_pencil () {
+    var tool = this;
+    this.started = false;
+
+    // This is called when you start holding down the mouse button.
+    // This starts the pencil drawing.
+    this.mousedown = function (ev) {
+        context.beginPath();
+        context.moveTo(ev._x, ev._y);
+		if(isPenClicked || isEraserClicked) 
+		{
+			if(isPenClicked)
+				context.strokeStyle = 'black';
+			else
+				context.strokeStyle = '#dfdfe6';
+			context.arc(ev._x, ev._y, .5, 0, Math.PI * 2, false);
+		}
+		context.closePath();
+        context.stroke();
+        tool.started = true;
+    };
+
+    // This function is called every time you move the mouse. Obviously, it only 
+    // draws if the tool.started state is set to true (when you are holding down 
+    // the mouse button).
+    this.mousemove = function (ev) {
+      if (tool.started){
+ 		if(isPenClicked)
+ 		{
+        	context.lineTo(ev._x, ev._y);
+			context.stroke();
+      	}
+		if(isEraserClicked)
+		{
+			context.beginPath();
+			context.arc(ev._x, ev._y, 5, 0, Math.PI*2, true);
+			context.fillStyle = '#dfdfe6';
+			context.fill();
+
+		}
+			
+    	}
+	}
+
+    // This is called when you release the mouse button.
+    this.mouseup = function (ev) {
+	  var image_data = canvas.toDataURL();
+	  $.post("{% url save_canvas %}", {'user': '{{user.id}}', 'data': image_data}, function(json){}); 
+      if (tool.started) {
+        tool.mousemove(ev);
+        tool.started = false;
+		isDragged = false;
+      }
+    };
+  }
+
+  // The general-purpose event handler. This function just determines the mouse 
+  // position relative to the canvas element.
+  function ev_canvas (ev) {
+    if (ev.layerX || ev.layerX == 0) { // Firefox
+      ev._x = ev.layerX;
+      ev._y = ev.layerY;
+    } else if (ev.offsetX || ev.offsetX == 0) { // Opera
+      ev._x = ev.offsetX + 100;
+      ev._y = ev.offsetY;
+    }
+
+    // Call the event handler of the tool.
+    var func = tool[ev.type];
+    if (func) {
+      func(ev);
+    }
+  }
+
+  init();
+
+}, false); }
+
+// vim:set spell spl=en fo=wan1croql tw=80 ts=2 sw=2 sts=2 sta et ai cin fenc=utf-8 ff=unix:
+</script>
+{% endblock %}
+
+{% block right_col %}
+<div id="extras" style="position:absolute;right:3px;top:-39px;">
+	<table id="main_search_box"><tr><div class="uiSearchInput"><td><input type="text" style="width:149px;"></td><td><span><a rel="tipsy" title="Search"><img src="{% get_static_prefix %}images/search.png"></a></span></td></div></tr></table>
+
+<h2 class="uiSideHeader" style="width:180px; top:10px;">{{user.get_profile.first_name}}'s Whiteboard
+
+
+	<div rel="secondary_content" class="whiteboard">
+	<div id="box" style="" class="uiContentHeader"><div id="inner_eraser" align="center"></div>
+	<div id="inner_pen" align="center"></div>
+	</div>
+	<div id="eraser"><img src="{% get_static_prefix%}images/eraser.png" onselectstart="return false;" ondragstart="return false;" style=""></div>			
+	<div id="marker"><img src="{% get_static_prefix%}images/marker.png"  onselectstart="return false;" ondragstart="return false;" style=""></div>
+	<canvas id="imageView" onselectstart="return false;" ondragstart="return false;"> </canvas> 
+	<img src="{% get_static_prefix%}images/whiteboard.png" onselectstart="return false;" ondragstart="return false;" style="position:absolute;">
+	</div>
+	
+</h2>
+
+</div>
+{% endblock %}
+
+
+<!--
+
+old message
+
+<div id="message" style="display:none; position:absolute; top:50px;" rel="secondary_content">
+
+<textarea class="message" cols="25"  class="basic_text" style="color:#777;" onclick="this.value=''; this.style.color='#666';">Message {{user.get_profile.facebook_name}}...</textarea>
+
+<img style="position:absolute; top:-17px; z-index:2;" src="{% get_static_prefix %}images/post-it.png">
+<div class="signature">- {{user.get_profile.facebook_name}}</div>
+<img id="send_mail" src="{% get_static_prefix %}images/send_mail.png" rel="tipsy" title="Send" style="cursor:pointer;">
+</div>
+
+
+>

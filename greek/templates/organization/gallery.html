@@ -1,0 +1,201 @@
+{% extends "users/index.html" %}
+{% load static %}
+{% load slug %}
+{% load thumbnail %}
+{% load toString %}
+{% load chomp %}
+
+
+{% block extra_assets %}
+<script type="text/javascript" src="{% get_static_prefix %}js/scroll.js"></script>
+<link href='{% get_static_prefix %}css/scroll.css' rel='stylesheet' type='text/css'>
+{% endblock %}
+{% block content %}
+
+<script type="text/javascript">
+
+	$(document).ready(function() {
+		
+	
+			
+				
+		/*	$("a:has(img)").fancybox({'onComplete'	:	function() {
+						$("#fancybox-wrap").hover(function() {
+							$("#fancybox-title").show();
+						}, function() {
+							$("#fancybox-title").hide();
+						});
+					}
+				}); */
+				
+				$("img.captioned").captify({});
+	
+				/*$("div.thumbnail_container").smoothDivScroll({
+							scrollStep: 45, 
+							scrollInterval: 5
+				});*/
+				
+				/*
+				$('.thumbnail_container img').qtip({
+			      // Simply use an HTML img tag within the HTML string
+			      content: '<img style="max-height:500px; max-width:500px;" src="{% get_static_prefix %}sample_photos/1.jpg" alt="Owl" />',
+			   		style: { 
+			      		border: {
+			         		width: 3,
+			         		radius: 8,
+			         		color: '#6699CC'
+			      			},
+			      		width: "100%"
+					},
+					position: {
+				      corner: {
+				      }
+				   }
+			   }); */
+				
+			});
+</script>
+
+
+{% block content_header %}
+<div class="uiOrganizationHeader">Albums</div>
+{% endblock %}
+
+{% if error %}
+	<div class="fberrorbox" style="margin-left:1.9px;">{{error}}</div><br/>	
+{% endif %}
+
+<div id="upload_photos" style="display:none; width:330px;">
+<script>
+	$('textarea[rel*=resizeable1]').autoResize({
+	    // On resize:
+	    onResize : function() {
+	        $(this).css({opacity:0.8});
+	    },
+	    // After resize:
+	    animateCallback : function() {
+	        $(this).css({opacity:1});
+	    },
+	    // Quite slow animation:
+	    animateDuration : 300,
+	    // More extra space:
+		extraSpace:20
+	});
+
+</script>
+	<h1 style="font-size:20px;"> Create a New Album </h1><hr/>
+	
+
+<form  name="gallery_form" enctype="multipart/form-data" method="post" action="{% url new_album uni.name org|slug %}">
+	{% csrf_token %}
+<span style="color:#999; font-size:12px;">Title:</span><br/> <input name="title" style="width:218px;"/><br/>
+<span style="color:#999; font-size:12px;">Description:</span><br/>
+<textarea name="description" rel="resizeable1" style="width:223px;" placeholder=""></textarea><br/>
+<span style="color:#999; font-size:12px;">Upload Photos:</span><br/>
+<input type="file" name="photos" multiple>
+<div><br/><button class="awesome" id="button" onclick="this.form.submit();" style="	background-color: #0066FF; border: 0 none; color: #FFFFFF; cursor: pointer; position:relative;left:39px; font-size: 12px; font-weight: bold; padding: 5px 5px 5px 5px; text-align: center; width: 50px;">Save</button>	</div>
+</form><br/>
+</div>
+	
+<div class="thumbnail_container" style="">
+
+	
+		<div class="scrollWrapper">
+			<div class="scrollableArea" >
+		
+<div style="display:inline;" style="height:800px;">
+{% for album in albums %}
+<a class="gallery" href="{% url uni_org_album uni.name org|slug album.id %}">
+{% thumbnail album.thumbnail "150x120" crop="center" as im %}
+<img class="captioned" alt="{{album.title|preview}}" src="/{{album.thumbnail}}" height="{{im.height}}" width="{{im.width}}">
+{% endthumbnail %}
+</a>
+
+{% endfor %}
+</div>
+</div>
+
+</div>
+</div>
+
+
+<br/>
+
+{% endblock %}
+
+
+{% block right_col %}
+<script>
+$(document).ready(function()
+{
+	$("#new_announcement_img").click(function()
+	{
+		$("#new_announcement").fadeIn(2000);
+
+	});
+});
+</script>
+<div id="extras" style="position:absolute;right:3px;top:-39px;">
+	<table id="main_search_box"><tr><div class="uiSearchInput"><td><input type="text"></td><td><span><a rel="tipsy" title="Search"><img src="{% get_static_prefix %}images/search.png"></a></span></td></div></tr></table>
+
+
+<h2 class="uiSideHeader" style="text-align:center; "> 
+<div style=""><span style="text-align:center;">{{org}}'s Albums</span>
+</div>
+</h2>
+
+
+
+<div class="about_organization">
+<span style="top:-3px; font-size:12px;"><a rel="facebox" href="#upload_photos">- Create New - </a></span>
+<hr class="padded"/>
+
+{% for year, albums in albums_by_year.iteritems %}
+<a style="color:#666666; position:relative; " rel="tipsy"><b>{{year}}</b></a><br/>
+<span class="detail">
+{% for album in albums %}
+
+{{album.date|date:"m/d"}}: <a href="{% url uni_org_album uni.name org|slug album.id %}" id="album{{forloop.counter}}">{{album}}</a> <br/>
+
+<script>
+
+var qtip_content = '<span style="font-family:Century Gothic; font-size:11px; text-align:center;">{{album.date}}</span><br/>' +
+'<table><tr><td><img height="48px;" width="48px;" src="/{{album.thumbnail}}"  alt="Loading..." /></td><td style="padding-left:15px;"><p style="font-family:Century Gothic; font-size:13px;">"{{album.description}}"</p></td></tr></table>';
+
+	 $('#album{{forloop.counter}}').qtip(
+	      {
+	         content: {
+	            text: qtip_content,
+	            title: {
+	               text: '{{album.title}}', // Give the tooltip a title using each elements text
+	            }
+	         },
+	         position: {
+	            corner: {
+	               target: 'bottomMiddle', // Position the tooltip above the link
+	               tooltip: 'topMiddle'
+	            },
+	            adjust: {
+	               screen: true // Keep the tooltip on-screen at all times
+	            }
+	         },
+	         style: {
+	            tip: true, // Apply a speech bubble tip to the tooltip at the designated tooltip corner
+	            border: {
+	               width: 0,
+	               radius: 4
+	            },
+	            name: 'light' // Use the default light style
+	         }
+	      });
+</script>
+{% endfor %}
+</span>
+<br/><hr/>
+{% endfor %}
+
+</div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,54 @@
+.announcements
+{
+	height:300px;
+	position: relative;
+	left: 2px;
+	 width: 160px;
+}
+
+.about_organization
+{
+	position:relative;
+	#right:40px;
+	width:154px;
+}
+
+.about_organization hr 
+{
+	height: 1px;
+	color: #ccc;	
+}
+
+.about_organization hr.padded 
+{
+margin-bottom: 9px;
+margin-top: 9px;	
+}
+
+
+.about_organization b
+{
+padding-bottom:10px;
+text-align:center;
+}
+
+.about_organization span.spread, .about_organization span.spread .normalize
+{
+position:relative;
+top:8px;
+	font-size:11px;
+}
+
+ .about_organization span.spread .normalize
+{
+	position:static;
+	top:0px;
+	color:;
+}
+
+.about_organization span.detail
+{
+	position:relative;
+	top:7px;
+	font-size:11px;
+}

@@ -1,0 +1,57 @@
+{% load slug %}
+{% load toString %}
+<div class="discussion-board">
+
+<div class="creation_buttons notes_button">
+<a class="creation_buttons unbutton" style="color:#3B5998;" rel="facebox" href="{% url new-topic-form uni.name org.name|slug %}">
+<span class="button_newtopic" style="" >Start New Topic</span>
+</a>
+</div>
+
+<div class="bar summary_bar clearfix">
+<div class="summary">Displaying topics {% if topics %}1{% else %}0{% endif %} -  out of {{topics.count}}.</div>
+</div>
+
+<div class="discussions">
+<div class="board_topics">
+	
+{% for topic in topics %}
+
+<div id="topic#" class="board_topic first clearfix">
+
+<div class="topic_info">
+<h2 class="topic_title datawrap"> <a href="{% url uni_org_topic uni org|slug topic.id %}">{{topic.topic}}</a></h2>
+
+<div class="more_info" style="color: rgb(51, 51, 51);">{{topic.count}} posts. <span class="timestamp">
+<abbr title="Monday, July 11, 2011 at 11:25pm" data-date="Mon, 11 Jul 2011 20:25:53 -0700" class="timestamp">Created on {{topic.date}}</abbr></span>
+</div></div>
+
+<div class="last_post" style="position:relative; top:17px;">
+<div class="post_user">
+<a>Latest post</a> by <a>{{topic.last_reply}}</a>
+</div>
+<div class="topic_pager">
+<abbr title="Wednesday, July 13, 2011 at 4:37pm" data-date="Wed, 13 Jul 2011 13:37:28 -0700" class="timestamp">{{topic.last_reply.date}}</abbr>
+
+</div>
+</div>
+
+</div>
+<div class="bar summary_bar clearfix">
+<div class="summary"></div>
+</div>
+
+{% endfor %}
+
+
+</div>
+</div>
+
+</div>
+
+<p style="margin-top:57px;"></p>
+
+<!-- new discussions -->
+<!-- end new discussions -->
+
+

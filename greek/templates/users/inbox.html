@@ -1,0 +1,141 @@
+{% extends "users/index.html" %}
+{% load slug %}
+{% load static %}
+{% load get_range %}
+{% block content %}
+<script>
+		jQuery.ias({
+		  container 	: ".discussions",
+		  		// Enter the selector of the element containing
+		  		// your items that you want to paginate.
+
+		  item		: "div[conversation]",
+				// Enter the selector of the element that each
+				// item has. Make sure the elements are inside
+				// the container element.
+
+		  pagination	: ".summary",
+				// Enter the selector of the element that contains
+				// your regular pagination links, like next,
+				// previous and the page numbers. This element
+				// will be hidden when IAS loads.
+
+		  next		: "a#next_page",
+				// Enter the selector of the link element that
+				// links to the next page. The href attribute
+				// of this element will be used to get the items
+				// from the next page.
+
+		  loader	: "{% get_static_prefix %}images/loader.gif"
+				// Enter the url to the loader image. This image
+				// will be displayed when the next page with items
+				// is loaded via AJAX.
+		});
+</script>		
+<div class="uiOrganizationHeader">Inbox</div>
+<div class="discussion-board">
+
+<div class="creation_buttons notes_button">
+<a class="creation_buttons unbutton" style="color:#3B5998;"  rel="facebox" href="{% url new_message %}">
+<span class="button_newtopic" >New Message</span>
+</a>
+</div>
+
+<div class="bar summary_bar clearfix">
+<div class="summary">
+{% if conversations.has_previous %}
+    <a href="?page={{ conversations.previous_page_number }}">Previous</a>
+{% endif %}
+
+<span class="current">
+    Page {{ conversations.number }} of {{ conversations.paginator.num_pages }}
+</span>
+
+{% if conversations.has_next %}
+    <a id="next_page" href="?page={{ conversations.next_page_number }}">Next</a>
+{% endif %}
+</div>
+</div>
+
+<div class="discussions">
+<div class="board_topics">
+
+{% for conversation in conversations %}
+
+
+<div conversation class="board_topic first clearfix" style="display:inline;">
+
+<a href="{% url uni_org_profile uni org|slug conversation.partner.id %}"><img id="prof_pic{{forloop.counter}}" src="/{{conversation.partner.get_profile.profile_picture}}" width="48" height="48" class="avatar"></a>
+<div class="inbox_info">
+	
+<h2 class="topic_title datawrap"> <a href="{% url message conversation.id %}">{{conversation.preview}}</a></h2>
+
+<div class="more_info" style="color: rgb(51, 51, 51);">{{conversation.messages.count}} posts. <span class="timestamp">
+<abbr title="Monday, July 11, 2011 at 11:25pm" data-date="Mon, 11 Jul 2011 20:25:53 -0700" class="timestamp">Last reply at {{conversation.updated_at}}</abbr></span>
+</div></div>
+
+<div class="last_reply">
+<div class="post_user">
+ <a href="{% url uni_org_profile uni org|slug conversation.partner.id %}">{{conversation.partner.get_profile}}</a>
+</div>
+<div class="topic_pager">
+<abbr title="Wednesday, July 13, 2011 at 4:37pm" data-date="Wed, 13 Jul 2011 13:37:28 -0700" class="timestamp">Created on {{conversation.created_at}}</abbr>
+
+</div>
+</div>
+
+</div>
+<div class="bar summary_bar clearfix">
+<div class="summary"></div>
+</div>
+
+
+<script>
+var name="{{conversation.partner.get_profile.facebook_name}}";
+var role="{{conversation.partner.get_profile.role}} ";
+var src="/{{conversation.partner.get_profile.profile_picture}}";
+var year="{{conversation.partner.get_profile.linkedin.graduate_year}}".substring(2);
+	$('#prof_pic{{forloop.counter}}').qtip(
+	      {
+	         content: {
+	            text: '<table><tr><td><img height="48px;" width="48px;" src="'+ src + '"  alt="Loading..." /></td><td style="padding-left:15px;"><p style="font-family:Century Gothic; font-size:13px;">' + role + ' (\'' + year + ')</p></td></tr></table>',
+	            title: {
+	               text: name, // Give the tooltip a title using each elements text
+	            }
+	         },
+	         position: {
+	            corner: {
+	               target: 'bottomMiddle', // Position the tooltip above the link
+	               tooltip: 'topMiddle'
+	            },
+	            adjust: {
+	               screen: true // Keep the tooltip on-screen at all times
+	            }
+	         },
+	         style: {
+	            tip: true, // Apply a speech bubble tip to the tooltip at the designated tooltip corner
+	            border: {
+	               width: 0,
+	               radius: 4
+	            },
+	            name: 'light' // Use the default light style
+	         }
+	      });
+</script>
+
+{% endfor %}
+
+
+</div>
+</div>
+
+</div>
+
+<p style="margin-top:57px;"></p>
+
+<!-- new discussions -->
+<!-- end new discussions -->
+
+
+{% endblock %}
+

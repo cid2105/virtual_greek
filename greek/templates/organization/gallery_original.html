@@ -1,0 +1,91 @@
+{% extends "users/index.html" %}
+{% load static %}
+{% load slug %}
+{% load toString %}
+{% load chomp %}
+
+{% block extra_assets %}
+<script type="text/javascript" src="{% get_static_prefix %}js/scroll.js"></script>
+<link href='{% get_static_prefix %}css/scroll.css' rel='stylesheet' type='text/css'>
+{% endblock %}
+{% block content %}
+
+<script type="text/javascript">
+
+	$(document).ready(function() {
+		
+	
+				
+			$("a:has(img)").fancybox({'onComplete'	:	function() {
+						$("#fancybox-wrap").hover(function() {
+							$("#fancybox-title").show();
+						}, function() {
+							$("#fancybox-title").hide();
+						});
+					}
+				});
+	
+				$("div.thumbnail_container").smoothDivScroll({
+							scrollStep: 45, 
+							scrollInterval: 5
+				});
+				
+				/*
+				$('.thumbnail_container img').qtip({
+			      // Simply use an HTML img tag within the HTML string
+			      content: '<img style="max-height:500px; max-width:500px;" src="{% get_static_prefix %}sample_photos/1.jpg" alt="Owl" />',
+			   		style: { 
+			      		border: {
+			         		width: 3,
+			         		radius: 8,
+			         		color: '#6699CC'
+			      			},
+			      		width: "100%"
+					},
+					position: {
+				      corner: {
+				      }
+				   }
+			   }); */
+				
+			});
+</script>
+
+
+{% block content_header %}
+<div class="uiOrganizationHeader">Albums</div>
+{% endblock %}
+
+	
+	
+<div class="thumbnail_container" style="">
+	<div class="scrollingHotSpotLeft"></div>
+	<div class="scrollingHotSpotRight"></div>
+	
+		<div class="scrollWrapper">
+			<div class="scrollableArea" style="height:450px;">
+		
+<div>
+<a title="asdf" rel="gallery" href="{% get_static_prefix %}sample_photos/1.jpg"><img src="{% get_static_prefix %}sample_photos/1.jpg" ></a>
+<a rel="gallery" href="{% get_static_prefix %}sample_photos/2.jpg"><img src="{% get_static_prefix %}sample_photos/2.jpg" ></a>
+<a rel="gallery" href="{% get_static_prefix %}sample_photos/3.jpg"><img src="{% get_static_prefix %}sample_photos/3.jpg" ></a>
+<a rel="gallery" href="{% get_static_prefix %}sample_photos/4.jpg"><img src="{% get_static_prefix %}sample_photos/4.jpg"></a>
+<a rel="gallery" href="{% get_static_prefix %}sample_photos/5.jpg"><img src="{% get_static_prefix %}sample_photos/5.jpg"></a>
+<a rel="gallery" href="{% get_static_prefix %}sample_photos/6.jpg"><img src="{% get_static_prefix %}sample_photos/6.jpg"></a>
+<a rel="gallery" href="{% get_static_prefix %}sample_photos/7.jpg"><img src="{% get_static_prefix %}sample_photos/7.jpg"></a>
+<a rel="gallery" href="{% get_static_prefix %}sample_photos/8.jpg"><img src="{% get_static_prefix %}sample_photos/8.jpg"></a>
+<a rel="gallery" href="{% get_static_prefix %}sample_photos/9.jpg"><img src="{% get_static_prefix %}sample_photos/9.jpg"></a>
+</div><div>
+<a rel="gallery" href="{% get_static_prefix %}sample_photos/10.jpg"><img src="{% get_static_prefix %}sample_photos/10.jpg" ></a>
+<a rel="gallery" href="{% get_static_prefix %}sample_photos/11.jpg"><img src="{% get_static_prefix %}sample_photos/11.jpg" ></a>
+<a rel="gallery" href="{% get_static_prefix %}sample_photos/12.jpg"><img src="{% get_static_prefix %}sample_photos/12.jpg" ></a>
+</div>
+</div>
+
+</div>
+</div>
+
+
+<br/>
+
+{% endblock %}

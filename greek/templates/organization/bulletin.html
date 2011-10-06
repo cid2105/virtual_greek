@@ -1,0 +1,142 @@
+{% load static %}
+{% load slug %}
+<link rel="stylesheet" type="text/css" href="{% get_static_prefix %}css/twitter.css" media="screen" title="style (screen)" />
+
+<script>
+
+var once = true;
+
+$("#fb_content").focusout(function()
+{
+$("#token-input-tag").attr("placeholder", "");	
+});
+
+$("#fb_content").focus(function()
+{
+$(this).css("width", "452px");
+$(this).css("top", "3px");
+$(".tags").fadeIn(1000);
+$(this).animate({"height": "85px",}, "fast" );
+$("#fb_button_block").slideDown("fast");
+	$("#tag").hide();
+if(once)
+{
+		once = false;
+
+	$(".tags").tokenInput(	[
+		{% for hash in hash_tags %}
+            {name: "{{hash}}"}
+		{% if not forloop.last %}	
+		,
+		{% endif %}
+		{% endfor %}
+        ], {
+	               theme: "facebook",
+				hintText: "Enter a hash tag",
+				searchingText: "Loading..."
+	
+	           });
+
+$("#token-input-tag").attr("placeholder", "Tags...");
+
+}
+return false;
+});
+
+$("#new_announcement").blur(function()
+{
+$("#fb_content").animate({"height": "20px",}, "fast" );
+$("#fb_button_block").slideUp("fast");
+$("#fb_content").css("top", "11px");
+return false;
+});
+
+$("#post_announcement").click(function()
+{
+	var hashes = "";
+	$('.token-input-token-facebook').each(function(index) {
+	   var word = $(this).text();
+	   var hash = word.substring(0, word.length - 1).replace(/$/g, "") + "$" ;
+	   hashes += hash;
+		alert(hash);
+	  });
+	
+	$.post("{% url new_announcement uni org|slug %}", {'hashes': hashes, 'announcement': $("#fb_content").val()}, function(json)
+	{
+		alert(json);
+	}
+	);
+});
+
+
+$("#fb_cancel").click(function()
+{
+$("#fb_content").animate({"height": "20px",}, "fast" );
+$("#fb_button_block").slideUp("fast");
+$("#fb_content").css("top", "11px");
+return false;
+});
+
+
+</script>
+
+
+<div class="stream-manager">
+
+	
+	<div id="new_announcement" style="position:relative;bottom:8px;">
+
+		<input id="tag" class="tags" type="text" style="display:none; position:relative; font-size:11px; height:13px; margin-bottom:0px;"  />
+		<textarea id="fb_content"  placeholder=" Post an announcement..."></textarea>
+		<div id="fb_button_block">
+		<div class="tweet_button">
+		<input type="submit" id="post_announcement" class="twitter_button" value="post"/>
+		</div>
+		</div>
+	</div>
+	
+  <div><div class="stream-title"></div><div class="stream-container"><div class="stream">
+  <div class="stream-items"><div data-item-type="tweet" data-item-id="102056154678575104" class="stream-item" media="true">
+  <div class="more"></div>
+<div data-user-id="346283981" data-screen-name="coal_diamond" data-item-id="102056154678575104" data-tweet-id="102056154678575104" class="stream-item-content tweet stream-tweet ">
+  <div class="tweet-dogear"></div>
+  <div class="tweet-image">
+      <img width="48" height="48" data-user-id="346283981" class="user-profile-link" alt="Cole Diamond" src="http://a1.twimg.com/profile_images/1471730262/asdf_normal.jpg">
+  </div>
+  <div class="tweet-content">
+    <div class="tweet-row">
+              <span class="tweet-user-name">
+  <a title="Cole Diamond" href="/#!/coal_diamond" data-user-id="346283981" class="tweet-screen-name user-profile-link">coal_diamond</a>
+  <span class="tweet-full-name">Cole Diamond</span>
+  </span>
+      <div class="tweet-corner">
+        <div class="tweet-meta">
+  <span class="icons">
+                  <div class="extra-icons">
+      <span class="inlinemedia-icons"></span>
+      </div>
+  </span>
+</div>
+      </div>
+    </div>
+    <div class="tweet-row">
+      <div class="tweet-text pretty-link">mealmecca.com is coming soon</div>
+    </div>
+    <div class="tweet-row">
+      <a title="12:37 PM Aug 12th" class="tweet-timestamp" href="/#!/coal_diamond/status/102056154678575104"><span data-long-form="true" data-time="1313167058000" class="_timestamp">42 minutes ago</span></a>
+      <span data-tweet-id="102056154678575104" class="tweet-actions">
+      <span class="tweet-action action-favorite">
+              <a title="Favorite" class="favorite-action" href="#"><span><i></i><b>Favorite</b></span></a>
+      </span>
+          <a title="Reply" data-screen-name="coal_diamond" class="reply-action" href="#"><span><i></i><b>Reply</b></span></a>
+          <a title="Delete" class="delete-action" href="#"><span><i></i><b>Delete</b></span></a>
+    </span>
+    </div>
+    </div>
+</div>
+</div>
+
+
+<hr class="twitter" style="border-color:#ccc;">
+
+

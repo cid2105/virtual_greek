@@ -1,0 +1,488 @@
+{% extends "users/index.html" %}
+{% load extract %}
+{% load getFacebookID %}
+{% load getYear %}
+{% load thumbnail %}
+{% load static %}
+{% load slug %}
+{% load get_range %}
+{% load subtract %}
+{% load toString %}
+
+
+
+{% block extra_assets %}
+<script type="text/javascript" src="{% get_static_prefix %}js/jquery.dock.js"></script>
+<script type="text/javascript" src="{% get_static_prefix %}js/jquery.fisheye.js"></script>
+<!-- <link href='http://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'> -->
+<script src="{% get_static_prefix %}js/facebook.js" type="text/javascript"></script>
+<script type="text/javascript">
+	$(function(){
+		var jqDockOpts = {align: 'right', duration: 200, labels: 'tc', size: 50, distance: 35};
+		$('#jqDock').jqDock(jqDockOpts);
+	});
+	
+	
+
+	
+	$(document).ready(function()
+	{
+			$('img.captify').click(function(e)
+			{
+				e.preventDefault();					
+				jQuery.facebox({ image: '/{{user.get_profile.profile_picture}}' });
+			});
+
+		
+	});
+	
+	
+</script>
+{% endblock %}
+
+{% block content %}
+
+
+{% block content_header %}
+<div class="uiProfileHeader">{{user.get_profile}} </div>
+{% endblock %}
+
+
+<!-- dockContainer >
+<div id="dockContainer">
+	<ul id="jqDock" style="list-style: none;">
+		<li><a class="dockItem" onclick="$('[rel*=secondary_content]').hide(); $('.whiteboard').fadeIn(1500);"  ><img  src="{% get_static_prefix %}images/home.png" alt="linkedin" title="Home" /></a></li>
+		<li><a class="dockItem" onclick="$('[rel*=secondary_content]').hide(); $('#message').fadeIn(1500);" ><img src="{% get_static_prefix %}images/email-sm.png" alt="Contact" title="Message" /></a></li>
+		<li><a class="dockItem" onclick="$('[rel*=secondary_content]').hide(); $('#resume, #resume span').fadeIn(1500);"><img src="{% get_static_prefix %}images/portfolio-sm.png" alt="portfolio" title="Resume" /></a></li>
+		<li><a class="dockItem" href="#facebook_befriend" rel="facebox"><img src="{% get_static_prefix %}images/facebook.png" alt="facebook" title="Facebook" /></a></li>
+				<li><a class="dockItem" onclick="$('[rel*=secondary_content]').hide(); $('.home').fadeIn(1500);"><img src="{% get_static_prefix %}images/user_icon.png" alt="settings" title="About" /></a></li>
+	</ul>
+</div>
+-->
+
+
+<div id="fb-root"></div>
+
+
+<div class="profile_container" >
+	
+			<div class="infobox-container">
+			<div class="triangle-l"></div>
+			<div class="triangle-r"></div>
+			<div class="infobox" style="background:none; -moz-border-radius:none; -moz-box-shadow:none;">
+			<h3 id="toc2"><span>{{user.get_profile}}</span></h3>
+			</div>
+			</div>
+
+		<blockquote class="home adjust" rel="secondary_content" style="">
+		<p style="margin-top:20px;">&nbsp;</p>
+	<form action="{% url facebook_connect %}?facebook_login=1" method="post" >
+
+
+	<a href="/{{user.get_profile.profile_picture}}" id="cropped_profile_picture"  title="{{user.get_profile.facebook_name}}">
+
+	{% thumbnail user.get_profile.profile_picture "180x154" crop="center" as im %}
+	<img  class="captify"  src="/{{user.get_profile.profile_picture}}" alt="<a rel='facebox' style='color:#999;' id='update_profile_picture_link'>Update profile picture</a>" style="margin-left:6px;" onError="this.src='{% get_static_prefix %}{% get_static_prefix %}images/default.png';this.title='Click here to add facebook profile picture';" width="{{ im.width }}" height="{{ im.height }}">
+	{% endthumbnail %}
+	</a>
+
+
+	<input type="hidden" value="{% url profile %}" name="next" /></form>
+	<div class="networks">{{user.get_profile.organization.name}}, {{user.get_profile.university.name}} {{user.get_profile.linkedin.graduate_year|getYear}}
+	<div style="font-weight:bold;">Brother</div>
+	</div>
+
+	</blockquote>
+
+
+
+<div class="profile_pic_right">
+	
+	<div class="fb_tabs_container">
+	<div class="fbtab" onclick="$('#message, #resume').hide(); $('#about').fadeIn(1500);" >About</div>
+	<div class="fbtab" onclick="$('#about, #message').hide(); $('#resume').fadeIn(1500);">Resume</div>
+	<div class="fbtab" onclick="$('#about, #resume').hide(); $('#message').fadeIn(1500);">Message</div>
+	</div>
+	
+	<div id="profile_content">
+	<!--- ABOUT -->
+	<blockquote id="about" class="home" rel="secondary_content" style="position: relative;">
+						<div style="color:#999999;">	
+							Display Name:<br/><span class="content_editable" field_id="display_name" input_mode="false">{{user.get_profile}}</span></a><br/>
+								
+							Email:<br/> <span  style="color:#333;">{{user.username}}</span><br/>
+							Phone:<br/><span class="content_editable" field_id="phone_number" 			 	
+							input_mode="false">
+							{{user.get_profile.phone_number}}</span>
+							<br/>
+							Description:<br/><span style="color:#333;">{{user.get_profile.description}}</span><br/>
+						</div>
+	</blockquote>
+	<!--- -->
+	</div>
+	
+	<!--- message -->
+	<blockquote id="message" class="home" rel="secondary_content" style=" position:relative; display:none;">
+						<div class="fbbluebox" id="message_sent" style="display:none; text-align:center;">Message sent.</div>	
+						<div style="color:#333; font-size:11px;">	
+							Message {{user.get_profile}}:<br/> <textarea id="private_message" rel="resizeable1"></textarea><br/>
+						</div>
+						<button onclick="$.post('{% url send_message %}', {'message':$('#private_message').val(), 'to':{{user.id}}}); $('#message_sent').fadeIn(1500).fadeOut(1500); "class="fb_form_button" style="float:right; position:relative; right:5px; top:9px; font-size:12px;">Send</button>
+						<p style="margin-bottom:8px;">
+						&nbsp;
+						</p>
+		
+	</blockquote>
+	<!--- -->
+	
+	
+	<!--- resume -->
+	<blockquote id="resume" class="home" rel="secondary_content" style=" position:relative; display:none; color:#999999;">	
+							Education:<br/> <span  style="color:#333;">{{user.get_profile.university.name}} 
+								<span id="college_duration"
+								input_mode="false">
+								({{user.get_profile.linkedin.matriculate_year}} - {{user.get_profile.linkedin.graduate_year}})
+								
+
+								</span>
+						  	</span>
+							<br/>
+							Major: <span class="content_editable" field_id="major" input_mode="false"><br/>{{user.get_profile.major}}
+</span></a><br/>
+							Job History:<br/><span style="color:#333;">
+							{% for position in user.get_profile.linkedin.position_set.all %}
+ 							{{forloop.counter}})
+ 							<span  field_id="company{{forloop.counter}}" 			 	
+							input_mode="false">{{position.company}}</span></a><br/>
+							<span style="font-size:11px; text-align:center;" field_id="position{{forloop.counter}}" 	 
+							input_mode="false">{{position.title}}</span><br/>
+							
+							{% endfor %}
+							<br/>
+							{% if user.get_profile.resume %}<a style="font-size:11px; "href="/{{user.get_profile.resume}}">- download resume -</a>{% endif %}
+							</span>
+	</blockquote>
+	
+
+	
+	
+</div>
+</div>
+
+
+<div class="secondary_content">
+
+
+<h2 class="uiResume" id="resume" style="display:none;" rel="secondary_content" >
+<div id="scribble" contenteditable="true" style="overflow:auto;" onkeyup="storeUserScribble(this.id);">
+<u>Education</u>
+<div class="linkedin_description">
+{{user.get_profile.university.name}}:
+{{user.get_profile.linkedin.matriculate_year}} - {{user.get_profile.linkedin.graduate_year}}
+<div> Major: {{user.get_profile.major}} </div>
+</div><div style="margin-top:3px;"></div>
+<u>Job History</u>
+{% for position in user.get_profile.linkedin.position_set.all %}
+
+<div class="linkedin_description">{{forloop.counter}}) {{position.title}}, {{position.company}}</div>
+
+{% endfor %}
+<div style="margin-top:3px;"></div>
+<u style="text-align:center; padding-top:5px;">Honors</u><br/>
+<div class="linkedin_description">{{user.get_profile.linkedin.honors}}</div>
+<br/>
+</div>
+
+{{user.email}}
+{% if user.get_profile.linkedin.pk > 0 %}
+<a href="{% url socialauth_begin "linkedin" %}">refresh resume</a>
+{% endif %}
+<img  title="View {{user.get_profile.facebook_name}}'s public profile" src="{% get_static_prefix %}images/linkedin.png" style="position:absolute; top: 0px; right:0px; height:20px; width:20px; cursor:pointer;" onclick="window.location='{{ user.get_profile.linkedin.public_profile_url}}'" rel="tipsy">
+
+</h2>
+
+<!--- facebook -->
+<div id="facebook_befriend" style="display:none; width:375px;" >
+<div style="font-weight:bold;" class="fbgreybox" style="">
+Are you sure you want to add {{user.get_profile.facebook_name}} as a friend?
+<div style="padding-top:10px;" align="center">
+<button onmouseover="this.style.textDecoration='underline';" onmouseout="this.style.textDecoration='none';" onclick="window.location='http://www.facebook.com/addfriend.php?id={{user.get_profile.facebook_profile_url|getFacebookID}}'" class="add_friend" align="left">+1 Add Friend</button> 
+<button onmouseover="this.style.textDecoration='underline';" onmouseout="this.style.textDecoration='none';" onclick="jQuery(document).trigger('close.facebox')" class="add_friend" align="right">Cancel</button></div></div>
+</div>
+
+<!-- tab partials end -->
+
+</div>
+
+{% endblock %}
+
+
+{% block extra_scripts %}
+
+<script>
+facebookAppId = '{{ FACEBOOK_APP_ID }}';
+function facebookJSLoaded(){
+FB.init({appId: facebookAppId, status: false, cookie: true, xfbml: true});
+}
+window.fbAsyncInit = facebookJSLoaded;
+F = new facebookClass(facebookAppId);
+F.load();
+
+
+</script>
+
+
+
+<!-- canvas script -->
+<script>
+var count = 2;
+var isDragged = false;
+var isPenClicked = false;
+var isEraserClicked = false;
+var dropped = false;
+
+$("#marker img").mousedown(function(e){
+      isPenClicked = true;
+	  dropped = false;
+});
+
+$("#eraser img").mousedown(function(e){
+      isEraserClicked = true;
+	  droppped = false;	  
+		$('#eraser img').css('position', 'fixed');
+	      $('#eraser img').css('top', e.clientY).css('left', e.clientX+3);
+
+});
+
+$("#box #inner_eraser").hover(function(e){
+	if(isEraserClicked)
+	{
+		 dropped = true;
+	}
+});
+
+$("#box #inner_pen").hover(function(e){
+	if(isPenClicked)
+	{
+		 dropped = true;
+	}
+});
+
+$("body").mousemove(function(e){
+
+	if(isPenClicked)
+	{
+	  var x = parseInt(e.clientX);
+	  var y = parseInt(e.clientY);
+	
+	  if(dropped)
+	  {
+		isPenClicked = false;
+		$('#marker img').css('position', 'absolute').css('top', '-5px').css('left', '80px');
+	  }
+	  else
+	  {
+		  $('#marker img').css('position', 'fixed');
+	      $('#marker img').css('top', e.clientY).css('left', e.clientX+3);	
+	   }    
+	}
+	if(isEraserClicked)
+	{
+	  var x = parseInt(e.clientX);
+	  var y = parseInt(e.clientY);
+	  
+	  if(dropped)
+	  {
+		$('#eraser img').css('position', 'absolute').css('top', '-9px').css('left', '18px');;
+		isEraserClicked = false;
+		dropped = false;
+	  }
+	  else
+	  {
+		  $('#eraser img').css('position', 'fixed');
+	      $('#eraser img').css('top', e.clientY).css('left', e.clientX+3);	
+	   }    
+	}
+});
+
+/*
+$( "#marker" ).draggable({ revert: true, cursorAt: { bottom: 0, left: 0 }, drop:false });
+
+$( "#marker" ).bind( "dragstart",
+function(event, ui) { isDragged = true; }
+);
+
+$( "#marker" ).bind( "dragstop",
+function(event, ui) { isDragged = false; }
+);
+*/
+
+/* Â© 2009 ROBO Design
+ * http://www.robodesign.ro
+ */
+
+// Keep everything in anonymous function, called on window load.
+if(window.addEventListener) {
+window.addEventListener('load', function () {
+  var canvas, context, tool, strDataURI;
+  function init () {
+    // Find the canvas element.
+    canvas = document.getElementById('imageView');
+	canvas.width = 160;
+	canvas.height = 200;
+    if (!canvas) {
+     
+      return;
+    }
+
+    if (!canvas.getContext) {
+     
+      return;
+    }
+
+    // Get the 2D canvas context.
+    context = canvas.getContext('2d');
+    if (!context) {
+      
+      return;
+    }
+	
+	strDataURI = "{{user.get_profile.canvas}}";
+	var img = new Image;
+	img.onload = function(){
+	  context.drawImage(img,0,0); // Or at whatever offset you like
+	};
+	img.src = strDataURI;
+	
+    // Pencil tool instance.
+    tool = new tool_pencil();
+ 	  	
+    // Attach the mousedown, mousemove and mouseup event listeners.
+    canvas.addEventListener('mousedown', ev_canvas, false);
+    canvas.addEventListener('mousemove', ev_canvas, false);
+    canvas.addEventListener('mouseup',   ev_canvas, false);
+  }
+
+
+  // This painting tool works like a drawing pencil which tracks the mouse 
+  // movements.
+  function tool_pencil () {
+    var tool = this;
+    this.started = false;
+
+    // This is called when you start holding down the mouse button.
+    // This starts the pencil drawing.
+    this.mousedown = function (ev) {
+        context.beginPath();
+        context.moveTo(ev._x, ev._y);
+		if(isPenClicked || isEraserClicked) 
+		{
+			if(isPenClicked)
+				context.strokeStyle = 'black';
+			else
+				context.strokeStyle = '#dfdfe6';
+			context.arc(ev._x, ev._y, .5, 0, Math.PI * 2, false);
+		}
+		context.closePath();
+        context.stroke();
+        tool.started = true;
+    };
+
+    // This function is called every time you move the mouse. Obviously, it only 
+    // draws if the tool.started state is set to true (when you are holding down 
+    // the mouse button).
+    this.mousemove = function (ev) {
+      if (tool.started){
+ 		if(isPenClicked)
+ 		{
+        	context.lineTo(ev._x, ev._y);
+			context.stroke();
+      	}
+		if(isEraserClicked)
+		{
+			context.beginPath();
+			context.arc(ev._x, ev._y, 5, 0, Math.PI*2, true);
+			context.fillStyle = '#dfdfe6';
+			context.fill();
+
+		}
+			
+    	}
+	}
+
+    // This is called when you release the mouse button.
+    this.mouseup = function (ev) {
+	  var image_data = canvas.toDataURL();
+	  $.post("{% url save_canvas %}", {'user': '{{user.id}}', 'data': image_data}, function(json){}); 
+      if (tool.started) {
+        tool.mousemove(ev);
+        tool.started = false;
+		isDragged = false;
+      }
+    };
+  }
+
+  // The general-purpose event handler. This function just determines the mouse 
+  // position relative to the canvas element.
+  function ev_canvas (ev) {
+    if (ev.layerX || ev.layerX == 0) { // Firefox
+      ev._x = ev.layerX;
+      ev._y = ev.layerY;
+    } else if (ev.offsetX || ev.offsetX == 0) { // Opera
+      ev._x = ev.offsetX + 100;
+      ev._y = ev.offsetY;
+    }
+
+    // Call the event handler of the tool.
+    var func = tool[ev.type];
+    if (func) {
+      func(ev);
+    }
+  }
+
+  init();
+
+}, false); }
+
+// vim:set spell spl=en fo=wan1croql tw=80 ts=2 sw=2 sts=2 sta et ai cin fenc=utf-8 ff=unix:
+</script>
+{% endblock %}
+
+{% block right_col %}
+<div id="extras" style="position:absolute;right:3px;top:-39px;">
+	<table id="main_search_box"><tr><div class="uiSearchInput"><td><input type="text" style="width:149px;"></td><td><span><a rel="tipsy" title="Search"><img src="{% get_static_prefix %}images/search.png"></a></span></td></div></tr></table>
+
+<h2 class="uiSideHeader" style="width:180px; top:10px;">{{user.get_profile.first_name}}'s Whiteboard
+
+
+	<div rel="secondary_content" class="whiteboard">
+	<div id="box" style="" class="uiContentHeader"><div id="inner_eraser" align="center"></div>
+	<div id="inner_pen" align="center"></div>
+	</div>
+	<div id="eraser"><img src="{% get_static_prefix%}images/eraser.png" onselectstart="return false;" ondragstart="return false;" style=""></div>			
+	<div id="marker"><img src="{% get_static_prefix%}images/marker.png"  onselectstart="return false;" ondragstart="return false;" style=""></div>
+	<canvas id="imageView" onselectstart="return false;" ondragstart="return false;"> </canvas> 
+	<img src="{% get_static_prefix%}images/whiteboard.png" onselectstart="return false;" ondragstart="return false;" style="position:absolute;">
+	</div>
+	
+</h2>
+
+</div>
+{% endblock %}
+
+
+<!--
+
+old message
+
+<div id="message" style="display:none; position:absolute; top:50px;" rel="secondary_content">
+
+<textarea class="message" cols="25"  class="basic_text" style="color:#777;" onclick="this.value=''; this.style.color='#666';">Message {{user.get_profile.facebook_name}}...</textarea>
+
+<img style="position:absolute; top:-17px; z-index:2;" src="{% get_static_prefix %}images/post-it.png">
+<div class="signature">- {{user.get_profile.facebook_name}}</div>
+<img id="send_mail" src="{% get_static_prefix %}images/send_mail.png" rel="tipsy" title="Send" style="cursor:pointer;">
+</div>
+
+
+>

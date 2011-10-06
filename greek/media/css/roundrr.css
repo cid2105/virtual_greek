@@ -1,0 +1,212 @@
+[edit_members]
+{
+float:left;
+top:28px;
+left:20px;
+}
+
+[back]
+{
+float:left;
+left: 32px;
+top: 7px;
+z-index: 20;
+}
+
+.ui-widget
+{
+	font-size: 10px;
+}
+
+.divider
+{	
+	color: #FFFFFF;
+    height: 0.1px;
+    left: -24px;
+    position: absolute;
+    top: 23px;
+    width: 100%;
+}
+
+#next {
+	border-width: 0px;
+#	background-image: url(/media/images/btn2.png);
+	height: 38px;
+	width: 112px;
+
+}
+
+#prev {
+	border-width: 0px;
+#	background-image: url(/media/images/btn.png);
+	height: 38px;
+	width: 112px;
+	margin-top: 5px;
+}
+
+.container {
+	margin-top: 150px;
+	position: relative;
+	height:300px;
+	bottom:65px;
+}
+
+.my_class {
+	font-size: 1.5em;
+	color: #abc;
+	background-color: #ffffff;
+	border: 2px solid white;
+}
+
+.my_class:hover {
+	border: 2px solid #ccc;
+}
+
+.my_class img {
+#	height: 48px;
+#	width: 48px;
+}
+
+#roundrr_navigation {
+	position: absolute;
+	top: 280px;
+	z-index: 500;
+	width: 200px;
+	height: 100px;
+	right: 218px;
+}
+
+#roundrr_navigation p{
+color:white;
+font-family: arial, sans-serif;
+font-size:12px;
+margin-left:-9px;
+margin-top:-40px;
+width:145px;
+
+}
+
+.centerImage {
+	width: 180px;
+	height: 160px;
+	border: 0px solid white;
+	position:absolute;
+	left:12px;
+}
+
+.roundrr_center {
+	background-color: transparent;
+	height: 160px;
+	margin-bottom: 0;
+	margin-left: auto;
+	margin-right: auto;
+	position: relative;
+	top: 100px;
+	width: 195px;
+}
+
+
+#roundrr_pick {
+	background-image: url(/media/images/pick4.png);
+	height: 105px;
+	margin-bottom: 0;
+	margin-left: 45%;
+	margin-right: auto;
+	position: absolute;
+	top: -81px;
+	width: 94px;
+	z-index: 500;
+}
+
+.keyboard{
+
+    margin-left:-78px;
+}
+
+#roundrr_caption {
+	font-size: 12px;
+	height: 22px;
+	left: -2px;
+	letter-spacing: -1px;
+	margin-bottom: 0;
+	margin-left: 46%;
+	margin-right: auto;
+	position: absolute;
+	top: 54px;
+	width: 155px;
+	z-index: 500;
+	/*comment out the following to disable @font-face use*/
+font-family: verdana, arial, sans-serif;
+}
+
+#roundrr_caption:hover {
+	text-decoration:underline;
+	cursor:pointer;
+}
+
+#roundrr_container, #roundrr_container2 {
+	position: relative;
+	left: -45px;
+	top: -120px;
+	width: 100px;
+	height: auto;
+	text-align: center;
+	margin: 0 auto;
+}
+
+.roundrr_div_item {
+	background-color: none;
+	height: 50px;
+	padding: 40px;
+	color: #234;
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+	cursor: pointer;
+}
+
+
+.selected{
+
+background-color:red;
+border:2px solid red;
+color:#AABBCC;
+font-size:1.5em;
+
+}
+
+
+.roundrr_speech {
+background-color:#f7f7f7;
+background-image:url("/media/images/cloud.png");
+display:none;
+height:48px;
+left:-22px;
+margin-bottom:0;
+margin-left:30.5%;
+margin-right:auto;
+position:absolute;
+top:42px;
+width:254px;
+display:none;
+}
+
+#roundrr_caption {
+font-size:15px;
+white-space:inherit;
+width:171px;
+left:-63px;
+text-align:center;
+color:#444444;
+}
+
+.roundrr_center, .roundrr_center img, .centerImage{
+ cursor:pointer;
+}
+
+
+
+#roundrr_container, #roundrr_container2{
+
+height:auto;
+}
+

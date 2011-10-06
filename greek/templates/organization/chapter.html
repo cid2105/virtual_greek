@@ -1,0 +1,61 @@
+{% extends "users/index.html" %}
+{% load static %}
+{% load thumbnail %}
+{% load chomp %}
+{% load slug %}
+
+
+{% block content %}
+
+<div id="chapter" style="">
+
+<span class="button_newtopic" style="float:left; z-index:10; left: 32px;top: 7px;" back onclick="$('#chapter').slideUp('slow').load('{% url uni_org_index uni org|slug %} #organization_members').slideDown('slow'); ">Back</span>
+
+<h1>Live example</h1>
+			<div id="demo" style="width:90%; position:relative;bottom:70px;">
+<table  class="display" id="example">
+	<thead>
+		<tr>
+			<th>Brother</th>
+			<th>Year</th>
+			<th>Status</th>
+			<th>Dues</th>
+		</tr>
+	</thead>
+	<tbody>
+
+{% for member in org.members.all %}
+		<tr >
+			<td>
+				<div style="position:relative; right: 70px; top:12px;">
+				{% thumbnail member.get_profile.profile_picture "52x52" crop="center" as im %}
+<img src="/{{member.get_profile.profile_picture}}" height="{{im.height}}" width="{{im.width}}" link="{% url uni_org_profile uni org|slug member.id %}"></img> 
+{% endthumbnail %}</div>
+				<div style="position:relative; left:32px; bottom: 29px;">{{member.get_profile}}</div>
+			</td>
+			<td>{{member.get_profile.linkedin.graduate_year}}</td>	
+			<td>
+				<select>
+				{% for role in org.status_choices %}
+				<option value="{{role}}" {% ifequal member.get_profile.role|stringformat:"s" role %} selected {% endifequal %}>{{role}}</option>
+				{% endfor %}
+				</select>
+			
+			</td>
+			<td>500/500</td>
+		
+		</tr>
+{% endfor %}
+
+	</tbody>
+</table>
+			</div>
+
+
+
+
+
+</div>
+
+{% endblock %}
+

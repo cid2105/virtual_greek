@@ -1,0 +1,569 @@
+{% load chomp %}
+{% load static %}
+{% load slug %}
+
+{% load toString %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta name="description" content="Greek Gavel" />
+<meta name="keywords" content="Greek Gavel Fraternities" />
+<link rel="shortcut icon" href="{% get_static_prefix %}images/favicon.ico" type="image/x-icon">
+<link rel="icon" href="{% get_static_prefix %}images/favicon.ico" type="image/x-icon">
+<link rel="stylesheet" type="text/css" href="{% get_static_prefix %}css/navigation.css" media="screen" title="style (screen)" />
+<link rel="stylesheet" type="text/css" href="{% get_static_prefix %}css/style.css" media="screen" title="style (screen)" />
+<link rel="stylesheet" type="text/css" href="{% get_static_prefix %}css/jquery-ui.css" media="screen" title="style (screen)" />
+<link rel="stylesheet" type="text/css" href="{% get_static_prefix %}css/facebox.css" media="screen" title="style (screen)" />
+<link rel="stylesheet" type="text/css" href="{% get_static_prefix %}css/uniform.aristo.css" media="screen" title="style (screen)" />
+<link rel="stylesheet" type="text/css" href="{% get_static_prefix %}css/facebook.css" media="screen"  />
+<link rel="stylesheet" type="text/css" href="{% get_static_prefix %}css/tipsy.css" media="screen" title="style (screen)" />
+<link rel="stylesheet" type="text/css" href="{% get_static_prefix %}css/notify.css" media="screen" title="style (screen)" />
+<link rel="stylesheet" type="text/css" href="{% get_static_prefix %}css/sticky.css" media="screen" title="style (screen)" />
+<link rel="stylesheet" type="text/css" href="{% get_static_prefix %}css/slimbox.css" media="screen" title="style (screen)" />
+<link rel="stylesheet" type="text/css" href="{% get_static_prefix %}css/fancybox.css" media="screen" title="style (screen)" />
+<link rel="stylesheet" type="text/css" href="{% get_static_prefix %}css/captify.css" media="screen"  />
+<link rel="stylesheet" type="text/css" href="{% get_static_prefix %}css/discussions.css" media="screen"  />
+<link rel="stylesheet" type="text/css" href="{% get_static_prefix %}css/bubble.css" media="screen"  />
+<link rel="stylesheet" type="text/css" href="{% get_static_prefix %}css/sidepanel.css" media="screen"  />
+<link rel="stylesheet" type="text/css" href="{% get_static_prefix %}css/poll.css" media="screen"  />
+<link rel="stylesheet" type="text/css" href="{% get_static_prefix %}css/datatables.css" media="screen"  />
+<link rel="stylesheet" type="text/css" href="{% get_static_prefix %}css/infinite_scrolling.css" media="screen"  />
+<script type="text/javascript" src="{% get_static_prefix %}js/jquery.js"></script>
+<script type="text/javascript" src="{% get_static_prefix %}js/jquery-ui.js"></script>
+<script type="text/javascript" src="{% get_static_prefix %}js/jquery.sliding.js"></script>
+<script type="text/javascript" src="{% get_static_prefix %}js/jquery.bubbleup.js"></script>
+<script type="text/javascript" src="{% get_static_prefix %}js/facebox.js"></script>
+<script type="text/javascript" src="{% get_static_prefix %}js/jquery.uniform.min.js"></script>
+<script type="text/javascript" src="{% get_static_prefix %}js/jquery.tipsy.js"></script>
+<script type="text/javascript" src="{% get_static_prefix %}js/sNotify.js"></script>
+<script type="text/javascript" src="{% get_static_prefix %}js/slimbox.js"></script>
+<script type="text/javascript" src="{% get_static_prefix %}js/jquery.easing.js"></script>
+<script type="text/javascript" src="{% get_static_prefix %}js/jquery.fancybox.js"></script>
+<script type="text/javascript" src="{% get_static_prefix %}js/jquery.mousewheel.js"></script>
+<script type="text/javascript" src="{% get_static_prefix %}js/jquery.captify.js"></script>
+<script type="text/javascript" src="{% get_static_prefix %}js/qTip.js"></script>
+<script type="text/javascript" src="{% get_static_prefix %}js/poll.js"></script>
+<script type="text/javascript" src="{% get_static_prefix %}js/notify.js"></script>
+<script type="text/javascript" src="{% get_static_prefix %}js/character_counter.js"></script>
+<script type="text/javascript" src="{% get_static_prefix %}js/infinite_scrolling.js"></script>
+<script type="text/javascript" src="{% get_static_prefix %}js/sticky.js"></script>
+<script type="text/javascript" src="{% get_static_prefix %}js/livequery.js"></script>
+<script type="text/javascript" src="{% get_static_prefix %}js/datatables.js"></script>
+<script src="{% get_static_prefix %}js/jquery.elastic.js" type="text/javascript"></script>
+<title>greekgavel</title>
+
+<script>
+
+
+
+
+$(document).ready(function() 
+    {
+
+		//sNotify.addToQueue("Welcome"); // create notifications
+ 
+
+			jQuery.ias({
+			  container 	: "div[announcements]",
+			  		// Enter the selector of the element containing
+			  		// your items that you want to paginate.
+
+			  item		: "div[announcement]",
+					// Enter the selector of the element that each
+					// item has. Make sure the elements are inside
+					// the container element.
+
+			  pagination	: ".paginate_announcements",
+					// Enter the selector of the element that contains
+					// your regular pagination links, like next,
+					// previous and the page numbers. This element
+					// will be hidden when IAS loads.
+
+			  next		: "a#next_announcement_page",
+					// Enter the selector of the link element that
+					// links to the next page. The href attribute
+					// of this element will be used to get the items
+					// from the next page.
+
+			  loader	: "{% get_static_prefix %}images/loader.gif"
+					// Enter the url to the loader image. This image
+					// will be displayed when the next page with items
+					// is loaded via AJAX.
+			});
+	
+			
+		var member_names = [
+		{% for member in org.members.all %}
+		{value: "{% url uni_org_profile uni org|slug member.id %}", label: "{{member.get_profile}}"}{% if not forloop.last %},{% endif %}
+		{% endfor %}
+		];
+		
+		$( "#main_search_box input, #new_message_members" ).autocomplete({
+			source: member_names,
+		 	select: function( event, ui ) { 
+						
+			            window.location.href = ui.item.value;
+						$("#main_search_box input").val(ui.item.label);
+			        }
+		});
+		
+		$("[rel*=fancybox], a.profile_picture, [rel*=tipsy], [tooltip*=tipsy]").livequery(function(){
+			
+			$("[rel*=fancybox], a.profile_picture").fancybox({loadingImage : '{% get_static_prefix %}images/loading.gif',
+		      closeImage   : '{% get_static_prefix %}images/closelabel.png'});
+		
+				$('[rel*=tipsy], [tooltip*=tipsy]').tipsy({gravity: $.fn.tipsy.autoNS});
+			
+		});
+		
+		$("[rel*=facebox]").facebox();
+	
+		$("[qtip]").qtip({
+			   style: { 
+			      name: 'dark' // Inherit from preset style
+			   }
+			});
+		
+		$("#pollContainer").jPoll();
+		
+		$("a[rel*=fancybox] img, [rel*=fancybox]").hover(function()
+		{
+			if($(this).attr('no_highlight') != "true")
+				$(this).css('opacity', '.6');
+		},
+		function()
+		{
+			if($(this).attr('no_highlight') != "true")
+				$(this).css('opacity', '1');			
+		});
+		
+	
+
+		$(".dropdown dt a").click(function() {
+
+		        // Change the behaviour of onclick states for links within the menu.
+			var toggleId = "#" + this.id.replace(/^link/,"ul");
+
+		        // Hides all other menus depending on JQuery id assigned to them
+			$(".dropdown dd ul").not(toggleId).hide();
+
+		        //Only toggles the menu we want since the menu could be showing and we want to hide it.
+			$(toggleId).toggle();
+
+		        //Change the css class on the menu header to show the selected class.
+			if($(toggleId).css("display") == "none"){
+				$(this).removeClass("selected");
+			}else{
+				$(this).addClass("selected");
+			}
+
+		});
+
+	
+
+		$(".dropdown dd ul li a").click(function() {
+
+		    // This is the default behaviour for all links within the menus
+		    var text = $(this).html();
+		    $(".dropdown dt a span").html(text);
+		    $(".dropdown dd ul").hide();
+		});
+
+		$(document).bind('click', function(e) {
+
+		    // Lets hide the menu when the page is clicked anywhere but the menu.
+		    var $clicked = $(e.target);
+		    if (! $clicked.parents().hasClass("dropdown")){
+		        $(".dropdown dd ul").hide();
+				$(".dropdown dt a").removeClass("selected");
+			}
+
+		});
+
+
+		$('textarea[rel*=resizeable1]').autoResize({
+		    // On resize:
+		    onResize : function() {
+		        $(this).css({opacity:0.8});
+		    },
+		    // After resize:
+		    animateCallback : function() {
+		        $(this).css({opacity:1});
+		    },
+		    // Quite slow animation:
+		    animateDuration : 300,
+		    // More extra space:
+			extraSpace:20
+		});
+		
+			$('textarea[rel*=resizeable2]').autoResize({
+			    // On resize:
+			    onResize : function() {
+			        $(this).css({opacity:0.8});
+			    },
+			    // After resize:
+			    animateCallback : function() {
+			        $(this).css({opacity:1});
+			    },
+			    // Quite slow animation:
+			    animateDuration : 300,
+			    // More extra space:
+				extraSpace:0
+			});
+
+	 $('#login input[type!="submit"]').click(function () { 				
+		$(this).val("");
+		$(this).css("color", "#333333");
+	  }); 
+			
+	});	
+		
+		function cheese()
+		{			
+			window.location = "{% url uni_org_index uni.name org.name|slug %}";
+			return true;
+		}
+		
+</script>
+
+{% block extra_assets %}
+
+{% endblock %}
+</head>
+
+<body>
+
+
+<div id="preload">
+	
+	
+</div>
+
+
+<div class="header" >
+
+<a href="{% url logout %}"><span id="logout" style="color:#666666;">logout</span></a>
+<h1>greek<span style="color: #06f;">gavel</span></h1>
+
+
+<!-- Connecting You to Your Greek Life  -->
+
+
+<div id="main" >
+
+<div id="container">
+
+
+{% block left_col %}
+<!--
+<div style="position:fixed; bottom: 90px; left: 30px;"><div style="">
+<dl style="" class="dropdown">
+   <dt><a id="linkglobal" style="cursor:pointer;"></a></dt>
+<dd>
+        <ul id="ulglobal">
+            <li><a href="#">Everyone</a></li>
+            <li><a href="#">Friends</a></li>
+            <li><a href="#">Only Me</a></li>
+            <li><a href="#">Customize</a></li>
+      </ul>
+   </dd>
+</dl>
+</div></div>
+-->
+
+
+<div id="subnav" style="position:relative;">
+
+	<ul id="sliding-navigation" style="position:relative;top:20px; min-height:448px; ">
+			{% block logo %}
+		<div style="">
+		<div class="logo">
+		<b onclick="cheese()">{{user.get_profile.organization.name}}<br/> {{user.get_profile.university.name}}</b>
+		</div><br/>
+
+		<img src="{% get_static_prefix %}images/{{user.get_profile.organization.name|chomp}}.png" width="75px;" title="{{user.get_profile.organization.name}} - {{user.get_profile.organization.university.name}}" />
+		</div>
+		{% endblock %}
+		<div style="position:relative; bottom:35px;">
+        <li id="home" class="sliding-element"><a href="{% url home %}" >Home</a></li>
+        <li id="profile" class="sliding-element"><a href="{% url profile %}">Profile</a></li>
+        <li id="inbox" class="sliding-element"><a href="{% url inbox %}">Inbox</a></li>
+        <li id="gallery" class="sliding-element"><a href="{% url uni_org_gallery uni.name org|slug %}">Albums</a></li>
+		</div>
+    </ul>
+</div>
+
+{% endblock %}
+
+{% block right_col %}
+<script>
+$(document).ready(function()
+{
+	$("#new_announcement_img").click(function()
+	{
+		$("#new_announcement").fadeIn(2000);
+
+	});
+});
+</script>
+<div id="extras" style="position:absolute;right:3px;top:-39px;">
+
+	<table id="main_search_box"><tr><div class="uiSearchInput"><td><input type="text"></td><td><span><a rel="tipsy" title="Search"><img src="{% get_static_prefix %}images/search.png"></a></span></td></div></tr></table>
+
+
+<h2 class="uiSideHeader" style="margin-top:20px;">announcements
+<a rel="tipsy" title="Make an Announcement" id="new_announcement_img" class="new_item_img"><img src="{% get_static_prefix %}images/plus.png"></a>
+</h2>
+
+<!-- announcements -->
+
+<div id="new_announcement" style="display:none; margin-top:5px;">
+<form action="{% url uni_org_new_announcement uni.name org|slug %}" name="announcement_form" method="post">
+{% csrf_token %}
+<p class="bubble" style="color: #333;font-size: 11px; font-family: 'Century Gothic'; text-align:left;">
+
+<a rel="tipsy" title="cancel" onclick="$('#new_announcement').fadeOut(2000);" style="position:absolute; right:0px;"><img src="{% get_static_prefix %}images/fancy_close.png" height="15px"></a>
+
+<input name="hash_tag" id="hash_tags" placeholder="Hash tag..." />
+<textarea name="content" rel="resizeable1" style="" placeholder="New annoucement..."></textarea>
+<br/><span style="color:#777777; font-size:9px; text-align:center;"> - {{user.get_profile.facebook_name}}
+<a id="post_announcement_button" class="button Share" onclick="document.announcement_form.submit();" style="position:relative;">Post</a>	
+</span>
+<br/><br/><br/>
+</p>
+</form>
+</div>
+
+<div class="paginate_announcements">
+{% if announcements.has_previous %}
+    <a href="?page={{ announcements.previous_page_number }}">Previous</a>
+{% endif %}
+
+<span class="current">
+    Page {{ announcements.number }} of {{ announcements.paginator.num_pages }}
+	{% if announcements.has_next %}
+	    <a href="?page={{ announcements.next_page_number }}" id="next_announcement_page">Next</a>
+	{% endif %}
+</span>
+</div>
+
+<div announcements>
+{% for announcement in announcements %}
+<div style="margin-top:6px;" announcement>
+	<a style="">
+<p class="bubble" style="color: #333;font-size: 11px; font-family: 'Century Gothic'; text-align:left;">
+<a id="announcement{{forloop.counter}}" announcer="{{announcement.announcer}}" announcement="{{announcement.content}}" style="line-height:1px;"> {{announcement.hash}}</a> - {{announcement}}
+<br/><span style="color:#777777; font-size:9px; text-align:center;"> - {{announcement.announcer}} </span></p>
+
+</a></div>
+<script>
+var announcer = $('#announcement{{forloop.counter}}').attr('announcer');
+var announcement = $('#announcement{{forloop.counter}}').attr('announcement');
+var qtip_content = '<span style="font-family:Century Gothic; font-size:11px; text-align:center;">' + announcer + '</span><br/>' +
+'<table><tr><td><img height="48px;" width="48px;" src="/{{user.get_profile.profile_picture}}"  alt="Loading..." /></td><td style="padding-left:15px;"><p style="font-family:Century Gothic; font-size:13px;"> \"' + announcement + '\"</p></td></tr></table>';
+
+	$('#announcement{{forloop.counter}}').qtip(
+	      {
+	         content: {
+	            text: qtip_content,
+	            title: {
+	               text: '{{announcement.hash}}', // Give the tooltip a title using each elements text
+	            }
+	         },
+	         position: {
+	            corner: {
+	               target: 'bottomMiddle', // Position the tooltip above the link
+	               tooltip: 'topMiddle'
+	            },
+	            adjust: {
+	               screen: true // Keep the tooltip on-screen at all times
+	            }
+	         },
+	         style: {
+	            tip: true, // Apply a speech bubble tip to the tooltip at the designated tooltip corner
+	            border: {
+	               width: 0,
+	               radius: 4
+	            },
+	            name: 'light' // Use the default light style
+	         }
+	      });
+</script>
+{% endfor %}
+</div>
+
+
+<!-- VOTES: TO DO; SHOULD BE IMPLEMENTED!!!!!!!! >
+<h2 class="uiSideHeader" style="">votes
+<a rel="tipsy" title="Start a Vote" class="new_item_img"><img src="{% get_static_prefix %}images/plus.png"></a>	
+</h2>
+
+
+<div class="votes">
+	<div id="pollContainer"></div>
+</div>
+-->
+</div>
+
+{% endblock %}
+
+
+
+<div id="content" style="min-height:200px; position:absolute; left:60.4px;">
+
+
+	
+<!-- <h2 style="position:relative;right:10px;">Your Greek Life. Simplified.</h2> -->
+{% block columns %}
+<hr style="width:.01px; color:#ccc; height:94.1%; position:absolute; left:-.3px; top:-70px;">
+<hr style="width:.01px; color:#ccc; height:94.1%; position:absolute; right:-2px; top:-70px;">
+{% endblock %}
+<h1>
+	<script>
+	$(document).ready(function(){
+	{% if title %}
+
+		$("ul#sliding-navigation li#{{title}} a").css({'background-color' : '#D8DFEA', 'font-weight' : 'bold'});
+
+	{% else %}
+	$("ul#sliding-navigation li#home a").css({'background-color' : '#D8DFEA', 'font-weight' : 'bold'});
+//	$("#welcome").fadeIn(1000).delay(1500).fadeOut(1000);	
+	{% endif %}
+	
+	});
+
+
+	</script>
+	<span id="welcome" style="display:none; float:left; position:absolute; right:555px; bottom:20px;">welcome</span></h1>
+
+{% block content %}
+
+<div class="uiOrganizationHeader">{{user.get_profile.organization.name}}, {{user.get_profile.university.name}} </div>
+<div class="discussion-board">
+
+<div class="creation_buttons notes_button">
+<a class="creation_buttons unbutton" style="color:#3B5998;"  rel="facebox" href="{% url new-topic-form uni.name org.name|slug %}">
+<span class="button_newtopic" style="" >New Thread</span>
+</a>
+</div>
+
+<div class="topics_page">
+<div class="bar summary_bar clearfix" >
+<div class="summary" >
+{% if topics.has_previous %}
+    <a onclick="$('.topics_page').load('?page={{ topics.previous_page_number }} .topics_page');">Previous</a>
+{% endif %}
+
+<span class="current">
+    Page {{ topics.number }} of {{ topics.paginator.num_pages }}
+</span>
+
+{% if topics.has_next %}
+    <a id="next_page" href="?page={{ topics.next_page_number }}" onclick="$('.topics_page').load('?page={{ topics.next_page_number }} .topics_page');">Next</a>
+{% endif %}
+</div>
+<br/>
+</div>
+
+
+<div class="discussions" >
+<div class="board_topics">
+	
+{% for topic in topics %}
+<div class="topic" {% if forloop.first %} highlight {% endif %} {% if topic in unviewed %} unviewed {% endif %}>
+<div id="topic{{topic.id}}" class="board_topic first clearfix">
+
+<div class="topic_info">
+<h2 class="topic_title datawrap"> <a href="{% url uni_org_topic uni org|slug topic.id %}">{{topic.topic}}</a></h2>
+
+<div class="more_info" style="color: rgb(51, 51, 51);">{{topic.count}} posts. <span class="timestamp">
+<abbr title="Monday, July 11, 2011 at 11:25pm" data-date="Mon, 11 Jul 2011 20:25:53 -0700" class="timestamp">Created on {{topic.date}}</abbr></span>
+</div></div>
+
+<div class="last_post" style="position:relative; top:17px;">
+<div class="post_user">
+<a rel="tipsy" title="{{topic.last_reply.preview}}">Latest post</a> by <a href="{% url uni_org_profile uni org|slug topic.last_reply.author.id %}" title=" asdf" qtip>{{topic.last_reply.author.get_profile}}</a>
+</div>
+<div class="topic_pager">
+<abbr title="Wednesday, July 13, 2011 at 4:37pm" data-date="Wed, 13 Jul 2011 13:37:28 -0700" class="timestamp">{{topic.last_reply.date}}</abbr>
+
+</div>
+</div>
+
+</div>
+<div class="bar summary_bar clearfix">
+<div class="summary"></div>
+</div>
+</div>
+{% endfor %}
+
+
+</div>
+</div>
+
+</div>
+</div>
+
+<p style="margin-top:57px;"></p>
+
+<!-- new discussions -->
+<!-- end new discussions -->
+
+
+<script>
+		jQuery.ias({
+		  container 	: ".discussions",
+		  		// Enter the selector of the element containing
+		  		// your items that you want to paginate.
+
+		  item		: ".topic",
+				// Enter the selector of the element that each
+				// item has. Make sure the elements are inside
+				// the container element.
+
+		  pagination	: ".summary",
+				// Enter the selector of the element that contains
+				// your regular pagination links, like next,
+				// previous and the page numbers. This element
+				// will be hidden when IAS loads.
+
+		  next		: "a#next_page",
+				// Enter the selector of the link element that
+				// links to the next page. The href attribute
+				// of this element will be used to get the items
+				// from the next page.
+
+		  loader	: "{% get_static_prefix %}images/loader.gif"
+				// Enter the url to the loader image. This image
+				// will be displayed when the next page with items
+				// is loaded via AJAX.
+		});
+</script>
+{% endblock %}
+
+<div id="footer">
+<img src="{{ STATIC_URL }}/images/gg_logo.png" height="45px;"><br/>	
+&copy; GreekGavel 2011 </div>
+</div>
+    
+
+
+</div>
+</div>
+</div>
+
+{% block extra_scripts %}
+<script>
+var hashTags = [];
+{% for hash_tag in hash_tags %}
+hashTags.push("{{hash_tag}}");
+{% endfor %}
+
+$( "#hash_tags" ).autocomplete({
+	source: hashTags,				
+});
+</script>			
+{% endblock %}
+</body>
+</html>

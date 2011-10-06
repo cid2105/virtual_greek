@@ -1,0 +1,115 @@
+{% load static %}
+{% load toString %}
+{% load slug %}
+
+{% block content %}
+{% endblock %}
+
+<script>
+	$('textarea[rel*=resizeable1]').autoResize({
+	    // On resize:
+	    onResize : function() {
+	        $(this).css({opacity:0.8});
+	    },
+	    // After resize:
+	    animateCallback : function() {
+	        $(this).css({opacity:1});
+	    },
+	    // Quite slow animation:
+	    animateDuration : 300,
+	    // More extra space:
+		extraSpace:0
+	});
+
+</script>
+<div id="new_topic">
+	<div id="stylized" class="myform" style="width:550px; height:110%; ">
+	<form id="form" name="form" style="align:center;" >
+	{% csrf_token %}
+	<h1 >New Thread</h1>
+	<h2  id="new_topic_header" style="position:relative;left:4px;" >Thread will be visible to <select id="new_topic_privacy"><option value="{{user.get_profile.organization.type}}">Entire {{user.get_profile.organization.type}}</option>
+		
+	{% ifequal user.get_profile.organization.type|stringformat:"s" "Fraternity" %}
+	
+	<option value="Brothers">	
+	Brothers
+	</option>
+	{% endifequal %}
+	
+	{% ifequal user.get_profile.organization.type|stringformat:"s" "Sorority" %}
+
+	<option value="Sisters">	
+	Sisters
+	</option>	
+	
+	{% else %}
+	
+	<option value="Members">	
+	Members
+	</option>
+	
+	{% endifequal %}
+	
+	
+	
+	<option value="Society">Pledges</option><option value="Public">Public</option></select></h2>
+	<div class="fberrorbox" style="display:none;">Sorry, we have not expanded to your University yet.</div>
+	<div class="fbbluebox" style="display:none; text-align:center;">New Topic Added Successfully.</div>
+	<hr/><br/>
+	<div style="position:relative; left:40px;">
+	<label>Topic
+	<span class="small">Thread title</span>
+	</label>
+	<input type="text" class="required" name="topic" id="colleges" style="font-family: 'trebuchet ms','century gothic',verdana,sans-serif;"/>
+	<br/>
+	<br/><br/>
+	<label>Message 
+	<span class="small">Say what's on your mind</span>
+	</label>
+	<textarea id="message_body" rel="resizeable1" name="body" rows="6" id="password" style="overflow-y:hidden; font-family: 'trebuchet ms','century gothic',verdana,sans-serif; font-size:12px;"></textarea>
+	<br/><br/><br/>
+	<button class="awesome" id="button" style="	background-color: #0066FF; border: 0 none; color: #FFFFFF; cursor: pointer; position:relative;left:79px; bottom:13px; font-size: 12px; font-weight: bold; padding: 2px 5px 5px 5px; text-align: center; width: 50px;">Send</button>	
+	<br/><br/><br/>
+	</div>
+	</form>
+	</div>
+</div>
+
+
+<script>
+
+
+
+	
+
+
+	$("#button").click(function(e)
+	{
+		e.preventDefault();
+		var topic = $("input[name='topic']").val();
+		var body = $("textarea[name='body']").val();
+		var privacy = $("#new_topic_privacy").val();
+		var json;
+		var token =  $("input[name='csrfmiddlewaretoken']").val();	
+
+		$.ajax({
+		    type: "POST",
+		    url: "{% url new_topic user.get_profile.university.name|toString user.get_profile.organization.name|toString|slug %}",
+		    data:{topic:topic, body:body, privacy:privacy, csrfmiddlewaretoken:token},
+		    complete: function(data) 
+			{		
+					if(data.responseText != "")
+					{
+						$(".fberrorbox").html(data.responseText);
+						$(".fberrorbox").fadeIn(1500).delay(1500).fadeOut(500);
+					}
+					else
+					{
+						$(".fbbluebox").fadeIn(2000);
+						$(".discussions").load('{% url home %} .discussions');			
+						setTimeout('$("div[highlight]").effect("highlight", {}, 3000);',1000);
+					}		
+		     }});
+				e.preventDefault();
+	});
+</script>

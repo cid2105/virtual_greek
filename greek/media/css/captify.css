@@ -1,0 +1,92 @@
+
+#imageView
+{
+	position: absolute;
+	z-index: 1;
+	left: 15px;
+	top: 23px;	
+	width:160px;
+	height:200px;
+}
+
+.whiteboard
+{
+	position: absolute;
+	z-index:0;
+	top: 45px;
+}
+
+#marker img 
+{
+    bottom: -4px;
+    left: 80px;
+    position: absolute;
+    z-index: 2;
+}
+
+#eraser img 
+{
+	bottom: -10.5px;
+	left: 20px;
+	position: absolute;
+	z-index: 2;
+}
+
+#box
+{
+    background-color: #fff;
+    bottom: -10px;
+    height: 14px;
+    left: 0px;
+    position: absolute;
+    width: 180px;
+    z-index: 1;
+}
+
+#box #inner_eraser, #inner_pen
+{
+	width: 170px;
+	height: 8px;
+#	border: 1px solid black;
+	position:absolute;
+	top:-3px; 
+}
+
+
+#box #inner_eraser
+{
+	top:-8px;
+	z-index: 4;
+}
+
+
+.caption-top, .caption-bottom {
+	color: #ffffff;	
+	padding: 1.2em;	
+	font-weight: bold;
+	font-size: 13px;	
+	font-family: arial;	
+	cursor: default;
+	border: 0px solid #334143;
+	background: #000000;
+	text-shadow: 1px 1px 0 #202020;
+}
+.caption-top {
+   border-width: 0px 0px 8px 0px;
+}
+.caption-bottom {
+   border-width: 8px 0px 0px 0px;
+}
+.caption a, .caption a {
+	border: 0 none;
+	text-decoration: none;
+	background: #000000;
+	padding: 0.3em;
+}
+.caption a:hover, .caption a:hover {
+	background: #202020;
+}
+.caption-wrapper {
+	float: left;
+}
+br.c { clear: both; }

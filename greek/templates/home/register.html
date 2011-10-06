@@ -1,0 +1,117 @@
+{% load static %}
+<script type="text/javascript" src="{% get_static_prefix %}js/jquery.validate.min.js"></script>
+<script type="text/javascript" src="{% get_static_prefix %}js/jquery.form.js"></script>
+<script type="text/javascript" src="{% get_static_prefix %}js/jquery.metadata.js"></script>
+
+<script>
+	var availableTags = [
+		"Columbia",
+		"NYU"
+	];
+	
+$(document).ready(function() {
+	
+	$("select, input:checkbox, input:radio, input:file").uniform();
+	
+		
+	$(function() {
+			$( "#colleges" ).autocomplete({
+				source: availableTags
+			});
+		});
+		
+		$("#fjlnonoiinininkljorm").validate();
+				
+		
+		//	$(".fberrorbox").fadeIn(1500).delay(1000).fadeOut(1500);
+		$("input[name='university']").focusout(function() {
+		  	var text = $(this).val().toLowerCase();
+			var found = 0;
+			$.each(availableTags, function(index, value) { 
+			  if(value.toLowerCase() == text)
+				found = 1;
+			});
+			
+			
+		})
+		
+		$("select").change(function () {
+	          var text = $("select option:selected").text() + "'s";		
+	          $("#org_type").text(text);
+	        })
+	        .change();
+	    
+			$("#button").hover(
+			  function () {
+			    $(this).animate({backgroundColor: '#00AAFF'}, 'slow');				
+			  }, 
+			  function () {
+				$(this).animate({backgroundColor: '#0066FF'}, 'slow');
+			  }
+			);
+	
+	
+			$("#button").click(function(e)
+			{
+				e.preventDefault();
+				var fratname = $("input[name='fratname']").val();
+				var university = $("input[name='university']").val();
+				var email = $("input[name='fratemail']").val();
+				var type= $("#org_type").text();
+				type = type.substring(0, type.length -2);
+				var json;
+				var token =  $("input[name='csrfmiddlewaretoken']").val();	
+
+				$.ajax({
+				    type: "POST",
+				    url: "{% url register %}",
+				    data:{email: email, university:university, fratname:fratname, type:type, csrfmiddlewaretoken:token},
+				    complete: function(data) 
+					{		
+							if(data.responseText != "")
+							{
+								$(".fberrorbox").html(data.responseText);
+								$(".fberrorbox").fadeIn(1500).delay(1500).fadeOut(500);
+							}
+							else
+							{
+								$(".fbbluebox").fadeIn(2000);
+								setTimeout("$.facebox.close();",2000);
+							}		
+				     }});
+						e.preventDefault();
+			});
+		
+});
+</script>
+
+<div id="stylized" class="myform" style="width:550px; height:110%; ">
+<form id="form" name="form" style="align:center;" >
+	{% csrf_token %}
+<h1>Sign Up</h1>
+<h2>Request Access for Your <select><option value="fraternity">Fraternity</option><option value="sorority">Sorority</option><option value="Society">Society</option></select></h2>
+<div class="fberrorbox" style="display:none;">Sorry, we have not expanded to your University yet.</div>
+<div class="fbbluebox" style="display:none; text-align:center;">Welcome to GreekGavel<br/>You should receive an email confirmation shortly.</div>
+<hr/><br/><br/>
+<div style="position:relative; left:40px;">
+<label><span id="org_type">Fraternity's</span> Name
+<span class="small">Enter the full name</span>
+</label>
+<input type="text" class="required" name="fratname" />
+<br/><br/><br/>
+<label>University
+<span class="small">Must be listed</span>
+</label>
+<input type="text" class="required" name="university" id="colleges" />
+<br/>
+<br/><br/>
+<label>President's Email
+<span class="small">the big cheese</span>
+</label>
+<input type="text" class="required" name="fratemail" id="password" />
+<br/><br/><br/>
+<button class="awesome" id="button" style="position:relative; left:41px; background-color: #0066FF; border: 0 none; color: #FFFFFF; cursor: pointer;  font-size: 13px; font-weight: bold; text-align: center; width:110px; padding-top:0px;">Register</button>
+<br/><br/><br/>
+</div>
+</form>
+</div>

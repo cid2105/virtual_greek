@@ -1,0 +1,31 @@
+{% load static %}
+
+<script>
+	$('textarea[rel*=resizeable1]').autoResize({
+	    // On resize:
+	    onResize : function() {
+	        $(this).css({opacity:0.8});
+	    },
+	    // After resize:
+	    animateCallback : function() {
+	        $(this).css({opacity:1});
+	    },
+	    // Quite slow animation:
+	    animateDuration : 300,
+	    // More extra space:
+		extraSpace:0
+	});
+
+</script>
+
+
+
+<div id="stylized" class="myform" style="width:550px; height:110%; ">
+
+<h1>Invite members to join</h1>
+<h2 style="position:relative;bottom:3px;">Enter the emails or listserv address below.</h2>
+<hr/><br/>
+<div class="bubble" style="align:center; width:auto; height:auto; max-width:280px;">
+<input style="width:88%;"><br/>
+<br/>
+</div>

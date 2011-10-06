@@ -1,0 +1,8 @@
+implement a beta daily digest
+- send at noon everyday by default
+	- option is configurable only by president: in the beta panel
+- send emails for only new messages and new threads
+- each person has a daily digest in the home panel 
+- notifications for ecah new private message?e
+
+wake up call and alarm clock scheduler twilio app

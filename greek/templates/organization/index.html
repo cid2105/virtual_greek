@@ -1,0 +1,576 @@
+{% extends "users/index.html" %}
+{% load static %}
+{% load thumbnail %}
+{% load chomp %}
+{% load slug %}
+
+{% block extra_assets %}
+<link rel="stylesheet" type="text/css" href="{% get_static_prefix %}css/ribbon.css" media="screen" title="style (screen)" />
+<link rel="stylesheet" type="text/css" href="{% get_static_prefix %}css/roundrr.css" media="screen" title="style (screen)" />
+<link rel="stylesheet" type="text/css" href="{% get_static_prefix %}css/mediagallery.css" media="screen" title="style (screen)" />
+<link rel="stylesheet" type="text/css" href="{% get_static_prefix %}css/dropdown.css" media="screen" title="style (screen)" />
+<link rel="stylesheet" type="text/css" href="{% get_static_prefix %}css/dropdown.css" media="screen" title="style (screen)" />
+<link rel="stylesheet" type="text/css" href="{% get_static_prefix %}css/ribbon.css" media="screen" title="style (screen)" />
+<link rel="stylesheet" type="text/css" href="{% get_static_prefix %}css/roundrr.css" media="screen" title="style (screen)" />
+<script src="{% get_static_prefix %}js/jQuery.roundrr.js" type="text/javascript"></script>
+<script src="{% get_static_prefix %}js/jquery.mediagallery.js" type="text/javascript"></script>
+<script src="{% get_static_prefix %}js/jquery.viewport.js" type="text/javascript"></script>
+<script src="{% get_static_prefix %}js/fb_autocomplete.js" type="text/javascript"></script>
+<script src="{% get_static_prefix %}js/jQuery.roundrr.js" type="text/javascript"></script>
+<script src="{% get_static_prefix %}js/jquery.dropdown.js" type="text/javascript"></script>
+
+
+<script>
+
+	$("#example").livequery(function(){
+
+		$('#example').dataTable({"bLengthChange": false});	
+		
+	});
+	
+
+		
+	$("[back], [edit_members]").livequery(function(){
+
+
+		var i=0;
+			$(function() {
+				var members = [];
+				{% for member in org.members.all %}
+				members.push("{{member.get_profile.facebook_name}}");
+				{% endfor %}
+					$( "#names" ).autocomplete({
+						source: members,				
+					});
+
+
+					var i=0;
+					$('#names').bind('keydown keyup keybind focus', function() {
+					  	var input_text = $(this).val();
+						$("div.my_class img").each(function(index) {
+					    var alt_text = $(this).attr('alt').substring(0, input_text.length);
+						if( i > 0 && (alt_text.toLowerCase() != input_text.toLowerCase()))
+						{
+							$(this).fadeOut(1000);
+						}
+						else
+						{
+							var display = $(this).css("display");
+							if(display == "none")
+								$(this).fadeIn(1000);
+						}
+						});
+						i++;
+						return true;
+					});
+
+
+			});
+
+	  	jQuery("#roundrr_container").roundrrwheel(
+	  	{
+			mode: 'standard', //mode can be pick or standard
+			autoplay: false,
+			autoplayDirection: 'anticlockwise',
+			autoplayDuration: 4000,
+			centerClass: 'roundrr_center',
+			listClass: 'list', 
+			itemClass: 'item', 
+			radius: 220, 
+			animSpeed:400, 
+			centerX: 29, 
+			centerY: 60, 
+			animationEffect: 1, //(1:off, 5:light,10:heavy, 15:subtle)
+			selectEvent: "click", 	
+			centerImageSrc: "{% get_static_prefix %}images/{{user.get_profile.organization.name|chomp}}.png",
+			//on selecting/clicking an item on the wheel
+			onSelect: function($selected)
+			{  
+				showLargeImage($selected, 'noanim');
+			},
+			//on beginning to spin/animate the wheel
+			onNextBegin: function($m)
+			{
+
+			   interfaceLock = true;
+
+			},
+			onPrevBegin: function($m)
+			{
+
+			   interfaceLock = true;
+
+			},
+			//once an image has moved under the 'pick'
+			onImageFocus: function($item)
+			{
+
+            showLargeImage($item, 'none');
+
+
+			},
+			//once an image/image set is no longer under the 'pick'
+			onImageBlur:  function($item)
+			{
+
+			}, 
+			//once the animation has completed
+			onAnimationComplete: function($menu)
+			{
+
+
+			     jQuery('.centerImage').attr('src', currentImage);
+			     jQuery('.centerImage').load(function()
+			     {
+
+			        interfaceLock = false;
+			     });
+
+
+
+
+			},
+			angleOffset: Math.PI, 
+			onShow: function($menuitems)
+			{
+				$menuitems.each(function(i)
+				{
+					var $this = jQuery(this);
+					$this.delay(i*100).fadeIn(500);
+				});
+
+
+			}
+
+		});
+
+		jQuery("#roundrr_container").roundrrwheel("show");
+		$('#next').bind('click', spinMenuRight);
+		$('#prev').bind('click', spinMenuLeft);
+
+		function showLargeImage($i, mode)
+		{
+
+			interfaceLock = true;
+			var thisImage   = $i.find('img');
+
+			imageSrc = thisImage.attr('src');
+            largerImage = imageSrc.replace('_bigger', '');	
+            imageCaption = thisImage.attr('alt');
+            speechBubble =  jQuery('.roundrr_speech');
+			$("#profile_link").attr("href", thisImage.attr('link'));
+
+            var captionObject = jQuery('#roundrr_caption');
+            var centeredImage = jQuery('.centerImage');
+            var centerObject  = jQuery('.roundrr_center');
+
+            speechBubble.fadeIn();   
+            currentImage = largerImage;
+
+            captionObject.fadeIn();
+			captionObject.html(imageCaption);
+
+
+			/*center area: utilize the slimbox API for lightbox triggering*/
+			centerObject.bind('click', function()
+			{
+
+			  showLightbox();
+
+			});
+
+
+			/*hover case for central image*/
+			centeredImage.hover( function()
+			{
+			 $(this).css('opacity','0.5');
+
+			}, function()
+			{
+			$(this).css('opacity','1');
+			});
+
+
+            if(mode=='noanim')
+            {
+                 centeredImage.attr('src', currentImage);
+			     centeredImage.load(function()
+			     {
+			        interfaceLock = false;
+
+			     });
+            }
+
+
+		}
+
+
+
+		  /*Show lightbox for current image*/
+		  function showLightbox()
+		  {
+			var text = $("#roundrr_caption").html();
+			var image = $(".centerImage").attr("src");
+			$("#center_image").attr("href", image);
+			$("#center_image").attr("title", text);
+
+		  }
+
+		   /*Spin the menu to the left*/
+			function spinMenuLeft()
+			{
+			   if(!(interfaceLock))
+			  {
+			   jQuery("#roundrr_container").roundrrwheel("next");
+			   }			   
+			}
+
+			/*Spin the menu to the right*/
+			function spinMenuRight()
+			{
+		      if(!(interfaceLock))
+			  {
+			   jQuery("#roundrr_container").roundrrwheel("prev");
+			   } 
+			}
+
+			/*Keydown events*/
+			$(window).keydown(function(event) 
+			{
+				var keycode = event.keyCode;
+
+				switch(keycode)
+				{
+				  case 39:
+           		  spinMenuLeft();
+  				  break;
+  				  case 37:
+           		  spinMenuRight();
+  				   break;
+  				   case 32:
+  				   if(largerImage.length)
+  				   {
+  				   showLightbox();
+  				   }
+  				   break;
+
+		     } });
+	  });
+
+
+
+	//end menu
+
+		$('div[editable]').click(function()
+		{
+			$(this).html('<input>a</input>');
+		});
+
+		
+		$("textarea#about").val("{{chapter.about}}");
+
+		var year_founded = "{{chapter.year_founded}}";
+		var chapter = "{{chapter.name}}";
+
+		$("[edit_exec_board]").facebox();
+
+		$(".normalize").click(function()
+		{
+
+			if($(this).attr("editing") == "false")
+			{
+				var id = $(this).attr('attribute');
+				$(this).html('<input id="' + id + '" value="' + $(this).html().trim() + '" >');	
+				$(this).attr("editing", "true");
+			}
+
+		}).focusout(function()
+		{
+			if($(this).attr('attribute') == "year_founded")
+				year_founded = $(this).attr('attribute');
+			if($(this).attr('attribute') == "chapter")
+				chapter = $(this).attr('attribute');
+
+			$.post("{% url uni_org_index uni org|slug %}", {param:$(this).attr('attribute'), value:$(this).find('input').val()}, function(json)
+			{
+
+			});
+
+			$(this).html(" " + $(this).find('input').val());
+			$(this).attr("editing", "false");
+		});
+
+
+
+		$('.countable').jqEasyCounter({
+			'maxChars': 209,
+			    'maxCharsWarning': 200,
+			    'msgFontSize': '11px',
+			    'msgTextAlign': 'left',
+			    'msgWarningColor': '#F00',
+			    'msgAppendMethod': 'insertAfter'
+		}).focusout(function()
+		{
+			$.post("{% url uni_org_index uni org|slug %}", {param:$(this).attr('id'), value:$(this).val()}, function(json)
+			{
+
+			});
+		});
+
+
+		$("[rel*='members']").fancybox({loadingImage : '{% get_static_prefix %}images/loading.gif',
+	      closeImage   : '{% get_static_prefix %}images/closelabel.png'});
+
+		//menu
+		$('#flyout').fgmenu({	content: $('#flyout').next().html(), flyOut: true });
+		$('.fg-button').hover(
+			function(){ $(this).removeClass('ui-state-default').addClass('ui-state-focus'); },
+			function(){ $(this).removeClass('ui-state-focus').addClass('ui-state-default'); }
+		);
+		$("#names").click(function()
+		{
+			$(this).val("");
+			$(this).css("color", "#333");
+		});
+
+		$('[edit]').hover(function()
+		{
+		  $(this).append('<img src="{% get_static_prefix %}/images/edit.png" style="float:right;"/>');
+		},
+		function()
+		{
+		  $(this).find('img').remove();
+		});
+
+		$("#center_image").attr("href", "{% get_static_prefix %}images/{{user.get_profile.organization.name|chomp}}.png");
+		$("#center_image").attr("title", "{{org.name}}, {{uni.name}}");
+         var currentImage = "";
+         var interfaceLock = false; 
+         var imageCaption = "";
+		 var imageSrc = "";
+		 var largerImage = "";
+		 var speechBubble = "";
+
+
+
+<!-- autocomplete -->
+
+
+
+
+	
+	function hideClass(year)
+	{
+		var selector = "\".my_class img[class!='" + year + "']\"";
+		var antiselector = "\".my_class img[class='" + year + "']\"";
+		$(selector).fadeOut(1000);
+		$(antiselector).fadeIn(1000);
+
+		if(typeof($(antiselector)) !== 'undefined') 
+		{
+			
+			var center_src = "{% get_static_prefix %}images/{{user.get_profile.organization.name|chomp}}.png";
+			$(".centerImage").attr("href", center_src);
+			$(".centerImage").attr("src", center_src);
+			$(".roundrr_speech").show();
+			$(".centerImage").attr("title", "{{org}}");
+			if(year != "Alumni")
+				$("#roundrr_caption").text("Class of " + year);
+			else
+				$("#roundrr_caption").text(year);
+		}
+		
+	}
+	
+	function hideElement(element, condition)
+	{
+		var selector, antiselector;
+
+		if(element == "member")
+		{
+			selector = '.my_class img' + '[alt!="' + condition + '"]';	
+			antiselector = '.my_class img' + '[alt="' + condition + '"]';	
+		}
+			
+		
+		if(element == "class")
+		{
+			selector = '.my_class img[class!="' + condition + '"]';	
+			antiselector = '.my_class img[class="' + condition + '"]';	
+		}
+			
+		$(antiselector).trigger("click");
+		$(selector).fadeOut(1000);		
+		$(antiselector).fadeIn(1500);
+
+			
+	}
+	
+
+
+$(document).ready(function()
+{
+
+	  $.sticky2('<span style="text-align:center;">Is someone missing? Click <a href="{% url invite uni.name org|slug %}" rel="facebox">here</a> to invite them.</span>', {'autoclose':false, 'speed':'slow'});	
+});
+</script>
+{% endblock %}
+
+{% block columns %}
+<hr style="width:.01px; color:#ccc; height:94.1%; position:absolute; left:-.3px; top:-70px;">
+<hr style="width:.01px; color:#ccc; height:94.1%; position:absolute; right:-2px; top:-70px;">
+{% endblock %}
+{% block content %}
+
+{% block content_header %}
+<div class="uiOrganizationHeader" >{{org.name}}, {{uni.name}} </div>
+{% endblock %}
+
+<div id="organization_members">
+	<div id="filters" class="hidden" >
+		<ul>
+			<li><a href="#"><span>All</span></a></li>
+			<li><a href="#"><span>Brothers</span></a>
+			<li><a href="#"><span>Pledges</span></a></li>
+			<li><a href="#" >Executive Board<span class="ui-icon ui-icon-triangle-1-e"></a>
+				<ul>
+				{% for title, member in org.board %}
+				<li>{{title}}: <a>{{member.get_profile}}</a></li>
+				{% endfor %}
+			</ul></li>
+			<li><a href="#"><span>Year</span><span class="ui-icon ui-icon-triangle-1-e"></span></a>
+			<ul>
+				<li><a href="#">Spring 2011</a></li>
+				<li><a href="#">Fall 2011</a></li>
+				<li><a href="#">Spring 2012</a></li>
+			</ul></li>
+		</ul>
+	</div>
+	
+
+	<span class="button_newtopic" style="float:left; 	{% if not user.get_profile in org.exec_board %} display:none; {% endif %}" edit_members onclick="$('#organization_members').slideUp('slow').load('{% url uni_org_chapter uni org|slug %} #chapter').slideDown('slow');">Edit Members</span>
+
+	
+	<input id="names" placeholder="Search..."/>
+	<!-- <hr class="divider"> -->
+
+
+	<div class="cirlenav">
+	<div class="container">
+
+		<!-- Right-hand navigation -->
+		  <div id="roundrr_navigation">
+			<table><tr>
+				<td><a id="next"><span class="ui-icon ui-icon-circle-triangle-w" style="position:relative;left:31px; z-index:0; top:15px;"></span></a></td>
+		  		<td><a id="prev"><span class="ui-icon ui-icon-circle-triangle-e" style="position:relative;left:65px; z-index:0; top:15px;"></span></a></td>
+			</tr></table>
+		 </div>
+
+	  <!-- central image -->
+	<a id="center_image" rel="members" href="/{{member.get_profile.profile_picture}}" title="" > 
+	  <div class="roundrr_center" >
+
+	  </div>
+	</a>
+
+
+	  <!-- Speech bubble for captions -->
+	  <div class="roundrr_speech">
+	  </div>
+
+	 <!-- actual caption text -->
+	 <a id="profile_link" href="{% url uni_org_profile uni org|slug user.id %}"><div id="roundrr_caption" style="z-index:0;">
+	  </div></a>
+
+	 <!-- the container of images -->
+		<div id='roundrr_container'>
+			<ul class='list'>
+
+{% for member in org.members.all %}
+
+				<li class='item'>	
+				<div class='my_class'> 
+					{% thumbnail member.get_profile.profile_picture "52x52" crop="center" as im %}
+	<img class="{{member.get_profile.linkedin.graduate_year}}" alt="{{member.get_profile.facebook_name}}" num="{{forloop.counter}}" src="/{{member.get_profile.profile_picture}}" height="{{im.height}}" width="{{im.width}}" link="{% url uni_org_profile uni org|slug member.id %}"></img> 
+	{% endthumbnail %}
+				</div>	
+				</li>
+{% endfor %}
+				
+			</ul>
+		</div>
+		</div></div>
+
+
+	<!-- end autocomplete -->
+
+
+
+<p>&nbsp;</p><p>&nbsp;</p>
+
+<div id="edit_exec_board_facebox" style="display:none">
+	asdf
+</div>
+
+</div>
+{% endblock %}
+
+
+{% block right_col %}
+
+<div id="extras" style="position:absolute;right:3px;top:-39px;">
+	<table id="main_search_box"><tr><div class="uiSearchInput"><td><input type="text"></td><td><span><a rel="tipsy" title="Search"><img src="{% get_static_prefix %}images/search.png"></a></span></td></div></tr></table>
+
+
+<h2 class="uiSideHeader" style="text-align:left;right:3px; "> 
+<div style="margin-left:3px;"><span style="position:relative; left:5px;">{{user.get_profile.organization.name}}</span>
+	
+<!-- <a > -->
+{% ifequal org.president user %}	<a onclick="$('.my_class img').fadeIn(1000);"><p style="margin:0px 8px 6px 0px; float:right; font-size:12px;">See all</p></a> {% endifequal %}	</div>
+</h2>
+<div class="about_organization">
+
+<a style="color:#666666;" rel="tipsy" title="Edit Executive Board" href="#edit_exec_board_facebox" edit_exec_board><b>Executive Board</b></a>
+
+<span class="spread" exec_board>
+{% for member in org.board %}
+	{{member.0}}: <a onclick="hideElement('member', '{{member.1}}');"> {{member.1}}</a><br/>
+{% endfor %}
+</span>
+
+<br/><hr/><p></p>
+<b>Legacy</b><br/>
+<span class="spread">
+{% for class in classes %}
+<a onclick="hideClass({{class}});">Class of {{class}}</a><br/>
+{% endfor %}
+<a onclick="hideClass('Alumni');">Alumni</a>
+</span>
+
+<br/>
+<br/><hr/><p></p>
+<b edit><a title="Edit {{org.type}} Detail"  style="color:#666666;" rel="tipsy" edit_about>About</a></b><br/>
+<span class="spread">
+Chapter:<span class="normalize" attribute="chapter" {% if chapter.name %} editing="false" {% else %} editing="true" {% endif %}>{% ifequal org.president user %} {% if not chapter.name %}<input id="chapter"> {% else %} {{chapter.name}} {% endif %}</span>
+{% else %} {{chapter.name}} {% endifequal %}<br/>
+Year founded:<span class="normalize" attribute="year_founded" {% if chapter.name %} editing="false" {% else %} editing="true" {% endif %}>{% ifequal org.president user %} {% if not chapter.year_founded %}<input id="year_founded"> {% else %} {{chapter.year_founded}} {% endif %} {% else %} {{chapter.year_founded}}{% endifequal %}</span><br/>
+{{org.member_type}}{% ifnotequal org.member_type 'member' %}s{% endifnotequal %}: {{org.members.count}}<br/>
+Rushing: {{org.rushing.count}}<br/>
+Alumni: {{org.alumni.count}}<br/>
+Description:
+<!-- {% ifequal org.president user %}<br/> 
+<textarea rel="resizeable1" id="about" class="countable"></textarea> {% else %}{% endifequal %} -->
+ {{chapter.description}} 
+<br/>
+</span>
+</div>
+
+</div>
+
+{% endblock %}
+
+
+
+
+
+

@@ -1,0 +1,164 @@
+{% load static %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta name="description" content="_your description goes here_" />
+<meta name="keywords" content="_your,keywords,goes,here_" />
+<link rel="shortcut icon" href="{% get_static_prefix %}images/favicon.ico" type="image/x-icon">
+<link rel="icon" href="{% get_static_prefix %}images/favicon.ico" type="image/x-icon">
+<link rel="stylesheet" type="text/css" href="{% get_static_prefix %}css/style.css" media="screen" title="style (screen)" />
+<link rel="stylesheet" type="text/css" href="{% get_static_prefix %}css/jquery-ui.css" media="screen" title="style (screen)" />
+<link rel="stylesheet" type="text/css" href="{% get_static_prefix %}css/facebox.css" media="screen" title="style (screen)" />
+<link rel="stylesheet" type="text/css" href="{% get_static_prefix %}css/facebook.css" media="screen" title="style (screen)" />
+<link rel="stylesheet" type="text/css" href="{% get_static_prefix %}css/uniform.aristo.css" media="screen" title="style (screen)" />
+<link rel="stylesheet" type="text/css" href="{% get_static_prefix %}css/notify.css" media="screen" title="style (screen)" />
+
+<script type="text/javascript" src="{% get_static_prefix %}js/jquery.js"></script>
+<script type="text/javascript" src="{% get_static_prefix %}js/jquery-ui.js"></script>
+<script type="text/javascript" src="{% get_static_prefix %}js/jquery.bubbleup.js"></script>
+<script type="text/javascript" src="{% get_static_prefix %}js/facebox.js"></script>
+<script type="text/javascript" src="{% get_static_prefix %}js/notify.js"></script>
+<script type="text/javascript" src="{% get_static_prefix %}js/jquery.uniform.min.js"></script>
+
+<title>greekgavel</title>
+
+<script>
+
+
+
+$(document).ready(function() 
+    {
+		$("#freeow").freeow("Incorrect Email or Password", "Click register to make an account", {
+			    classes: ["gray", "error"]
+			});
+			
+			$('[rel*=facebox]').click(function () {
+
+					jQuery.facebox({ ajax: '{% url ajax_register %}', loadingImage : '{% get_static_prefix %}images/loading.gif',
+				      closeImage   : '{% get_static_prefix %}images/closelabel.png'});
+				});
+				
+	 $('#login input[type!="submit"]').click(function () { 				
+		$(this).val("");
+		$(this).css("color", "#333333");
+	  });
+
+	 $("#register_button").hover(
+	  function () {
+
+	    $(this).attr("src", "{% get_static_prefix %}images/register2.png");
+		$(this).css("cursor", "pointer");
+	  },
+	  function () {
+	    $(this).attr("src", "{% get_static_prefix %}images/register.png");
+	  }
+	);
+	
+	 $('#login input[type!="submit"]').click(function () { 
+				
+		$(this).val("");
+	  });
+
+	 
+
+
+	$(function() {
+		$('#carousel').bxSlider({
+	          mode: 'fade',
+			            captions: true,
+			            auto: true,
+			            controls: false,
+						speed: 2000
+	        });
+	
+			var availableTags = [];
+			
+			{% for uni in uni_list %}
+			availableTags.push("{{uni}}");
+			{% endfor %}
+
+
+			$( "#unis" ).autocomplete({
+				source: availableTags
+			});
+		});
+		});	
+
+		
+</script>
+
+</head>
+
+<body>
+
+
+<div id="preload"></div>
+
+<div class="header">
+
+	<div id="login" style="position:relative; left: 232px; top: 35px; float:left;">
+	<form method="post" action="{% url login %}">
+		{% csrf_token %}
+	<input type="text" name="username" value="Email" style="color:#999999;">
+	<input type="password" name="password" style="position:relative;left:30px; color:#999999;" value="Password" >
+	<input type="submit" class="awesome" style="position:relative; left: 60px;" value="Login >>">
+	</form>
+	</div>
+<h1 style="left:973px">greek<span span style="color: #06f;">gavel</span></h1>
+
+</div>
+<!-- Connecting You to Your Greek Life  -->
+
+
+
+<div id="main">
+<div id="container">
+
+{% block left_col %}
+<div id="subnav" style="display:none;">
+</div>
+{% endblock %}
+
+{% block right_col %}
+
+<div style="position:relative;right:30px;bottom:90px;">
+<div id="extras" style="position:absolute; border-left: 1px solid #ccc; min-height:443px; left:910px;">
+<h2>twitter</h2>
+<p style="">
+<a r href="http://twitter.com/#!/greekgavel">Follow Us</a>
+</p>
+<h2>already joined</h2>
+<b style="text-align:center; font-size:11px;" >
+<ul id="carousel" >
+    <li> <img src="{% get_static_prefix %}images/betathetapi.png" style="width:100px;height:100px;" title="Beta Theta Pi - Columbia" alt="" /></li>
+    <li><img src="{% get_static_prefix %}images/pike.png"  style="width:100px;height:100px;" title="Pike - NYU" alt="" /></li>
+    <li><img src="{% get_static_prefix %}images/sigep.png"  style="width:100px;height:100px;" title="Sigep - Columbia" alt="" /></li>
+</ul>
+</b>
+<div style="margin-top:50px;">
+No more listservs.<br/><span style="margin-left: 35px; font-weight:bold;">Ever.</span>
+</div>
+</div>
+</div>
+{% endblock %}
+
+<div id="content" style="position:absolute; top:50px;">
+<h1>welcome</h1>
+<h2>Your Greek Life. Simplified.</h2>
+
+<img rel="facebox" id="register_button" src="{% get_static_prefix %}images/register.png" style="position:relative;top:45px; ">
+<p style="margin-top:100px;"></p>
+<img src="{% get_static_prefix %}images/footer.png" style="position:relative; right:20px;width:700px;">
+<div id="home_footer">
+	<img src="{{ STATIC_URL }}/images/gg_logo.png" height="45px;"><br/>	
+	&copy; GreekGavel 2011
+</div>
+</div>
+</div>
+</div>
+{% if error %}
+<div id="freeow" class="freeow freeow-top-right"></div>
+{% endif %}
+</body>
+</html>

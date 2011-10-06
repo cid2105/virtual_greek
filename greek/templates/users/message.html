@@ -1,0 +1,196 @@
+{% extends "users/index.html" %}
+{% load static %}
+{% load slug %}
+{% load toString %}
+{% load chomp %}
+{% block content %}
+
+
+
+<script>
+
+
+
+
+
+
+$(document).ready(function(){
+
+	jQuery.ias({
+	  container 	: ".messages",
+	  		// Enter the selector of the element containing
+	  		// your items that you want to paginate.
+
+	  item		: "div[message]",
+			// Enter the selector of the element that each
+			// item has. Make sure the elements are inside
+			// the container element.
+
+	  pagination	: ".paginate",
+			// Enter the selector of the element that contains
+			// your regular pagination links, like next,
+			// previous and the page numbers. This element
+			// will be hidden when IAS loads.
+
+	  next		: "a#next_page",
+			// Enter the selector of the link element that
+			// links to the next page. The href attribute
+			// of this element will be used to get the items
+			// from the next page.
+
+	  loader	: "{% get_static_prefix %}images/loader.gif"
+			// Enter the url to the loader image. This image
+			// will be displayed when the next page with items
+			// is loaded via AJAX.
+	});
+		
+
+//$("[post-type='message']").mouseover(function(){$(".tweet-delete img").fadeIn(500)});
+
+{% if new_message %}
+$("#message1").effect("highlight", {}, 3000);	
+{% endif %}
+
+});
+
+</script>
+<link rel="stylesheet" type="text/css" href="{% get_static_prefix %}css/twitter.css" media="screen" title="style (screen)" />
+<div class="uiOrganizationHeader">{{conversation.partner.get_profile}} </div>
+<div class="stream-manager">
+		
+  <div><div class="stream-title"></div><div class="stream-container"><div class="stream">
+  <div class="stream-items">
+
+	 <div id="textareaWrap">
+	    <form name="message_form" method="post">{% csrf_token %}
+			<table><tr>
+			<td ><img class="user_picture" src="/{{user.get_profile.profile_picture}}"></td>
+			<td><textarea rel="resizeable2" placeholder="Post a reply..." style="resize:none;" name="message" id="wall"></textarea></td>
+			</tr></table>
+	    <div id="sharebtn"> <a class="button Share" style="" id="shareButton" onclick="document.message_form.submit();"> Post</a>
+		
+		 </div>
+	  </div>
+
+<div class="message_list">
+	<div class="paginate">
+	{% if messages.has_previous %}
+	    <a href="?page={{ messages.previous_page_number }}">Previous</a>
+		<!-- onclick="$('.message_list').load('?page={{ messages.previous_page_number }} .message_list');" -->
+	{% endif %}
+
+	<span class="current">
+	    Page {{ messages.number }} of {{ messages.paginator.num_pages }}
+		{% if messages.has_next %}
+		    <a href="?page={{ messages.next_page_number }}" id="next_page"  >Next</a> 
+		<!-- onclick="$('.message_list').load('?page={{ messages.next_page_number }} .message_list');"> -->
+		{% endif %}
+
+	</span>
+
+	
+	</div>
+	
+	<hr class="twitter" style="border-color:#ccc;">
+
+
+<div class="messages">
+{% for message in messages %}
+	
+
+<div post-type="message" id="message{{ forloop.counter }}" style="margin-top: 5px;" class="stream-item" media="true" message>
+  <div class="more"></div>
+<div data-user-id="346283981" data-screen-name="coal_diamond" data-item-id="102056154678575104" data-tweet-id="102056154678575104" class="stream-item-content tweet stream-tweet ">
+  <div class="tweet-dogear"></div>
+  <div class="tweet-image">
+ <img width="48" height="48" data-user-id="346283981" id="prof_pic{{forloop.counter}}" class="user-profile-link" name="{{message.author.get_profile.facebook_name}}" role="{{message.author.get_profile.role}}" src="/{{message.author.get_profile.profile_picture}}">
+  </div>
+  <div class="tweet-content">
+    <div class="tweet-row">
+              <span class="tweet-user-name">
+  <a title="{{message.author.get_profile.facebook_name}}" href="{% url uni_org_profile uni org|slug message.author.id %}" data-user-id="346283981" class="tweet-screen-name user-profile-link">{{message.author.get_profile.facebook_name}}</a>
+  <span class="tweet-full-name">{{message.author}}</span>
+  <span class="tweet-delete"></span>
+  </span>
+      <div class="tweet-corner">
+        <div class="tweet-meta">
+  <span class="icons">
+                  <div class="extra-icons">
+      <span class="inlinemedia-icons"></span>
+      </div>
+  </span>
+</div>
+      </div>
+    </div>
+    <div class="tweet-row">
+      <div class="tweet-text pretty-link">{{message.content}}</div>
+    </div>
+    <div class="tweet-row">
+      <span  class="tweet-timestamp" ><span class="_timestamp">{{message.date}}</span>
+	  </span>
+      <span class="tweet-actions">
+      <span class="tweet-action action-favorite">
+          
+    </span>
+    </div>
+    </div>
+</div>
+<script>
+var name="{{message.author.get_profile.facebook_name}}";
+var role="{{message.author.get_profile.role}}";
+var src="/{{user.get_profile.profile_picture}}";
+var year="{{message.author.get_profile.linkedin.graduate_year}}".substring(2);
+	$('#prof_pic{{forloop.counter}}').qtip(
+	      {
+	         content: {
+	            text: '<table><tr><td><img height="48px;" width="48px;" src="'+ src + '"  alt="Loading..." /></td><td style="padding-left:15px;"><p style="font-family:Century Gothic; font-size:13px;">' + role + ' (\'' + year + ')</p></td></tr></table>',
+	            title: {
+	               text: name, // Give the tooltip a title using each elements text
+	            }
+	         },
+	         position: {
+	            corner: {
+	               target: 'bottomMiddle', // Position the tooltip above the link
+	               tooltip: 'topMiddle'
+	            },
+	            adjust: {
+	               screen: true // Keep the tooltip on-screen at all times
+	            }
+	         },
+	         style: {
+	            tip: true, // Apply a speech bubble tip to the tooltip at the designated tooltip corner
+	            border: {
+	               width: 0,
+	               radius: 4
+	            },
+	            name: 'light' // Use the default light style
+	         }
+	      });
+
+$("#message{{ forloop.counter }}").hover(function()
+{
+		$(this).find('.tweet-actions').show();
+}, function()
+{
+	$(this).find('.tweet-actions').hide();
+});
+
+
+</script>
+
+</div>
+<div style="margin-bottom:5px;"></div>
+{% csrf_token %}
+
+{% endfor %}
+</div>
+
+<!-- <hr class="twitter" style="border-color:#ccc;"> -->
+
+</div>
+</div>
+</div></div></div>
+</div>
+
+<p style="margin-top:57px;"></p>
+{% endblock %}

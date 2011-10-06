@@ -1,0 +1,267 @@
+
+.discussion-board {
+    padding-top: 0px;
+    color: #333333;
+    direction: ltr;
+    font-family: "lucida grande",tahoma,verdana,arial,sans-serif;
+    font-size: 11px;
+    line-height: 1.28;
+    text-align: left;
+	margin-left:1px;
+	position: relative;
+	bottom: 11px;
+}
+
+input#names
+{
+	position:absolute;
+	right:20px;
+	 top:26px; 
+	color:#777;
+	 height:11px;
+	
+}
+.topic[unviewed] {
+	background-color:#DCE2EC;
+}
+
+.discussion-board h2
+{
+	margin-top: 16px;
+	margin-left:13px;
+}
+.discussion-board .tab_discussions .notes_button {
+    padding-bottom: 7px;
+    padding-top: 0;
+}
+
+.discussion-board .notes_button {
+    float: right;
+    margin-top: 0;
+    padding-right: 5px;
+    padding-top: 20px;
+
+}
+
+.discussion-board .creation_buttons {
+    margin-top: -10px;
+    overflow: hidden;
+}
+
+.discussion-board .creation_buttons .create_button, .discussion-board .creation_buttons .dh_toolbar_buttons, .discussion-board .creation_buttons .dh_new_media {
+    float: right;
+}
+
+.uiButton, .uiButtonSuppressed:active, .uiButtonSuppressed:focus, .uiButtonSuppressed:hover {
+    -moz-box-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
+    background-color: #EEEEEE;
+    background-image: url("http://static.ak.fbcdn.net/rsrc.php/v1/yf/r/_IKHHfAgFQe.png");
+    background-position: 0 -49px;
+    background-repeat: no-repeat;
+    border-color: #999999 #999999 #888888;
+    border-style: solid;
+    border-width: 1px;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 11px;
+    font-weight: bold;
+    line-height: normal !important;
+    padding: 2px 6px;
+    text-align: center;
+    text-decoration: none;
+    vertical-align: top;
+    white-space: nowrap;
+}
+
+a {
+    color: #3B5998;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+
+
+.mac .uiButton .uiButtonText, .mac .uiButton input {
+    margin-bottom: -1px;
+
+}
+
+.uiButton .uiButtonText, .uiButton input {
+    background: none repeat scroll 0 0 transparent;
+    border: 0 none;
+    color: #333333;
+    cursor: pointer;
+    display: inline-block;
+    font-family: 'Lucida Grande',Tahoma,Verdana,Arial,sans-serif;
+    font-size: 11px;
+    font-weight: bold;
+    margin: 0;
+    outline: medium none;
+    padding: 1px 0 2px;
+    white-space: nowrap;
+
+}
+
+
+
+.summary_bar {
+    border-bottom: 1px solid #D8DFEA;
+    clear: both;
+    color: #000000;
+    font-weight: normal;
+    line-height: normal;
+    padding: 11px 20px 0;
+
+}
+
+.summary_bar {
+    border-bottom: 1px solid #CCCCCC;
+    margin: 0;
+    padding: 15px 4px 0;
+#	width:93%;
+	text-align:right;
+	color:#999999;
+	font-size:11px;
+}
+
+.discussions .board_topic {
+    border-bottom: 0px solid #CCCCCC;
+    padding: 10px 0px 10px 30px;
+}
+
+.clearfix {
+}
+
+
+.avatar
+{
+	float:left;
+	position:relative;
+	top:13px;
+	left:32px;
+}
+
+.discussions .board_topic .topic_info, .inbox_info {
+    float: left;
+    padding-right: 10px;
+}
+
+.inbox_info
+{
+	position:relative;
+	top: 4px;
+	left:49px;
+}
+
+.datawrap {
+    word-wrap: break-word;
+}
+
+.discussions .board_topic .more_info {
+    color: #808080;
+	position:relative;
+	bottom:11px;
+	left:13px;
+}
+
+abbr {
+    border-bottom: medium none;
+    color:#333333;
+}
+
+
+.discussions .board_topic .last_post,  .last_reply {
+    color: #000000;
+    float: right;
+    width: 220px;
+	position:relative;
+	top:10px;
+	margin-right: 19px;
+}
+
+.last_reply
+{
+	position:relative;
+	top:22px;
+	left:20px;
+}
+
+
+.discussions .board_topic .topic_pager {
+    color: #808080;
+    padding-top: 1px;
+}
+
+
+.button_newtopic
+{
+position: absolute;
+left: 4px;
+top: 15px;
+cursor: pointer;
+-webkit-box-shadow: 0 1px 0 rgba(0, 0, 0, .05);
+border: 1px solid #999;
+font-size: 11px;
+font-weight: bold;
+line-height: normal;
+color: #3B5998;
+vertical-align: top;
+padding: 3px;
+background: #F2F2F2;
+}
+
+.button_newtopic:hover
+{
+	text-decoration:underline;
+}
+#message_body
+{
+	position:relative; left:10.4px; width: 203.3px; resize:none; 
+}
+
+
+#new_topic_privacy 
+{
+	position:relative; left:17px; bottom:2px; font-size:14px;padding-bottom:2px;
+}
+
+#new_topic_header
+{
+align:left;
+position:relative;
+left: -11px;
+}
+
+.current
+{
+
+}
+
+.paginate
+{
+	color: #999999;
+	font-size: 11px;
+	padding: 2px 0px 2px 0px;
+	width:100%;
+	text-align:right;
+}
+
+hr.twitter {
+    border-color: rgba(0, 0, 0, 0.1) -moz-use-text-color rgba(255, 255, 255, 0.3);
+    border-left: 0 none;
+    border-right: 0 none;
+    border-style: solid none;
+    border-width: 1px 0;
+    clear: both;
+    display: block;
+    height: 0;
+	margin: 0px 0px 15px 0px
+}
+
+.user_picture {
+   height: 48px;
+   width: 48px;
+    left: 18px;
+    position: absolute;
+    top: 24px;	
+}

@@ -1,0 +1,124 @@
+{% extends "organization/gallery.html" %}
+{% load static %}
+{% load slug %}
+{% load thumbnail %}
+{% load toString %}
+{% load chomp %}
+
+{% block content %}
+
+
+{% block content_header %}
+<div class="uiOrganizationHeader">{{album}}</div>
+{% endblock %}
+
+
+{% if error %}
+	<div class="fberrorbox" style="margin-left:1.9px;">{{error}}</div><br/>	
+{% endif %}
+
+<div id="upload_photos" style="display:none; width:330px;">
+<script>
+	$('textarea[rel*=resizeable1]').autoResize({
+	    // On resize:
+	    onResize : function() {
+	        $(this).css({opacity:0.8});
+	    },
+	    // After resize:
+	    animateCallback : function() {
+	        $(this).css({opacity:1});
+	    },
+	    // Quite slow animation:
+	    animateDuration : 300,
+	    // More extra space:
+		extraSpace:20
+	});
+
+
+		jQuery.ias({
+		  container 	: ".scrollableArea",
+		  		// Enter the selector of the element containing
+		  		// your items that you want to paginate.
+
+		  item		: ".gallery",
+				// Enter the selector of the element that each
+				// item has. Make sure the elements are inside
+				// the container element.
+
+		  pagination	: ".paginate",
+				// Enter the selector of the element that contains
+				// your regular pagination links, like next,
+				// previous and the page numbers. This element
+				// will be hidden when IAS loads.
+
+		  next		: "a#next_page",
+				// Enter the selector of the link element that
+				// links to the next page. The href attribute
+				// of this element will be used to get the items
+				// from the next page.
+
+		  loader	: "{% get_static_prefix %}images/loader.gif"
+				// Enter the url to the loader image. This image
+				// will be displayed when the next page with items
+				// is loaded via AJAX.
+		});
+		
+</script>
+	<h1 style="font-size:20px;"> Add Photos </h1><hr/>
+	
+
+<form  name="gallery_form" enctype="multipart/form-data" method="post" action="{% url new_album uni.name org|slug %}">
+	{% csrf_token %}
+<span style="color:#999; font-size:12px;">Title:</span><br/> <input name="title" style="width:218px;"/><br/>
+<span style="color:#999; font-size:12px;">Description:</span><br/>
+<textarea name="description" rel="resizeable1" style="width:223px;" placeholder=""></textarea><br/>
+<span style="color:#999; font-size:12px;">Upload Photos:</span><br/>
+<input type="file" name="photos" multiple>
+<div><br/><button class="awesome" id="button" onclick="this.form.submit();" style="	background-color: #0066FF; border: 0 none; color: #FFFFFF; cursor: pointer; position:relative;left:39px; font-size: 12px; font-weight: bold; padding: 5px 5px 5px 5px; text-align: center; width: 50px;">Save</button>	</div>
+</form><br/>
+</div>
+	<div class="paginate" style="visibility:hidden;">
+	{% if photos.has_previous %}
+	    <a href="?page={{ photos.previous_page_number }}">Previous</a>
+	{% endif %}
+
+	<span class="current">
+	   {% if photos.paginator.num_pages > 1 %} Page {{ photos.number }} of {{ photos.paginator.num_pages }} {% endif %}
+		{% if photos.has_next %}
+		    <a href="?page={{ photos.next_page_number }}" id="next_page">Next</a>
+		{% endif %}
+	</span>	
+	</div>
+<div class="thumbnail_container" style="">
+
+	
+		<div class="scrollWrapper">
+
+
+			<div class="scrollableArea" >
+		
+<div style="display:inline;" style="height:800px;">
+
+		
+{% for photo in photos %}
+
+<a class="gallery" href="/{{photo}}" rel="fancybox" no_highlight="true" style="text-decoration:none;" >
+{% thumbnail photo.url "150x120" crop="center" as im %}
+<img rel="asf" class="captioned" alt="a{% if caption %}{{photo.caption|preview}}{% endif %}" src="/{{photo}}" height="{{im.height}}" width="{{im.width}}">
+{% endthumbnail %}
+
+</a>
+
+{% endfor %}
+</div>
+</div>
+
+</div>
+</div>
+
+
+<br/>
+
+{% endblock %}
+
+

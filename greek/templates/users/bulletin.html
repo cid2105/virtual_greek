@@ -1,0 +1,14 @@
+{% extends "users/index.html" %}
+{% load static %}
+{% block right_col %}
+
+<div id="extras" style="position:absolute;right:3px;top:-39px;">
+	<table><tr><div class="uiSearchInput"><td><input type="text" id="search" style="width:100px;position:relative;left:11px;"></td><td><span id="image" style="position:relative; cursor:pointer;
+	top: 1px;left:9px;"><img src="{% get_static_prefix %}images/search.png"></span></td></div></tr></table>
+
+
+<h2 class="uiSideHeader" style="margin-top:20px;">latest posts</h2>
+
+
+</div>
+{% endblock %}

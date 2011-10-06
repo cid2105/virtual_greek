@@ -1,0 +1,386 @@
+{% extends "users/index.html" %}
+{% load static %}
+{% load slug %}
+{% load toString %}
+{% load chomp %}
+{% block content %}
+
+
+
+<script>
+
+
+
+
+
+
+$(document).ready(function(){
+
+/*
+		jQuery.ias({
+		  container 	: ".replies",
+		  		// Enter the selector of the element containing
+		  		// your items that you want to paginate.
+
+		  item		: "div[post-type='reply']",
+				// Enter the selector of the element that each
+				// item has. Make sure the elements are inside
+				// the container element.
+
+		  pagination	: ".paginate",
+				// Enter the selector of the element that contains
+				// your regular pagination links, like next,
+				// previous and the page numbers. This element
+				// will be hidden when IAS loads.
+
+		  next		: "a#next_page",
+				// Enter the selector of the link element that
+				// links to the next page. The href attribute
+				// of this element will be used to get the items
+				// from the next page.
+
+		  loader	: "{% get_static_prefix %}images/loader.gif"
+				// Enter the url to the loader image. This image
+				// will be displayed when the next page with items
+				// is loaded via AJAX.
+		});
+*/		
+
+//$("[post-type='reply']").mouseover(function(){$(".tweet-delete img").fadeIn(500)});
+
+{% if new_post %}
+
+$("#reply1").effect("highlight", {}, 3000);	
+{% endif %}
+
+});
+
+</script>
+<link rel="stylesheet" type="text/css" href="{% get_static_prefix %}css/twitter.css" media="screen" title="style (screen)" />
+<div class="uiOrganizationHeader">{{topic.topic.capitalize}} </div>
+<div class="stream-manager">
+		
+  <div><div class="stream-title"></div><div class="stream-container"><div class="stream">
+  <div class="stream-items">
+
+	 <div id="textareaWrap">
+	    <form name="reply_form" method="post">{% csrf_token %}
+			<table><tr>
+			<td ><img class="user_picture" src="/{{user.get_profile.profile_picture}}"></td>
+			<td><textarea rel="resizeable2" placeholder="Post a comment..." style="resize:none;" name="reply" id="wall"></textarea></td>
+			</tr></table>
+	    <div id="sharebtn"> <a class="button Share" id="shareButton" onclick="document.reply_form.submit();">Post</a> </div>
+	  </div>
+
+<div class="topics">
+	<div class="paginate">
+	{% if replies.has_previous %}
+	    <a href="?page={{ replies.previous_page_number }}">Previous</a>
+	{% endif %}
+
+	<span class="current">
+	    Page {{ replies.number }} of {{ replies.paginator.num_pages }}
+		{% if replies.has_next %}
+		    <a href="?page={{ replies.next_page_number }}" id="next_page">Next</a>
+		{% endif %}
+	</span>
+	</div>
+	
+<hr class="twitter" style="border-color:#ccc;">
+<script>
+function togglePraise(reply_id, self)
+{
+$.post('{% url vote_reply uni org|slug  %}', {reply:reply_id, type:self.attr('type')} );
+var text = self.find('b').text();
+var first_praise = false;
+if(text.toLowerCase().trim() == "praise")
+{
+	text = "Unpraise";
+	
+	var count = parseInt($("#praise" + reply_id).attr('count'));
+
+	if(count == 0)
+	{
+		$("#praise" + reply_id).fadeIn(1000);
+		first_praise = true;
+	}
+	count++;
+	$("#praise" + reply_id + "_text").html("(" + count + ")");
+	$("#praise" + reply_id).attr('count', count);
+
+}
+else
+{
+	text = "Praise";
+	var count = parseInt($("#praise" + reply_id).attr('count'));
+
+	if(count == 1)
+	{
+		$("#praise" + reply_id).fadeOut(1000);
+		$("#praise" + reply_id + "_text").html("");
+	}
+	else if(count <= 0)
+	{
+		$("#praise" + reply_id).attr('count', "0");
+	}
+	else
+	{
+		$("#praise" + reply_id + "_text").text("(" + count-1 + ")");
+	}
+		count--;
+	$("#praise" + reply_id).attr('count', count);
+}
+self.find('b').text(text);
+var title= text + " " + self.attr('name');
+self.attr('type', text.toLowerCase());	
+self.attr('title', title);	
+var original_title = $("#praise" + reply_id + "_title").attr('original-title');
+if(first_praise)
+{
+	var final_title = original_title + "{{user.get_profile}}";	
+}
+else
+{
+	var final_title = original_title + ", {{user.get_profile}}";	
+}
+
+
+$("#praise" + reply_id + "_title").attr('original-title', final_title);
+
+}
+
+function toggleTaze(reply_id, self)
+{
+	$.post('{% url vote_reply uni org|slug  %}', {reply:reply_id, type:self.attr('type')} );
+	var type = self.attr('type');
+	var first_taze = false;
+var text = self.find('b').text();
+	if(text.toLowerCase().trim() == "taze")
+	{
+		text = "Untaze";
+
+		var count = parseInt($("#taze" + reply_id).attr('count'));
+
+		if(count == 0)
+		{
+			$("#taze" + reply_id).fadeIn(1000);
+			first_taze = true;
+		}
+		count++;
+		$("#taze" + reply_id + "_text").html("(" + count + ") ");
+		$("#taze" + reply_id).attr('count', count);
+
+	}
+	else
+	{
+		text = "Taze";
+		var count = parseInt($("#taze" + reply_id).attr('count'));
+
+		if(count == 1)
+		{
+			$("#taze" + reply_id).fadeOut(1000);
+			$("#taze" + reply_id + "_text").html("");
+		}
+		else if(count <= 0)
+		{
+			$("#taze" + reply_id).attr('count', "0");
+		}
+		else
+		{
+			$("#taze" + reply_id + "_text").text("(" + count-1 + ")");
+		}
+			count--;
+		$("#taze" + reply_id).attr('count', count);
+		
+	}
+	
+	
+	self.find('b').text(text);
+	var title= text + " " + self.attr('name');
+	self.attr('type', text.toLowerCase());	
+	self.attr('title', title);
+
+	
+	var original_title = $("#taze" + reply_id + "_title").attr('original-title');
+	if(first_taze)
+	{
+		var final_title = original_title + "{{user.get_profile}}";	
+	}
+	else
+	{
+		var final_title = original_title + ", {{user.get_profile}}";	
+	}
+
+
+	$("#taze" + reply_id + "_title").attr('original-title', final_title);
+	
+
+}
+</script>
+
+<div class="replies">
+{% for reply in replies %}
+	
+
+<div post-type="reply" id="reply{{ forloop.counter }}" class="stream-item" media="true" style="margin-bottom:5px;">
+  <div class="more"></div>
+<div data-user-id="346283981" data-screen-name="coal_diamond" data-item-id="102056154678575104" data-tweet-id="102056154678575104" class="stream-item-content tweet stream-tweet ">
+  <div class="tweet-dogear"></div>
+  <div class="tweet-image">
+ <img width="48" height="48" data-user-id="346283981" id="prof_pic{{forloop.counter}}" class="user-profile-link" name="{{reply.author.get_profile.facebook_name}}" role="{{reply.author.get_profile.role}}" src="/{{reply.author.get_profile.profile_picture}}">
+  </div>
+  <div class="tweet-content">
+    <div class="tweet-row">
+              <span class="tweet-user-name">
+  <a title="{{reply.author.get_profile.facebook_name}}" href="{% url uni_org_profile uni org|slug reply.author.id %}" data-user-id="346283981" class="tweet-screen-name user-profile-link">{{reply.author.get_profile.facebook_name}}</a>
+  <span class="tweet-full-name">{{reply.author}}</span>
+  <span class="tweet-delete"></span>
+  </span>
+      <div class="tweet-corner">
+        <div class="tweet-meta">
+  <span class="icons">
+                  <div class="extra-icons">
+      <span class="inlinemedia-icons"></span>
+      </div>
+  </span>
+</div>
+      </div>
+    </div>
+    <div class="tweet-row">
+      <div class="tweet-text pretty-link">{{reply.content}}</div>
+    </div>
+    <div class="tweet-row">
+      <span  class="tweet-timestamp" ><span class="_timestamp">{{reply.date}}</span>
+	  <span> <img height="16px;"  id="praise{{reply.id}}" {% if reply.praises.count < 1 %}  style="display:none; "{% endif %} src="{% get_static_prefix %}images/praise.png" count="{{reply.praises.count}}">
+	<a id="praise{{forloop.counter}}_title" title="Praised by {% for user in reply.praises.all %}{{user.get_profile}} {% if not forloop.last %}, {% endif %}{% endfor %}" rel="tipsy">
+		<span id="praise{{reply.id}}_text"> {% if reply.praises.count > 0 %} ({{reply.praises.count}}) {% endif %}</span></a></img>
+	</span>
+	  <span > <img {% if reply.tazes.count < 1 %}  style="display:none; "{% endif %} id="taze{{reply.id}}" src="{% get_static_prefix %}images/taze.png" count="{{reply.tazes.count}}">
+	  <a id="taze{{forloop.counter}}_title" title="Tazed by {% for user in reply.tazes.all%}{{user.get_profile}}{% if not forloop.last %}, {% endif %}{% endfor %}" rel="tipsy" >
+		<span id="taze{{reply.id}}_text">
+		{% if reply.tazes.count > 0 %} 
+		({{reply.tazes.count}})
+		{% endif %}
+		</span>
+		</a>
+	  </span>
+	  </span>
+      <span class="tweet-actions">
+      <span class="tweet-action action-favorite">
+
+		{% if not request.user in reply.praises.all %}
+		<a rel="tipsy" title="Praise {{reply.author.get_profile}}" name="{{reply.author.get_profile}}" type="praise" class="reply-action" onclick="togglePraise({{reply.id}}, $(this));"><span><i></i><b> Praise</b></span></a>
+		{% else %}
+		<a rel="tipsy" title="Unpraise {{reply.author.get_profile}}" name="{{reply.author.get_profile}}" type="unpraise" class="reply-action" onclick="togglePraise({{reply.id}}, $(this));"><span><i></i><b> Unpraise</b></span></a>	
+		{% endif %}
+	
+	{% if not request.user in reply.tazes.all %}
+	<a rel="tipsy" title="Taze {{reply.author.get_profile}}" name="{{reply.author.get_profile}}"  class="reply-action" type="taze" onclick="toggleTaze({{reply.id}}, $(this));"><span><i></i><b> Taze</b></span></a>
+	{% else %}
+	<a rel="tipsy" title="Untaze {{reply.author.get_profile}}" name="{{reply.author.get_profile}}"  class="reply-action" type="untaze" onclick="toggleTaze({{reply.id}}, $(this));"><span><i></i><b> Untaze</b></span></a>	
+	{% endif %}
+          
+          
+    </span>
+    </div>
+    </div>
+</div>
+
+
+</div>
+
+{% csrf_token %}
+<script>
+var name="{{reply.author.get_profile.facebook_name}}";
+var role="{{reply.author.get_profile.role}} ";
+var src="/{{reply.author.get_profile.profile_picture}}";
+var year="{{reply.author.get_profile.linkedin.graduate_year}}".substring(2);
+	$('#prof_pic{{forloop.counter}}').qtip(
+	      {
+	         content: {
+	            text: '<table><tr><td><img height="48px;" width="48px;" src="'+ src + '"  alt="Loading..." /></td><td style="padding-left:15px;"><p style="font-family:Century Gothic; font-size:13px;">' + role + ' (\'' + year + ')</p></td></tr></table>',
+	            title: {
+	               text: name, // Give the tooltip a title using each elements text
+	            }
+	         },
+	         position: {
+	            corner: {
+	               target: 'bottomMiddle', // Position the tooltip above the link
+	               tooltip: 'topMiddle'
+	            },
+	            adjust: {
+	               screen: true // Keep the tooltip on-screen at all times
+	            }
+	         },
+	         style: {
+	            tip: true, // Apply a speech bubble tip to the tooltip at the designated tooltip corner
+	            border: {
+	               width: 0,
+	               radius: 4
+	            },
+	            name: 'light' // Use the default light style
+	         }
+	      });
+
+$("#reply{{ forloop.counter }}").hover(function()
+{
+		$(this).find('.tweet-actions').show();
+}, function()
+{
+	$(this).find('.tweet-actions').hide();
+});
+
+{% ifequal user.id reply.author.id %}
+$("#reply{{ forloop.counter }}").mouseenter(
+function()
+{
+	$(this).find('.tweet-delete').show();
+
+}).mouseleave(
+function()
+{
+	$(this).find('.tweet-delete').hide();
+
+}
+);
+
+$("#reply{{ forloop.counter }} .tweet-delete").hover(function()
+{
+	$(this).css('background-position', '-15px -16px');
+},
+function()
+{
+	$(this).css('background-position', '-15px 0px');
+});
+
+
+var csrf = $('input[name="csrfmiddlewaretoken"]').val();
+
+$("#reply{{ forloop.counter }} .tweet-delete").click(function()
+{
+
+	$.post("{% url uni_org_topic_delete_reply uni.name org|slug topic.id %}", {reply_id: '{{reply.id}}', 'csrfmiddlewaretoken':csrf},
+	function(json)
+	{
+		if(json=="success")
+		{
+			$("#reply{{ forloop.counter }}").fadeOut(1000);			
+		}
+
+	
+	});
+
+})
+{% endifequal %}
+</script>
+{% endfor %}
+</div>
+<!-- <hr class="twitter" style="border-color:#ccc;"> -->
+
+</div>
+
+</div></div></div>
+</div></div>
+
+<p style="margin-top:57px;"></p>
+{% endblock %}

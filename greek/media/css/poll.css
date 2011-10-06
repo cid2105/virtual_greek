@@ -1,0 +1,12 @@
+#pollContainer { width:250px; border:1px solid #000000; margin:0; text-align:center; background-color:#3a3737; position:relative; padding-bottom:10px; }
+#pollContainer form, #results { text-align:left; margin:0 0 0 30px; }	
+#pollContainer h2, #pollContainer p { font-family:Verdana; font-size:11px; margin:5px 0; color:#ffffff; font-weight:bold; }
+#pollContainer .error { margin:5px auto 0; background:url(images/warn.gif) no-repeat 0 0; padding-left:10px; width:182px; }
+#pollContainer input { margin:0 10px 0 0; }
+#pollContainer label { font-family:Verdana; font-size:10px; font-weight:bold; position:relative; top:-3px; color:#ffffff; }
+#pollContainer button { margin:5px 0 0; }
+#results { width:200px; margin:5px auto 0; border-top:2px solid #ffffff; border-bottom:2px solid #ffffff; }
+.row { width:200px; overflow:hidden; }
+#results label { width:93px; font-family:Verdana; font-size:11px; font-weight:bold; color:#ffffff; text-align:right; border-right:2px solid #ffffff; padding:5px 5px 10px 0; float:left; clear:both; height:10px; top:0; }
+.result { background-color:#079d67; width:0; float:left; height:21px; margin:2px 2px 2px 0; }
+#pollContainer #thanks { margin:0; position:relative; width:100%; text-align:center; clear:both; top:4px; }

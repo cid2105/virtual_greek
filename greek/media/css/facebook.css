@@ -1,0 +1,837 @@
+.edit_icon, .select_edit_icon
+{
+float:right;
+}
+
+.edit_icon:hover, .select_edit_icon:hover
+{
+	cursor:pointer;
+}
+.editable
+{
+color:#333;
+}
+.editable:hover
+{
+	text-decoration:none;
+}
+.fb_tabs_container
+{
+	position:relative;
+	right:3px;
+}
+.profile_container
+{
+	background-color: #F2F2F2;
+	    border: 1px solid #CCCCCC;
+	    color: #333333;
+	    font-family: "lucida grande",tahoma,verdana,arial,sans-serif;
+	    margin-left: 26px;
+	    margin-right: 27px;
+		height:440px;
+
+
+}
+
+.adjust
+{
+	position: relative;
+	left:51px;
+	top:6px;
+}
+
+span.content_editable
+{
+	color:#333;
+}
+
+span#user_email
+{
+color:#333333;
+}
+.profile_pic_right
+{
+	top: 40px;
+	right:0px;
+	width:300px;
+	position:absolute;
+}
+
+.profile_pic_right input
+{
+	width:190px;
+	color:#333333;
+}
+
+.profile_pic_right textarea
+{
+	width:193px;
+}
+
+/* Facebook Tab Style */  
+.fbtab  
+{  
+    padding: 8px;  
+    background-color: #d8dfea;  
+    color: #3b5998;  
+    font-weight: bold;  
+    float: left;  
+    margin-right: 4px;  
+    text-decoration: none;  
+}  
+.fbtab:hover  
+{  
+    background-color: #0066FF;
+    color: #ffffff;  
+    cursor: pointer;  
+}  
+
+.profile_pic_container
+{
+	position: relative;
+	right: 13px;
+}
+
+.home profile_picture
+{
+	position: relative;
+	left: 51px;
+}
+.message
+{
+padding-top:10px;
+margin-top:10px;
+resize:none;
+font-size: 13px;
+margin-top: 20px;
+background: none;
+border: none;
+width: 203px;
+position: absolute;
+left: 25px;
+top: 7px;
+height: 160px;
+font-family: 'Architects Daughter', cursive;
+height:140px;
+margin-top:20px;
+z-index:3;
+}
+
+.signature
+{
+	position: absolute;
+	top: 196px;
+	width: 230px;
+	left: 7px;
+	text-align: center;
+	font-family: Architects Daughter, cursive;
+	font-size: 11px;
+	z-index:3;
+}
+
+#send_mail
+{
+	position:absolute;
+	top:215px;
+	left: 15px;
+ 	height:23px;
+	width:28px;
+	z-index:3;
+}
+/* faceboook styles */
+.uiSearchInput{
+
+	margin: 0 22px 0 5px;
+	padding: 1px 5px 2px 0;
+	color: #333;
+	text-align: left;
+	direction: ltr;
+	width:120px;
+	position:relative;
+	left: 7px;
+}
+
+
+
+.uiSearchInput input
+{
+	width:80px;
+	height:15px;
+}
+.fbbluebox  
+{  
+    background-color: #eceff6;  
+    border: 1px solid #d4dae8;  
+    color: #333333;  
+    padding: 10px;  
+    font-size: 13px;  
+    font-weight: bold;  
+}
+
+ .fberrorbox  
+ {  
+     background-color: #ffebe8;  
+     border: 1px solid #dd3c10;  
+     color: #333333;  
+     padding: 10px;  
+     font-size: 13px;  
+     font-weight: bold;  
+ }
+
+
+.altSideHeader
+{
+margin: 0em;
+padding: 0em;
+font-size: 1.2em;
+padding-bottom: 0.175em;
+margin-bottom: 1.4em;
+margin-top: 0.95em;
+border-bottom: dotted 1px #E1E1E1;
+position: relative;
+color: #184366;
+font-weight: normal;
+letter-spacing: -1px;
+text-transform: lowercase
+}
+
+.altSideHeader .ul 
+{
+	margin-bottom: 2.0em;
+}
+
+.altSideHeader li
+{
+	line-height: 2em;
+}
+
+.uiSideHeader {
+    background-color: #F2F2F2;
+    border-bottom: medium none;
+    border-top: 1px solid #E2E2E2;
+	height:125%;
+	padding-bottom:3px;
+	color: #333333;
+	text-align:center;
+	font-size:13px;
+	font-family:"lucida grande",tahoma,verdana,arial,sans-serif;
+	position: relative;
+#	right: 46px;
+	width: 160px
+}
+
+.uiContentHeader, .uiOrganizationHeader, .uiResume, .uiProfileHeader, .prof_pic_header {
+
+    background-color: #F2F2F2;
+    border-bottom: medium none;
+    border-top: 1px solid #E2E2E2;
+    border-left: 1px solid #E2E2E2;
+    border-right: 1px solid #E2E2E2;
+	height:125%;
+	padding-bottom:5px;
+	color: #333333;
+	text-align:center;
+	font-size:13px;
+	font-family:"lucida grande",tahoma,verdana,arial,sans-serif;
+#	position:relative;
+#	bottom:70px;
+}
+
+.prof_pic_header
+{
+	width:220px;
+	left:55px;
+	background:none;
+	border:0px;
+}
+
+.uiOrganizationHeader, .uiProfileHeader
+{
+position:relative;
+left:174px;
+bottom:40px;
+padding-top:2px;
+font-size:19px;
+text-align:center;
+font-weight:bold;
+width:50%;	
+}
+
+.uiProfileHeader
+{
+
+font-family:"lucida grande",tahoma,verdana,arial,sans-serif;
+padding-top:2px;
+font-size:16px;
+padding-bottom:3px;
+height:100%;
+border: 1px solid #E2E2E2;
+}
+
+.uiResume
+{
+ position:relative;
+ bottom:-2px;
+ left:3px;
+ margin-top:1px;
+ width:270px;
+ height:246px;
+ background-color:#DDF0F8;
+ border:none;
+}
+
+
+.profile_name{	
+	padding-top:9px;
+	padding-bottom:3px;
+	color: #1C2A47;
+	font-size: 15px;
+	font-weight:bold;
+	position:relative; 
+	right: 2px;
+}
+
+.profile_pic img{
+	display: block;
+	padding-top:10px;
+}
+
+.networks{
+font-size: 11px;	
+text-align:center;
+color: #666;
+
+line-height: 1.4em;
+position:relative;
+top:5px;
+}
+
+.linkedin_description
+{
+	text-align:left;
+	padding-left:8px;
+	padding-right:3px;
+	font-size:11px;
+}
+
+.add_friend
+{
+	background: #DDD; cursor:pointer;
+	border-bottom-color: #999;
+	-webkit-box-shadow: 0 1px 0 rgba(0, 0, 0, .05);
+	border:1px solid #999;
+	font-size:11px;
+	font-weight:bold;
+	line-height: normal;
+	color: #3B5998;
+	font-family:'lucida grande',tahoma,verdana,arial,sans-serif;
+	background-image: vertical-align:top;
+	color:#444444;
+}
+
+.add_friend :hover
+{
+	text-decoration:underline;
+}
+
+.basic_text
+{
+	background-attachment: scroll;
+	background-clip: border-box;
+	background-color: transparent;
+	background-image: none;
+	background-origin: padding-box;
+	color: #666;
+	direction: ltr;
+	display: inline;
+	font-family: 'lucida grande', tahoma, verdana, arial, sans-serif;
+	font-size: 11px;
+	height: 0px;
+	line-height: 15px;
+	margin-bottom: 0px;
+	margin-left: 0px;
+	margin-right: 8px;
+	margin-top: 0px;
+	min-height: 0px;
+	padding-bottom: 0px;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	text-align: left;
+	unicode-bidi: normal;
+	visibility: visible;
+	width: 0px;
+}
+
+.fb_button_label
+{
+	-webkit-box-shadow: rgba(0, 0, 0, 0.046875) 0px 1px 0px 0px;
+	background-attachment: scroll;
+	background-clip: border-box;
+	background-color: #06f;
+	background-image: none;
+	background-origin: padding-box;
+	background-position: 0% 0%;
+	background-repeat: repeat;
+	border: 1px solid #ccc;
+	color: #666;
+	cursor: pointer;
+	direction: ltr;
+	display: inline-block;
+	font-family: 'lucida grande', tahoma, verdana, arial, sans-serif;
+	font-size: 13px;
+	font-weight: bold;
+	height: 19px;
+	line-height: normal;
+	list-style-type: none;
+	margin:0px;
+	padding-bottom: 2px 6px 6px 2px;
+	text-align: center;
+	text-decoration: none;
+	unicode-bidi: normal;
+	vertical-align: top;
+	white-space: nowrap;
+	width: 38px;
+}
+
+.fb_button
+{
+	-webkit-appearance: none;
+	-webkit-box-align: center;
+	-webkit-box-shadow: none;
+	-webkit-rtl-ordering: logical;
+	-webkit-user-select: text;
+	background-attachment: scroll;
+	background-clip: border-box;
+	background-color: transparent;
+	background-image: none;
+	background-origin: padding-box;
+	background-position: 0% 0%;
+	background-repeat: repeat;
+	border-bottom-color: white;
+	border-bottom-style: none;
+	border-bottom-width: 0px;
+	border-left-color: white;
+	border-left-style: none;
+	border-left-width: 0px;
+	border-right-color: white;
+	border-right-style: none;
+	border-right-width: 0px;
+	border-top-color: white;
+	border-top-style: none;
+	border-top-width: 0px;
+	box-sizing: border-box;
+	color: white;
+	cursor: pointer;
+	direction: ltr;
+	display: inline-block;
+	font-family: 'Lucida Grande', Tahoma, Verdana, Arial, sans-serif;
+	font-size: 11px;
+	font-style: normal;
+	font-variant: normal;
+	font-weight: bold;
+	height: 19px;
+	letter-spacing: normal;
+	line-height: normal;
+	list-style-type: none;
+	margin-bottom: 0px;
+	margin-left: 0px;
+	margin-right: 0px;
+	margin-top: 0px;
+	outline-color: white;
+	outline-style: none;
+	outline-width: 0px;
+	padding-bottom: 2px;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 1px;
+	text-align: center;
+	text-decoration: none;
+	text-indent: 0px;
+	text-shadow: none;
+	text-transform: none;
+	unicode-bidi: normal;
+	vertical-align: baseline;
+	white-space: nowrap;
+	width: 38px;
+	word-spacing: 0px;
+}
+
+.fbinfobox
+{
+background-color: #fff9d7;
+border: 1px solid #e2c822;
+color: #333333;
+padding: 10px;
+font-size: 13px;
+font-weight: bold;
+}
+
+.fbgreybox  
+{  
+    background-color: #f7f7f7;  
+    border: 1px solid #cccccc;  
+    color: #333333;  
+    padding: 13px;  
+    font-size: 13px;  
+    font-weight: bold;
+  	text-align:center;
+}
+
+#fb_content
+{
+position: relative;
+resize: none;
+top: 11px;
+width:175px; 
+height:20px;
+border-color: 1px solid #B4BBCD; 
+font-size:13px;
+}
+#fb_button
+{
+background-color:#3B5998;
+color:#ffffff;
+font-size:13px;
+font-weight:bold;
+padding:4px;
+}
+#fb_cancel
+{
+background-color:#dedede;
+color:#000;
+font-size:13px;
+padding:4px;
+margin-left:10px;
+}
+#fb_button_block
+{
+display:none;
+}
+
+.fbFeedbackContent .composer {
+	
+	-moz-border-bottom-colors: none;
+    -moz-border-image: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background-color: rgba(190, 190, 190, 0.2);
+    border-color: #E9E9E9;
+    border-style: solid;
+    border-width: 1px 0;
+    padding: 7px 10px 7px 69px;
+    position: relative;
+}
+
+.uiTypeahead {
+    -moz-border-bottom-colors: none;
+    -moz-border-image: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background: none repeat scroll 0 0 #FFFFFF;
+    border-color: #BDC7D8;
+    border-style: solid;
+    border-width: 1px 0;
+    cursor: default;
+    position: relative;
+}
+
+.fbFeedbackContent.fbDarkWidget .fbFeedbackMentions .mentionsTextarea, .fbFeedbackContent .fbFeedbackMentions .mentionsTextarea {
+    background-color: transparent;
+    border-width: 0;
+    box-shadow: none;
+    margin: 0;
+    padding: 0;
+}
+
+.fbCommentContext .composer textarea, .fbFeedbackContent .composer textarea {
+    border: 1px solid #899BC5;
+    padding: 3px;
+    width: 100%;
+}
+
+.fbFeedbackContent .composer .uiProfilePhoto {
+    background-color: #DDDDDD;
+    left: 10px;
+    margin: 2px 0 0;
+    padding: 0 !important;
+    position: absolute;
+}
+
+.uiProfilePhotoLarge {
+    height: 50px;
+    width: 50px;
+}
+
+.fbFeedbackContent .post label.desc {
+    font-weight: normal;
+    position: absolute;
+    top: 4px;
+}
+
+.fbFeedbackContent label {
+    color: #666666;
+    cursor: pointer;
+    font-weight: bold;
+    vertical-align: middle;
+}
+
+/* Example tokeninput style #2: Facebook style */
+ul.token-input-list-facebook {
+    border: 1px solid #999;
+    cursor: text;
+    font-size: 11px;
+    list-style-type: none;
+    overflow: hidden;
+    padding: 0;
+    position: relative;
+    width: 220px;
+}
+
+ul.token-input-list-facebook li input {
+    border: 0;
+    width: 100px;
+    padding: 3px 8px;
+    background-color: white;
+    margin: 2px 0;
+	height:20px;
+    -webkit-appearance: caret;
+}
+
+li.token-input-token-facebook {
+    overflow: hidden; 
+    height: auto !important; 
+    height: 15px;
+    margin: 3px;
+    padding: 1px 3px;
+    background-color: #eff2f7;
+    color: #000;
+    cursor: default;
+    border: 1px solid #ccd5e4;
+    font-size: 11px;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    float: left;
+    white-space: nowrap;
+}
+
+li.token-input-token-facebook p {
+    display: inline;
+    padding: 0;
+    margin: 0;
+}
+
+li.token-input-token-facebook span {
+    color: #a6b3cf;
+    margin-left: 5px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+li.token-input-selected-token-facebook {
+    background-color: #5670a6;
+    border: 1px solid #3b5998;
+    color: #fff;
+}
+
+li.token-input-input-token-facebook {
+    float: left;
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+}
+
+div.token-input-dropdown-facebook {
+    position: absolute;
+    width: 220px;
+    background-color: #fff;
+    overflow: hidden;
+    border-left: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    cursor: default;
+    font-size: 11px;
+    font-family: Verdana;
+    z-index: 1;
+}
+
+div.token-input-dropdown-facebook p {
+    margin: 0;
+    padding: 5px;
+    font-weight: bold;
+    color: #777;
+}
+
+div.token-input-dropdown-facebook ul {
+    margin: 0;
+    padding: 0;
+}
+
+div.token-input-dropdown-facebook ul li {
+    background-color: #fff;
+    padding: 3px;
+    margin: 0;
+    list-style-type: none;
+}
+
+div.token-input-dropdown-facebook ul li.token-input-dropdown-item-facebook {
+    background-color: #fff;
+}
+
+div.token-input-dropdown-facebook ul li.token-input-dropdown-item2-facebook {
+    background-color: #fff;
+}
+
+div.token-input-dropdown-facebook ul li em {
+    font-weight: bold;
+    font-style: normal;
+}
+
+div.token-input-dropdown-facebook ul li.token-input-selected-dropdown-item-facebook {
+    background-color: #3b5998;
+    color: #fff;
+}
+
+
+#wrapper {
+	width:800px;
+margin-top:250px;
+	margin-left: auto;
+	margin-right: auto
+}
+#wall {
+	border: 1px solid #BDC7D8;
+	    float: left;
+	    font-family: Arial,Helvetica,sans-serif;
+	    font-size: 13px;
+		position: relative;
+	    left:70px;
+	    top: 19px;
+	    width: 480px;
+	height:45px;
+
+}
+.Share.button, .Share.button:visited {
+#  background-color: #3B5998;
+background-color: #0066FF;
+    border: 0 none;
+    color: #FFFFFF;
+    cursor: pointer;
+    float: right;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 5px;
+    position: absolute;
+    right: 22px;
+    text-align: center;
+   top: 25px;
+    width: 50px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	-moz-box-shadow: 0 1px 3px #999;
+	-webkit-box-shadow: 0 1px 3px #999;
+	text-shadow: 0 -1px 1px #222;
+}
+
+
+.fb_form_button, .fb_form_button:visited  {
+ background-color: #0066FF;
+    border: 0 none;
+    color: #FFFFFF;
+    cursor: pointer;
+    float: right;
+    font-size: 13px;
+    font-weight: bold;
+    padding: 5px;
+    text-align: center;
+    width: 50px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	-moz-box-shadow: 0 1px 3px #999;
+	-webkit-box-shadow: 0 1px 3px #999;
+	text-shadow: 0 -1px 1px #222;
+}
+
+#sharebtn {
+	padding:20px 5px;
+}
+.info {
+	width:360px;
+	height:100px;
+	float:left;
+	margin:15px
+}
+#prev {
+	cursor:pointer;
+}
+#next {
+	cursor:pointer;
+}
+#totalimg {
+	font-size:9px;
+	color:#000000;
+	float:left;
+	margin:5px;
+}
+label.title {
+	font-size:12px;
+	font-weight:bold;
+	cursor:pointer;
+}
+label.url {
+	font-size: 11px;
+	font-weight: normal;
+	color: #666;
+}
+label.desc {
+	font-size:11px;
+	cursor:pointer;
+}
+.title:hover, .desc:hover {
+	background-color:#FFFF99
+}
+.images {
+	width:100px;
+	height:100px;
+	float:left;
+	margin:15px 23px 15px 15px;
+}
+#loader {
+	margin:16px 17px 7px 7px;
+}
+#fetched_data {
+	height:125px;
+	margin-bottom:10px;
+}
+#textareaWrap {
+  -moz-border-bottom-colors: none;
+    -moz-border-image: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background-color: #F2F2F2;
+    border-color: #B4BBCD;
+    border-style: solid;
+    border-width: 0px; #1px 1px 1px;
+    text-align: center;
+}
+
+#new_announcement img 
+{
+	height:15px; position:relative; bottom:9px; right:3px;
+}
+
+#post_announcement_button{
+    border: 0 none;
+    color: #FFFFFF;
+    cursor: pointer;
+    font-size: 11px;
+    font-weight: bold;
+    height: 16px;
+    padding: 2px;
+    right: 80px;
+    top: 8px;
+}

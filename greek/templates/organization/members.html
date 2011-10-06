@@ -1,0 +1,412 @@
+{% load static %}
+{% load chomp %}
+
+
+<br/>
+<a tabindex="0" href="#filters" style="color:#3B5998; font-size:11px;" class="fg-button fg-button-icon-right ui-widget ui-state-default ui-corner-allz" id="flyout"><span class="ui-icon ui-icon-triangle-1-s"></span>Brothers</a>
+<div id="filters" class="hidden" >
+	<ul>
+		<li><a href="#"><span>All</span></a></li>
+		<li><a href="#"><span>Brothers</span></a>
+		<li><a href="#"><span>Pledges</span></a></li>
+		<li><a href="#" >Executive Board<span class="ui-icon ui-icon-triangle-1-e"></a>
+			<ul>
+			<li><a href="#">President</a></li>
+			<li><a href="#">Vice President</a></li>
+			<li><a href="#">Social Chair</a></li>
+			<li><a href="#">Rush Chair</a></li>
+			<li><a href="#">Treasurer</a></li>
+			<li><a href="#">Secretary</a></li>
+			<li><a href="#">House Manager</a></li>
+		</ul></li>
+		<li><a href="#"><span>Year</span><span class="ui-icon ui-icon-triangle-1-e"></span></a>
+		<ul>
+			<li><a href="#">Spring 2011</a></li>
+			<li><a href="#">Fall 2011</a></li>
+			<li><a href="#">Spring 2012</a></li>
+		</ul></li>
+	</ul>
+</div>
+<input id="names" style="position: absolute; right: 28px; color:#777; " value="Search..."/>
+<!-- <hr class="divider"> -->
+
+
+<div class="cirlenav">
+<div class="container">
+
+	<!-- Right-hand navigation -->
+	  <div id="roundrr_navigation">
+		<table><tr>
+			<td><a id="next"><span class="ui-icon ui-icon-circle-triangle-w" style="position:relative;left:17px; z-index:0; top:15px;"></span></a></td>
+	  		<td><a id="prev"><span class="ui-icon ui-icon-circle-triangle-e" style="position:relative;left:35px; z-index:0; top:15px;"></span></a></td>
+		</tr></table>
+	 </div>
+
+  <!-- central image -->
+<a id="center_image" rel="fancybox" href="" title="" > 
+  <div class="roundrr_center" >
+	
+  </div>
+</a>
+
+	
+  <!-- Speech bubble for captions -->
+  <div class="roundrr_speech">
+  </div>
+
+ <!-- actual caption text -->
+ <div id="roundrr_caption" style="z-index:0;">
+  </div>
+
+ <!-- the container of images -->
+	<div id='roundrr_container'>
+		<ul class='list'>
+
+			<li class='item'>	
+			<div class='my_class'> 
+			<img alt="Cole Diamond" num="1" src="{% get_static_prefix %}/{{user.get_profile.profile_picture}}"></img> 
+			</div>	
+			</li>
+			
+			<li class='item'>	
+			<div class='my_class'> 
+			<img alt="Cole Diamond1" num="2" src="http://a6.sphotos.ak.fbcdn.net/hphotos-ak-snc6/285184_10150717500045459_568675458_19737584_17892_n.jpg"></img> 
+			</div>	
+			</li>
+			
+			<li class='item'>	
+			<div class='my_class'> 
+			<img alt="Cole Diamond2" num="3" src="http://a6.sphotos.ak.fbcdn.net/hphotos-ak-snc6/285184_10150717500045459_568675458_19737584_17892_n.jpg"></img> 
+			</div>	
+			</li>
+			
+			<li class='item'>	
+			<div class='my_class'> 
+			<img alt="Cole Diamond3" num="4" src="http://a6.sphotos.ak.fbcdn.net/hphotos-ak-snc6/285184_10150717500045459_568675458_19737584_17892_n.jpg"></img> 
+			</div>	
+			</li>
+			
+			<li class='item'>	
+			<div class='my_class'> 
+			<img alt="Cole Diamond4" num="5" src="http://a6.sphotos.ak.fbcdn.net/hphotos-ak-snc6/285184_10150717500045459_568675458_19737584_17892_n.jpg"></img> 
+			</div>	
+			</li>
+			
+			<li class='item'>	
+			<div class='my_class'> 
+			<img alt="Cole Diamond5" num="6" src="http://a6.sphotos.ak.fbcdn.net/hphotos-ak-snc6/285184_10150717500045459_568675458_19737584_17892_n.jpg"></img> 
+			</div>	
+			</li>
+
+	        <li class='item'>	
+			<div class='my_class'>  
+			<img  alt="Taylor Swift" num="7" src="http://a0.twimg.com/profile_images/390558464/Photo_190_bigger.jpg"></img>  </div>	</li>
+
+
+          <li class='item'>	
+			<div class='my_class'>  
+			<img alt="Andy Warhols" num="8" src="http://a1.twimg.com/profile_images/930308885/ban_bigger.jpg"></img>
+			</div>	
+			</li>
+
+			<li class='item'>	
+			<div class='my_class'>  
+			<img alt="Lenny Kravitz" num="9" src="http://a0.twimg.com/profile_images/1117384560/image_bigger.jpg"></img>
+			</div>	
+			</li>
+
+			<li class='item'>	
+			<div class='my_class'>  
+			<img alt="Katy Perry"  num="10" src="http://a3.twimg.com/profile_images/1107052519/i_mblue_bigger.jpg"></img>  </div>	</li>
+		</ul>
+	</div>
+	</div></div>
+	<br/>	<br/>	<br/>
+
+
+
+
+
+
+<link rel="stylesheet" type="text/css" href="{% get_static_prefix %}css/ribbon.css" media="screen" title="style (screen)" />
+<link rel="stylesheet" type="text/css" href="{% get_static_prefix %}css/roundrr.css" media="screen" title="style (screen)" />
+<script src="{% get_static_prefix %}js/jQuery.roundrr.js" type="text/javascript"></script>
+<script src="{% get_static_prefix %}js/jquery.dropdown.js" type="text/javascript"></script>
+<link rel="stylesheet" type="text/css" href="{% get_static_prefix %}css/dropdown.css" media="screen" title="style (screen)" />
+<script type="text/javascript" src="{% get_static_prefix %}js/jquery.themes.js"></script>
+<script type="text/javascript"> $(function(){ $('<div style="position: absolute; top: 20px; right: 300px;" />').appendTo('body').themeswitcher({loadTheme: 'Smoothness'}).hide(); }); </script>
+<script>
+	//menu
+	$('#flyout').fgmenu({	content: $('#flyout').next().html(), flyOut: true });
+	$('.fg-button').hover(
+		function(){ $(this).removeClass('ui-state-default').addClass('ui-state-focus'); },
+		function(){ $(this).removeClass('ui-state-focus').addClass('ui-state-default'); }
+	);
+	$("#names").click(function()
+	{
+		$(this).val("");
+		$(this).css("color", "#333");
+	});
+	//end menu
+jQuery(document).ready(function()
+{
+	  
+
+		$("#center_image").attr("href", "{% get_static_prefix %}images/{{user.get_profile.organization.name|chomp}}.png");
+		$("#center_image").attr("title", "{{user.get_profile.organization.name}}, {{user.get_profile.university.name}}");
+         var currentImage = "";
+         var interfaceLock = false; 
+         var imageCaption = "";
+		 var imageSrc = "";
+		 var largerImage = "";
+		 var speechBubble = "";
+      
+
+	  	jQuery("#roundrr_container").roundrrwheel(
+	  	{
+			mode: 'standard', //mode can be pick or standard
+			autoplay: false,
+			autoplayDirection: 'anticlockwise',
+			autoplayDuration: 4000,
+			centerClass: 'roundrr_center',
+			listClass: 'list', 
+			itemClass: 'item', 
+			radius: 220, 
+			animSpeed:400, 
+			centerX: 29, 
+			centerY: 60, 
+			animationEffect: 1, //(1:off, 5:light,10:heavy, 15:subtle)
+			selectEvent: "click", 	
+			centerImageSrc: "{% get_static_prefix %}images/{{user.get_profile.organization.name|chomp}}.png",
+			//on selecting/clicking an item on the wheel
+			onSelect: function($selected)
+			{  
+				showLargeImage($selected, 'noanim');
+			},
+			//on beginning to spin/animate the wheel
+			onNextBegin: function($m)
+			{
+			   
+			   interfaceLock = true;
+			 
+			},
+			onPrevBegin: function($m)
+			{
+			   
+			   interfaceLock = true;
+			 
+			},
+			//once an image has moved under the 'pick'
+			onImageFocus: function($item)
+			{
+
+            showLargeImage($item, 'none');
+		
+			 
+			},
+			//once an image/image set is no longer under the 'pick'
+			onImageBlur:  function($item)
+			{
+			   
+			}, 
+			//once the animation has completed
+			onAnimationComplete: function($menu)
+			{
+			
+			     
+			     jQuery('.centerImage').attr('src', currentImage);
+			     jQuery('.centerImage').load(function()
+			     {
+			       
+			        interfaceLock = false;
+			     });
+			     
+			     
+			
+			 
+			},
+			angleOffset: Math.PI, 
+			onShow: function($menuitems)
+			{
+				$menuitems.each(function(i)
+				{
+					var $this = jQuery(this);
+					$this.delay(i*100).fadeIn(500);
+				});
+				
+				
+			}
+			
+		});
+		
+		jQuery("#roundrr_container").roundrrwheel("show");
+		$('#next').bind('click', spinMenuRight);
+		$('#prev').bind('click', spinMenuLeft);
+		
+		function showLargeImage($i, mode)
+		{
+		  
+			interfaceLock = true;
+			var thisImage   = $i.find('img');
+			
+			imageSrc = thisImage.attr('src');
+            largerImage = imageSrc.replace('_bigger', '');	
+            imageCaption = thisImage.attr('alt');
+            speechBubble =  jQuery('.roundrr_speech');
+            
+            
+            var captionObject = jQuery('#roundrr_caption');
+            var centeredImage = jQuery('.centerImage');
+            var centerObject  = jQuery('.roundrr_center');
+            
+            speechBubble.fadeIn();   
+            currentImage = largerImage;
+            
+            captionObject.fadeIn();
+			captionObject.html(imageCaption);
+			
+			
+			/*center area: utilize the slimbox API for lightbox triggering*/
+			centerObject.bind('click', function()
+			{
+			
+			  showLightbox();
+			  
+			});
+			
+			
+			/*hover case for central image*/
+			centeredImage.hover( function()
+			{
+			 $(this).css('opacity','0.5');
+			
+			}, function()
+			{
+			$(this).css('opacity','1');
+			});
+			
+            
+            if(mode=='noanim')
+            {
+                 centeredImage.attr('src', currentImage);
+			     centeredImage.load(function()
+			     {
+			        interfaceLock = false;
+			        
+			     });
+            }
+            
+   
+		}
+		
+
+		
+		  /*Show lightbox for current image*/
+		  function showLightbox()
+		  {
+			var text = $("#roundrr_caption").html();
+			var image = $(".centerImage").attr("src");
+			$("#center_image").attr("href", image);
+			$("#center_image").attr("title", text);
+			
+		  }
+		
+		   /*Spin the menu to the left*/
+			function spinMenuLeft()
+			{
+			   if(!(interfaceLock))
+			  {
+			   jQuery("#roundrr_container").roundrrwheel("next");
+			   }			   
+			}
+			
+			/*Spin the menu to the right*/
+			function spinMenuRight()
+			{
+		      if(!(interfaceLock))
+			  {
+			   jQuery("#roundrr_container").roundrrwheel("prev");
+			   } 
+			}
+			
+			/*Keydown events*/
+			$(window).keydown(function(event) 
+			{
+				var keycode = event.keyCode;
+				
+				switch(keycode)
+				{
+				  case 39:
+           		  spinMenuLeft();
+  				  break;
+  				  case 37:
+           		  spinMenuRight();
+  				   break;
+  				   case 32:
+  				   if(largerImage.length)
+  				   {
+  				   showLightbox();
+  				   }
+  				   break;
+  				  
+		     } });
+	  });
+	
+</script>
+
+<!-- autocomplete -->
+<script>
+
+var i=0;
+	$(function() {
+		var availableTags = [
+			"Cole Graphite Diamond", "Katy Perry"
+		];
+			$( "#names" ).autocomplete({
+				source: availableTags,				
+			});
+			
+			
+			var i=0;
+			$('#names').bind('keydown keyup keybind focus', function() {
+			  	var input_text = $(this).val();
+				$("div.my_class img").each(function(index) {
+			    var alt_text = $(this).attr('alt').substring(0, input_text.length);
+				if( i > 0 && (alt_text.toLowerCase() != input_text.toLowerCase()))
+				{
+					$(this).fadeOut(1000);
+				}
+				else
+				{
+					var display = $(this).css("display");
+					if(display == "none")
+						$(this).fadeIn(1000);
+				}
+				});
+				i++;
+				return true;
+			});
+
+			
+	});
+	</script>
+<!-- end autocomplete -->
+
+
+
+
+
+<!-- SAVE THIS SHOULD BE RE IMPLEMENETEDD!!!!! ->
+{% block right_col %}
+
+<div id="extras" style="position:absolute;right:3px;top:-39px;">
+	<table><tr><div class="uiSearchInput"><td><input type="text" id="search" style="width:100px;position:relative;left:11px;"></td><td><span id="image" style="position:relative; cursor:pointer;
+	top: 1px;left:9px;"><img src="{% get_static_prefix %}images/search.png"></span></td></div></tr></table>
+
+
+<a><h2 class="uiSideHeader" style="margin-top:20px;">{{user.get_profile.organization.name}}</h2></a>
+</div>
+{% endblock %}
+-->
+
+
