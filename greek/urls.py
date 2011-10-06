@@ -24,7 +24,6 @@ urlpatterns = patterns('',
 
 urlpatterns += patterns('',
     # Examples:	
-	(r'^uploadify/', include('uploadify.urls')),
 	url(r'', include('social_auth.urls')),
 	(r'^facebook/', include('django_facebook.urls')),
 	url(r'^register/$', ajax_register, name='ajax_register'),
