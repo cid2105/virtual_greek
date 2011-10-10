@@ -75,7 +75,7 @@ background-image: url('/media/images/menubg.jpg');
 }
 .header {
  height: 80px;
-
+width:100%
 margin: 0 0 0 0;
 background-color: #3b3b3b;
 vertical-align: bottom;
