@@ -219,14 +219,15 @@ def members(request, uni_name, org_name):
 	
 def topic(request, uni_name, org_name, topic_id):
 	topic = get_object_or_404(Topic, pk=topic_id)
-	replies = topic.reply_set.all()
 	dict = getDict(request, uni_name, org_name)
-	dict.update({'topic':topic})
-	dict = paginateCollection(request, dict, replies, "replies")
 	if request.POST and request.POST['reply']:
 		reply = Reply(author = request.user, date=datetime.now(), topic = topic, content=request.POST['reply'])
 		reply.save()
+		topic.save()
 		dict.update({'new_post':True})
+	replies = topic.reply_set.all()
+	dict.update({'topic':topic})
+	dict = paginateCollection(request, dict, replies, "replies")	
 	return render_to_response('organization/topic.html', dict, context_instance=RequestContext(request))
 
 def profile(request, uni_name, org_name, user_id):

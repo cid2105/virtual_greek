@@ -49,7 +49,7 @@ def send_message(request):
 def profile_base(request):
 	profile = request.user.get_profile()
 	dict = getDict(request, profile.university.name, slugify(profile.organization.name))
-	dict.update({'title':'profile', 'curr_year':datetime.now().year, 'step':10 })
+	dict.update({'title':'profile', 'curr_year':datetime.datetime.now().year, 'step':10 })
 	return render_to_response('users/profile.html',dict, context_instance=RequestContext(request))
 	
 def upload_resume(request):
@@ -141,17 +141,20 @@ def getPagedTopics(request, topics):
 
 def message(request, conversation_id):
 	conversation = get_object_or_404(Conversation, pk=conversation_id)
-	messages = conversation.messages.all().order_by('-date')
 	profile = request.user.get_profile()
 	dict = getDict(request, profile.university.name, slugify(profile.organization.name))
 	if 'message' in request.POST:
 		message = Message(author = request.user, content=request.POST['message'], recipient=conversation.partner)
 		message.save()
 		conversation.messages.add(message)
+		conversation.save()
 		conversation.partner.get_profile().conversations.get(partner=request.user).messages.add(message)
+		conversation.partner.get_profile().save()
+		conversation.partner.get_profile().conversations.get(partner=request.user).messages
 		dict.update({'new_message':True})	
+	messages = conversation.messages.all()	
 	dict.update({'title':'inbox', 'conversation':conversation})
-	dict = paginateCollection(request, dict, messages, "messages")	
+	dict = paginateCollection(request, dict, messages, "messages")
 	return render_to_response('users/message.html', dict, context_instance=RequestContext(request))
 	
 def getPagedConversations(request, conversations):
@@ -186,7 +189,9 @@ def home(request):
 	return render_to_response('users/index.html', dict, context_instance=RequestContext(request))
 	
 def inbox(request):
-	conversations = request.user.get_profile().conversations.all()
+	if request.is_ajax():
+		conversations = request.user.get_profile().conversations.order_by('-pk')
+	conversations = request.user.get_profile().conversations.order_by('-pk')
 	profile = request.user.get_profile()
 	dict = getDict(request, profile.university.name, slugify(profile.organization.name))
 	dict.update({'title':'inbox'})

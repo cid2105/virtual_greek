@@ -6,6 +6,7 @@ from django.db.models.signals import post_save
 from users.fields import JSONField
 from extra import ContentTypeRestrictedFileField
 import s3 as site_s3
+import datetime
 
 class Message(models.Model):
 	editable = models.BooleanField()
@@ -23,16 +24,25 @@ class Conversation(models.Model):
 	partner = models.ForeignKey(User, related_name='conversator', blank=True, null=True)
 	viewed = models.BooleanField(default=True)
 	messages = models.ManyToManyField(Message, blank=True, null=True)
-	created_at = models.DateField(auto_now_add=True)
-	updated_at = models.DateField(auto_now=True)
+	created_at = models.DateField()
+	updated_at = models.DateField()
 	
+	class Meta:
+		ordering = ['-created_at', '-updated_at']
+		
+	def save(self, *args, **kwargs):
+		''' On save, update timestamps '''
+		if not self.id:
+			self.created_at = datetime.datetime.now()
+		self.updated_at = datetime.datetime.now()
+		super(Conversation, self).save(*args, **kwargs)
+    
 	def preview(self):
 		if len(self.messages.latest('date').content) > 50:
 			return self.messages.latest('date').content[0:50] + "..."
 		else:
 			return self.messages.latest('date').content
-	class Meta:
-		ordering = ['-updated_at', '-created_at']					
+					
 	
 class Linkedin(models.Model):
 	matriculate_year = models.IntegerField(blank=True, null=True)

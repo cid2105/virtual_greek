@@ -3,6 +3,7 @@
 {% load static %}
 {% load get_range %}
 {% block content %}
+
 <script>
 		jQuery.ias({
 		  container 	: ".discussions",
@@ -14,7 +15,7 @@
 				// item has. Make sure the elements are inside
 				// the container element.
 
-		  pagination	: ".summary",
+		  pagination	: "#paginate",
 				// Enter the selector of the element that contains
 				// your regular pagination links, like next,
 				// previous and the page numbers. This element
@@ -35,14 +36,14 @@
 <div class="uiOrganizationHeader">Inbox</div>
 <div class="discussion-board">
 
-<div class="creation_buttons notes_button">
+<div class="creation_buttons notes_button" style="">
 <a class="creation_buttons unbutton" style="color:#3B5998;"  rel="facebox" href="{% url new_message %}">
 <span class="button_newtopic" >New Message</span>
 </a>
 </div>
 
-<div class="bar summary_bar clearfix">
-<div class="summary">
+<div  class="bar summary_bar clearfix" >
+	<div id="paginate">
 {% if conversations.has_previous %}
     <a href="?page={{ conversations.previous_page_number }}">Previous</a>
 {% endif %}
@@ -59,7 +60,6 @@
 
 <div class="discussions">
 <div class="board_topics">
-
 {% for conversation in conversations.object_list %}
 <div conversation class="topic" style="" {% if forloop.first %} highlight {% endif %} {% if conversation in unviewed %} unviewed {% endif %}>
 <div id="conversation{{topic.id}}" class="board_topic first clearfix">
@@ -86,7 +86,6 @@
 <div class="bar summary_bar clearfix">
 <div class="summary"></div>
 </div>
-
 
 <script>
 var name="{{conversation.partner.get_profile.facebook_name}}";
@@ -122,8 +121,6 @@ var year="{{conversation.partner.get_profile.linkedin.graduate_year}}".substring
 </script>
 </div>
 {% endfor %}
-
-
 </div>
 </div>
 
@@ -133,7 +130,6 @@ var year="{{conversation.partner.get_profile.linkedin.graduate_year}}".substring
 
 <!-- new discussions -->
 <!-- end new discussions -->
-
 
 {% endblock %}
 
