@@ -16,6 +16,9 @@ class Message(models.Model):
 	content = models.TextField(blank=True, null=True)
 	date = models.DateTimeField(auto_now_add=True)
 
+	class Meta:
+		ordering = ['-date']
+		
 class Conversation(models.Model):
 	partner = models.ForeignKey(User, related_name='conversator', blank=True, null=True)
 	viewed = models.BooleanField(default=True)
@@ -28,6 +31,8 @@ class Conversation(models.Model):
 			return self.messages.latest('date').content[0:50] + "..."
 		else:
 			return self.messages.latest('date').content
+	class Meta:
+		ordering = ['-updated_at', '-created_at']					
 	
 class Linkedin(models.Model):
 	matriculate_year = models.IntegerField(blank=True, null=True)
