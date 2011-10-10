@@ -65,7 +65,7 @@
 
 <div conversation class="board_topic first clearfix" style="display:inline;">
 
-<a href="{% url uni_org_profile uni org|slug conversation.partner.id %}"><img id="prof_pic{{forloop.counter}}" src="/{{conversation.partner.get_profile.profile_picture}}" width="48" height="48" class="avatar"></a>
+<a href="{% url uni_org_profile uni org|slug conversation.partner.id %}"><img id="prof_pic{{forloop.counter}}" src="{{conversation.partner.get_profile.profile_picture}}" width="48" height="48" class="avatar"></a>
 <div class="inbox_info">
 	
 <h2 class="topic_title datawrap"> <a href="{% url message conversation.id %}">{{conversation.preview}}</a></h2>
@@ -93,7 +93,7 @@
 <script>
 var name="{{conversation.partner.get_profile.facebook_name}}";
 var role="{{conversation.partner.get_profile.role}} ";
-var src="/{{conversation.partner.get_profile.profile_picture}}";
+var src="{{conversation.partner.get_profile.profile_picture}}";
 var year="{{conversation.partner.get_profile.linkedin.graduate_year}}".substring(2);
 	$('#prof_pic{{forloop.counter}}').qtip(
 	      {

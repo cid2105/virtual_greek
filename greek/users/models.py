@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from users.fields import JSONField
 from extra import ContentTypeRestrictedFileField
+import s3 as site_s3
 
 class Message(models.Model):
 	editable = models.BooleanField()
@@ -59,7 +60,7 @@ class UserProfile(models.Model):
 	user = models.OneToOneField(User, unique=True)
 	full_name = models.CharField(max_length=100, blank=True)
 	nickname = models.CharField(max_length=100, blank=True)
-	profile_picture = models.ImageField(upload_to='media/profile_pictures', blank=True)
+	profile_picture_key = models.CharField(max_length=100, blank=True, null=True)
 	organization = models.ForeignKey(Organization, null=True)
 	university = models.ForeignKey(University, null=True)
 	about_me = models.TextField(blank=True, null=True)
@@ -78,7 +79,12 @@ class UserProfile(models.Model):
 	role = models.CharField(max_length=100, choices=ROLE_CHOICES)
 	canvas = models.TextField(blank=True, null=True)
 	phone_number = models.IntegerField(blank=True, null=True)
-	resume = ContentTypeRestrictedFileField(upload_to='media/resumes', content_types=['application/pdf', 'application/zip', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'], max_upload_size=5242880, blank=True, null=True)
+	resume_key = models.CharField(max_length=100, blank=True, null=True)
+	
+	def resume(self):
+	    return site_s3.get_s3_url('gg_resumes', self.resume_key)
+	def profile_picture(self):
+		return site_s3.get_s3_url('gg_profile_pictures', self.profile_picture_key)
 	
 	def first_name(self):
 		return self.facebook_name.split(" ")[0]

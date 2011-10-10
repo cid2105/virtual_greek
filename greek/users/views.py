@@ -1,4 +1,4 @@
-
+from s3 import *
 from django.shortcuts import *
 from django.contrib.auth.models import User
 from django.views.decorators.csrf import csrf_exempt
@@ -55,20 +55,18 @@ def profile_base(request):
 def upload_resume(request):
 	if 'resume' in request.FILES:
 		file = request.FILES['resume']
-		extension_array = file.name.split(".")
-		extension = "." + extension_array[len(extension_array)-1]
-		file.name = 'resume_' + str(request.user.id) +  extension
-		if request.user.get_profile().resume:
-			request.user.get_profile().resume.delete()
-		request.user.get_profile().resume = file
+		key = '%s-%s' % (request.user.id, ''.join(file.name.split(' ')))
+		site_s3.save_s3_data(key, file, 'gg_resumes', file.content_type)
+		request.user.get_profile().resume = key
 	request.user.get_profile().save()
 	return profile_base(request)
 	
 def upload_profile_picture(request):
 	if 'profile_picture' in request.FILES:
-		if request.user.get_profile().profile_picture:
-			request.user.get_profile().profile_picture.delete()
-		request.user.get_profile().profile_picture = request.FILES['profile_picture']
+		file = request.FILES['profile_picture']
+		key = '%s-%s' % (request.user.id, ''.join(file.name.split(' ')))
+		site_s3.save_s3_data(key, file, 'gg_profile_pictures', file.content_type)
+		request.user.get_profile().profile_picture_key = key
 		request.user.get_profile().save()
 		return profile_base(request)
 	profile = request.user.get_profile()

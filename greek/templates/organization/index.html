@@ -491,7 +491,7 @@ $(document).ready(function()
 				<li class='item'>	
 				<div class='my_class'> 
 					{% thumbnail member.get_profile.profile_picture "52x52" crop="center" as im %}
-	<img class="{{member.get_profile.linkedin.graduate_year}}" alt="{{member.get_profile.facebook_name}}" num="{{forloop.counter}}" src="/{{member.get_profile.profile_picture}}" height="{{im.height}}" width="{{im.width}}" link="{% url uni_org_profile uni org|slug member.id %}"></img> 
+	<img class="{{member.get_profile.linkedin.graduate_year}}" alt="{{member.get_profile.facebook_name}}" num="{{forloop.counter}}" src="{{member.get_profile.profile_picture}}" height="{{im.height}}" width="{{im.width}}" link="{% url uni_org_profile uni org|slug member.id %}"></img> 
 	{% endthumbnail %}
 				</div>	
 				</li>

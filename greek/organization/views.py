@@ -1,4 +1,5 @@
 # Create your views here.
+from s3 import *
 from django.shortcuts import *
 from unis.models import *
 from django.conf import settings
@@ -176,7 +177,9 @@ def new_album(request, uni_name, org_name):
 		album.save()
 		photo_list = []
 		for file in request.FILES.getlist('photos'):
-			pic = Photo.objects.create(url = file)
+			key = '%s-%s' % (request.user.get_profile().organization.name, ''.join(file.name.split(' ')))
+			site_s3.save_s3_data(key, file, 'gg_organization_photos', file.content_type)
+			pic = Photo.objects.create(key = file)
 			pic.save()
 			photo_list.append(pic)
 		map(album.photos.add, photo_list)

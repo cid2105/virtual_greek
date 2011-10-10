@@ -79,10 +79,10 @@
 	<form action="{% url facebook_connect %}?facebook_login=1" method="post" >
 
 
-	<a href="/{{user.get_profile.profile_picture}}" id="cropped_profile_picture"  title="{{user.get_profile.facebook_name}}">
+	<a href="{{user.get_profile.profile_picture}}" id="cropped_profile_picture"  title="{{user.get_profile.facebook_name}}">
 
 	{% thumbnail user.get_profile.profile_picture "180x154" crop="center" as im %}
-	<img  class="captify"  src="/{{user.get_profile.profile_picture}}" alt="<a rel='facebox' style='color:#999;' id='update_profile_picture_link'>Update profile picture</a>" style="margin-left:6px;" onError="this.src='{% get_static_prefix %}{% get_static_prefix %}images/default.png';this.title='Click here to add facebook profile picture';" width="{{ im.width }}" height="{{ im.height }}">
+	<img  class="captify"  src="{{user.get_profile.profile_picture}}" alt="<a rel='facebox' style='color:#999;' id='update_profile_picture_link'>Update profile picture</a>" style="margin-left:6px;" onError="this.src='{% get_static_prefix %}{% get_static_prefix %}images/default.png';this.title='Click here to add facebook profile picture';" width="{{ im.width }}" height="{{ im.height }}">
 	{% endthumbnail %}
 	</a>
 
@@ -159,7 +159,7 @@
 							
 							{% endfor %}
 							<br/>
-							{% if user.get_profile.resume %}<a style="font-size:11px; "href="/{{user.get_profile.resume}}">- download resume -</a>{% endif %}
+							{% if user.get_profile.resume %}<a style="font-size:11px; "href="{{user.get_profile.resume}}">- download resume -</a>{% endif %}
 							</span>
 	</blockquote>
 	

@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from unis.models import University
 from users.models import *
+import s3 as site_s3
 
 ORG_CHOICES = (
     ('Fraternity', 'Fraternity'),
@@ -38,9 +39,13 @@ class Photo(models.Model):
 	date = models.DateTimeField(auto_now_add=True,  blank=True, null=True)
 	caption = models.CharField(max_length=200, blank=True, null=True)
 	tagged = models.ManyToManyField(User, related_name="tagged", blank=True, null=True)
-	url = models.ImageField(upload_to="media/organization_photos", blank=True, null=True)
+	key = models.CharField(max_length=100, blank=True, null=True)
 	thumbnail = models.FileField(upload_to="media/organization_thumbnails")
 	new_upload = models.NullBooleanField(default=False)
+	
+	def _get_file_url(self):
+	    return site_s3.get_s3_url('gg_organization_photos', self.key)
+	url = property(_get_file_url)
 	
 	def __unicode__(self):
 		return str(self.url)

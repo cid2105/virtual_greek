@@ -104,7 +104,7 @@
 
 <a class="gallery" href="/{{photo}}" rel="fancybox" no_highlight="true" style="text-decoration:none;" >
 {% thumbnail photo.url "150x120" crop="center" as im %}
-<img rel="asf" class="captioned" alt="a{% if caption %}{{photo.caption|preview}}{% endif %}" src="/{{photo}}" height="{{im.height}}" width="{{im.width}}">
+<img rel="asf" class="captioned" alt="{% if caption %}{{photo.caption|preview}}{% endif %}" src="{{photo}}" height="{{im.height}}" width="{{im.width}}">
 {% endthumbnail %}
 
 </a>

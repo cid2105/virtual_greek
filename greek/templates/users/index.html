@@ -363,7 +363,7 @@ $(document).ready(function()
 var announcer = $('#announcement{{forloop.counter}}').attr('announcer');
 var announcement = $('#announcement{{forloop.counter}}').attr('announcement');
 var qtip_content = '<span style="font-family:Century Gothic; font-size:11px; text-align:center;">' + announcer + '</span><br/>' +
-'<table><tr><td><img height="48px;" width="48px;" src="/{{user.get_profile.profile_picture}}"  alt="Loading..." /></td><td style="padding-left:15px;"><p style="font-family:Century Gothic; font-size:13px;"> \"' + announcement + '\"</p></td></tr></table>';
+'<table><tr><td><img height="48px;" width="48px;" src="{{user.get_profile.profile_picture}}"  alt="Loading..." /></td><td style="padding-left:15px;"><p style="font-family:Century Gothic; font-size:13px;"> \"' + announcement + '\"</p></td></tr></table>';
 
 	$('#announcement{{forloop.counter}}').qtip(
 	      {

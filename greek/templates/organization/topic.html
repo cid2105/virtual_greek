@@ -66,7 +66,7 @@ $("#reply1").effect("highlight", {}, 3000);
 	 <div id="textareaWrap">
 	    <form name="reply_form" method="post">{% csrf_token %}
 			<table><tr>
-			<td ><img class="user_picture" src="/{{user.get_profile.profile_picture}}"></td>
+			<td ><img class="user_picture" src="{{user.get_profile.profile_picture}}"></td>
 			<td><textarea rel="resizeable2" placeholder="Post a comment..." style="resize:none;" name="reply" id="wall"></textarea></td>
 			</tr></table>
 	    <div id="sharebtn"> <a class="button Share" id="shareButton" onclick="document.reply_form.submit();">Post</a> </div>
@@ -227,7 +227,7 @@ var text = self.find('b').text();
 <div data-user-id="346283981" data-screen-name="coal_diamond" data-item-id="102056154678575104" data-tweet-id="102056154678575104" class="stream-item-content tweet stream-tweet ">
   <div class="tweet-dogear"></div>
   <div class="tweet-image">
- <img width="48" height="48" data-user-id="346283981" id="prof_pic{{forloop.counter}}" class="user-profile-link" name="{{reply.author.get_profile.facebook_name}}" role="{{reply.author.get_profile.role}}" src="/{{reply.author.get_profile.profile_picture}}">
+ <img width="48" height="48" data-user-id="346283981" id="prof_pic{{forloop.counter}}" class="user-profile-link" name="{{reply.author.get_profile.facebook_name}}" role="{{reply.author.get_profile.role}}" src="{{reply.author.get_profile.profile_picture}}">
   </div>
   <div class="tweet-content">
     <div class="tweet-row">
@@ -293,7 +293,7 @@ var text = self.find('b').text();
 <script>
 var name="{{reply.author.get_profile.facebook_name}}";
 var role="{{reply.author.get_profile.role}} ";
-var src="/{{reply.author.get_profile.profile_picture}}";
+var src="{{reply.author.get_profile.profile_picture}}";
 var year="{{reply.author.get_profile.linkedin.graduate_year}}".substring(2);
 	$('#prof_pic{{forloop.counter}}').qtip(
 	      {
