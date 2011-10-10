@@ -63,7 +63,7 @@
 {% for conversation in conversations.object_list %}
 
 
-<div conversation class="board_topic first clearfix" style="display:inline;">
+<div conversation class="board_topic first clearfix" style="display:inline;" {% if forloop.first %} highlight {% endif %} {% if conversation in unviewed %} unviewed {% endif %}>
 
 <a href="{% url uni_org_profile uni org|slug conversation.partner.id %}"><img id="prof_pic{{forloop.counter}}" src="{{conversation.partner.get_profile.profile_picture}}" width="48" height="48" class="avatar"></a>
 <div class="inbox_info">

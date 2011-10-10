@@ -75,6 +75,8 @@ function messageValidation()
 	{
 		$.post('{% url send_message %}', {'message':$('#message_body').val(), 'to':okay});
 		$('#message_sent').fadeIn(1500).fadeOut(1500); 
+		$(".discussions").load('{% url inbox %} .discussions');			
+		setTimeout('$("div[highlight]").effect("highlight", {}, 3000);',1000);
 	}
 	else
 	{
