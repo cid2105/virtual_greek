@@ -278,8 +278,8 @@
 <a href="{{user.get_profile.profile_picture}}" id="cropped_profile_picture" style="" title="{{user.get_profile.facebook_name}}">
 
 {% if user.get_profile.profile_picture_key %}
-{% thumbnail user.get_profile.profile_picture "180x154" crop="center" as im %}
-<img  class="captify"  src="{{user.get_profile.profile_picture}}" alt="<a rel='facebox' style='color:#999;' id='update_profile_picture_link'>Update profile picture</a>" style="margin-left:6px;" onError="this.src='{% get_static_prefix %}images/default.png';this.title='Add a profile picture';" width="{{ im.width }}" height="{{ im.height }}">
+{% thumbnail user.get_profile.profile_picture_key "180x154" crop="center" as im %}
+<img  class="captify"  src="{{user.get_profile.profile_picture_key}}" alt="<a rel='facebox' style='color:#999;' id='update_profile_picture_link'>Update profile picture</a>" style="margin-left:6px;" onError="this.src='{% get_static_prefix %}images/default.png';this.title='Add a profile picture';" width="{{ im.width }}" height="{{ im.height }}">
 {% endthumbnail %}
 {% else %}
 <img  class="captify"  src="{% get_static_prefix %}images/default.png" alt="<a rel='facebox' style='color:#999;' id='update_profile_picture_link'>Update profile picture</a>" style="margin-left:6px;" onError="this.src='{% get_static_prefix %}images/default.png';this.title='Add a profile picture';" width="180px;" height="154px;">
