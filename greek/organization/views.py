@@ -179,7 +179,7 @@ def new_album(request, uni_name, org_name):
 		for file in request.FILES.getlist('photos'):
 			key = '%s-%s' % (request.user.get_profile().organization.name, ''.join(file.name.split(' ')))
 			site_s3.save_s3_data(key, file, 'gg_organization_photos', file.content_type)
-			pic = Photo.objects.create(key = file)
+			pic = Photo.objects.create(key = key)
 			pic.save()
 			photo_list.append(pic)
 		map(album.photos.add, photo_list)

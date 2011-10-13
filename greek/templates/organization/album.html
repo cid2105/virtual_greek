@@ -99,17 +99,12 @@
 		
 <div style="display:inline;" style="height:800px;">
 
-		
-{% for photo in photos %}
-
-<a class="gallery" href="/{{photo}}" rel="fancybox" no_highlight="true" style="text-decoration:none;" >
-{% thumbnail photo.url "150x120" crop="center" as im %}
-<img rel="asf" class="captioned" alt="{% if caption %}{{photo.caption|preview}}{% endif %}" src="{{photo}}" height="{{im.height}}" width="{{im.width}}">
-{% endthumbnail %}
-
+{% for photo in photos.object_list %}
+<a class="gallery" href="{{photo.url}}" rel="fancybox" no_highlight="true" style="text-decoration:none;" >
+<img rel="asf" class="captioned" alt="{% if caption %}{{photo.caption|preview}}{% endif %}" src="{{photo.url}}" height="120px;" width="150px;">
 </a>
-
 {% endfor %}
+
 </div>
 </div>
 

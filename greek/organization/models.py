@@ -47,8 +47,7 @@ class Photo(models.Model):
 	    return site_s3.get_s3_url('gg_organization_photos', self.key)
 	url = property(_get_file_url)
 	
-	def __unicode__(self):
-		return str(self.url)
+
 	
 	class Meta:
 		ordering = ['-date']
