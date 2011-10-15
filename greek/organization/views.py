@@ -191,7 +191,7 @@ def new_album(request, uni_name, org_name):
 		org.albums.add(album)
 		org.save()
 		dict['org'] = org
-		return render_to_response('organization/gallery.html', dict, context_instance=RequestContext(request))	
+		return gallery(request, uni_name, org_name)	
 	dict['error'] = 'One or more fields are incomplete'
 	return render_to_response('organization/gallery.html', dict, context_instance=RequestContext(request))	
 		
