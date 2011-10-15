@@ -12,6 +12,7 @@ from django.db.utils import IntegrityError
 import sys
 import os
 from django.db import transaction
+from s3 import *
 
 logger = logging.getLogger(__name__)
 
@@ -172,9 +173,11 @@ def _setProfilePicture(profile):
     filename= fbname + '.jpg'	
     dest = settings.PROFILE_PATH + filename
     url = ' http://graph.facebook.com/' + fbname + '/picture?type=large'
+	request.user.get_profile().profile_picture_key = key
+	request.user.get_profile().save()
     command = 'wget -O ' + dest + url
-    os.system(command)
-    profile.profile_picture = settings.PROFILE_PIC_DIR + filename
+#    os.system(command)
+    profile.profile_picture_key = url
     profile.save()
     return True
 
