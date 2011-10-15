@@ -276,7 +276,7 @@
 
 
 <a href="{{user.get_profile.profile_picture}}" id="cropped_profile_picture" style="" title="{{user.get_profile.facebook_name}}">
-
+{{user.get_profile.profile_picture}}
 {% if user.get_profile.profile_picture_key %}
 <img  class="captify"  src="{{user.get_profile.profile_picture}}" alt="<a rel='facebox' style='color:#999;' id='update_profile_picture_link'>Update profile picture</a>" style="margin-left:6px;" onError="this.src='{% get_static_prefix %}images/default.png';this.title='Add a profile picture';" width="180px;" height="154px;">
 {% else %}
