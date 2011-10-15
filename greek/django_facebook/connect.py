@@ -173,8 +173,6 @@ def _setProfilePicture(profile):
     filename= fbname + '.jpg'	
     dest = settings.PROFILE_PATH + filename
     url = ' http://graph.facebook.com/' + fbname + '/picture?type=large'
-    request.user.get_profile().profile_picture_key = key
-    request.user.get_profile().save()
     command = 'wget -O ' + dest + url
 #    os.system(command)
     profile.profile_picture_key = url
