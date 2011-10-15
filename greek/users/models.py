@@ -93,7 +93,7 @@ class UserProfile(models.Model):
 	ip = models.IPAddressField(blank=True, null=True, default='127.0.0.1')
 	role = models.CharField(max_length=100, choices=ROLE_CHOICES)
 	canvas = models.TextField(blank=True, null=True)
-	phone_number = models.CharField(max_length=12, blank=True, null=True)
+	phone_number = models.CharField(max_length=15, blank=True, null=True)
 	resume_key = models.CharField(max_length=100, blank=True, null=True)
 	
 	def resume(self):
