@@ -71,7 +71,7 @@ def upload_profile_picture(request):
 		return profile_base(request)
 	profile = request.user.get_profile()
 	dict = getDict(request, profile.university.name, slugify(profile.organization.name))
-	dict.update({'title':'profile', 'curr_year':datetime.now().year, 'step':10 })
+	dict.update({'title':'profile', 'curr_year':datetime.datetime.now().year, 'step':10 })
 	return render_to_response('users/upload_picture.html',dict, context_instance=RequestContext(request))
 
 def brother_validation(request):
