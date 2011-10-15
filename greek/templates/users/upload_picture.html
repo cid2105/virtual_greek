@@ -3,7 +3,7 @@
 
 <div id="upload_profile_picture">
 	<h1 style="font-size:20px;"> Upload your profile picture </h1><hr/>
-<form  name="resume_form" enctype="multipart/form-data" method="post" action="{% url upload_profile_picture %}">
+<form  name="resume_form" enctype="multipart/form-data" method="post" style="width:270px;" action="{% url upload_profile_picture %}">
 	{% csrf_token %}
 <span style="color:#999; font-size:12px;">Browse:</span> <input type="file" name="profile_picture"/>
 <div><br/><input type="submit" value="Post" class="fb_form_button"></div>
