@@ -226,7 +226,7 @@ def _update_user(user, facebook):
         user.save()
     if profile_dirty:
         profile.save()
-    if profile.profile_picture == '':
+    if profile.profile_picture_key == '':
         _setProfilePicture(profile)
     return user
 
