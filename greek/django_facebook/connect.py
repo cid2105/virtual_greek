@@ -173,7 +173,7 @@ def _setProfilePicture(profile):
     filename= fbname + '.jpg'	
     dest = settings.PROFILE_PATH + filename
     url = ' http://graph.facebook.com/' + fbname + '/picture?type=large'
-    command = 'wget -O ' + dest + url
+#    command = 'wget -O ' + dest + url
 #    os.system(command)
     profile.profile_picture_key = url
     profile.save()
@@ -226,8 +226,7 @@ def _update_user(user, facebook):
         user.save()
     if profile_dirty:
         profile.save()
-    if profile.profile_picture_key == '':
-        _setProfilePicture(profile)
+    _setProfilePicture(profile)
     return user
 
 
