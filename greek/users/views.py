@@ -49,7 +49,9 @@ def send_message(request):
 def profile_base(request):
 	profile = request.user.get_profile()
 	dict = getDict(request, profile.university.name, slugify(profile.organization.name))
-	dict.update({'title':'profile', 'curr_year':datetime.datetime.now().year, 'step':10 })
+	if profile.profile_picture_key.find("graph.facebook.com") != -1:
+		FacebookPic = True
+	dict.update({'FacebookPic': FacebookPic, 'title':'profile', 'curr_year':datetime.datetime.now().year, 'step':10 })
 	return render_to_response('users/profile.html',dict, context_instance=RequestContext(request))
 	
 def upload_resume(request):
