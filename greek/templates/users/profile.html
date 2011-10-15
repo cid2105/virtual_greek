@@ -48,8 +48,12 @@
 				
 				$('img.captify').click(function(e)
 				{
-					e.preventDefault();					
+					e.preventDefault();	
+					{% if not FacebookPic %}
 					jQuery.facebox({ image: '{{user.get_profile.profile_picture}}' });
+					{% else %}
+					jQuery.facebox({ image: '{{user.get_profile.profile_picture_key}}' });
+					{% endif %}
 				});
 			
 		$('#update_profile_picture_link').click(function(e)
