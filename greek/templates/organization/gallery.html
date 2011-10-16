@@ -157,7 +157,7 @@ $(document).ready(function()
 <script>
 
 var qtip_content = '<span style="font-family:Century Gothic; font-size:11px; text-align:center;">{{album.date}}</span><br/>' +
-'<table><tr><td><img height="48px;" width="48px;" src="{{album.thumbnail}}"  alt="Loading..." /></td><td style="padding-left:15px;"><p style="font-family:Century Gothic; font-size:13px;">"{{album.description}}"</p></td></tr></table>';
+'<table><tr><td><img height="48px;" width="48px;" src="{{album.thumbnail.url}}"  alt="Loading..." /></td><td style="padding-left:15px;"><p style="font-family:Century Gothic; font-size:13px;">"{{album.description}}"</p></td></tr></table>';
 
 	 $('#album{{forloop.counter}}').qtip(
 	      {
