@@ -153,7 +153,7 @@ $(document).ready(function()
 {% for album in albums %}
 
 {{album.date|date:"m/d"}}: <a href="{% url uni_org_album uni.name org|slug album.id %}" id="album{{forloop.counter}}">{{album}}</a> <br/>
-
+{{album.thumbnail.url}}
 <script>
 
 var qtip_content = '<span style="font-family:Century Gothic; font-size:11px; text-align:center;">{{album.date}}</span><br/>' +
