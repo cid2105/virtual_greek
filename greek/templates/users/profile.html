@@ -222,10 +222,10 @@
 					{% endif %}
 				});
 			
-		$('#update_profile_picture_link').click(function(e)
+		$('.caption-bottom').click(function(e)
 		{
 			e.preventDefault();
-			alert('asdf');
+
 			jQuery.facebox({ ajax: '{% url upload_profile_picture %}', loadingImage : '{% get_static_prefix %}images/loading.gif',
 		      closeImage   : '{% get_static_prefix %}images/closelabel.png'});
 		});
