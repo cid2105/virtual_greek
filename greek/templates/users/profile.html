@@ -46,22 +46,7 @@
 		
 				$('img.captify').captify({});
 				
-				$('img.captify').click(function(e)
-				{
-					e.preventDefault();	
-					{% if not FacebookPic %}
-					jQuery.facebox({ image: '{{user.get_profile.profile_picture}}' });
-					{% else %}
-					jQuery.facebox({ image: '{{user.get_profile.profile_picture_key}}' });
-					{% endif %}
-				});
-			
-		$('#update_profile_picture_link').click(function(e)
-		{
-			e.preventDefault();
-			jQuery.facebox({ ajax: '{% url upload_profile_picture %}', loadingImage : '{% get_static_prefix %}images/loading.gif',
-		      closeImage   : '{% get_static_prefix %}images/closelabel.png'});
-		});
+		
 		
 	
 		
@@ -225,6 +210,24 @@
 				}
 			
 				$(this).attr('input_mode', 'false');			
+		});
+		
+				$('img.captify').click(function(e)
+				{
+					e.preventDefault();	
+					{% if not FacebookPic %}
+					jQuery.facebox({ image: '{{user.get_profile.profile_picture}}' });
+					{% else %}
+					jQuery.facebox({ image: '{{user.get_profile.profile_picture_key}}' });
+					{% endif %}
+				});
+			
+		$('#update_profile_picture_link').click(function(e)
+		{
+			e.preventDefault();
+			alert('asdf');
+			jQuery.facebox({ ajax: '{% url upload_profile_picture %}', loadingImage : '{% get_static_prefix %}images/loading.gif',
+		      closeImage   : '{% get_static_prefix %}images/closelabel.png'});
 		});
 		
 	});
