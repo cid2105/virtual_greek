@@ -98,8 +98,12 @@ class UserProfile(models.Model):
 	
 	def resume(self):
 	    return site_s3.get_s3_url('gg_resumes', self.resume_key)
+	
 	def profile_picture(self):
-		return site_s3.get_s3_url('gg_profile_pictures', self.profile_picture_key)
+		if self.profile_picture_key and self.profile_picture_key.find("graph.facebook.com") == -1:
+			return site_s3.get_s3_url('gg_profile_pictures', self.profile_picture_key)
+		else:
+			return self.profile_picture_key
 	
 	def first_name(self):
 		return self.facebook_name.split(" ")[0]
