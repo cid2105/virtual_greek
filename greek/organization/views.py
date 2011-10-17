@@ -202,13 +202,16 @@ def threads(request, uni_name, org_name):
 	return render_to_response('organization/threads.html', dict, context_instance=RequestContext(request))	
 	
 def new_announcement(request, uni_name, org_name):
-	dict = getDict(request, uni_name, org_name)
 	if request.POST:
+		uni = request.user.get_profile().university
+		org = request.user.get_profile().organization
 		hash = request.POST['hash_tag']
 		content = request.POST['content']
-		announcement = Announcement(author=request.user, date=datetime.now(), content=content, hash=hash, university=dict['uni'], organization=dict['org'])
+		announcement = Announcement(author=request.user, date=datetime.now(), content=content, hash=hash, university=uni, organization=org)
 		announcement.save()
-	dict['topics'] = Topic.objects.filter(organization=request.user.get_profile().organization, university=request.user.get_profile().university, members__id__contains = request.user.id )	
+	dict = getDict(request, uni_name, org_name)
+	topics = Topic.objects.filter(organization=request.user.get_profile().organization, university=request.user.get_profile().university, members = request.user)
+	dict = paginateCollection(request, dict, topics, "topics")	
 	return render_to_response('users/index.html', dict, context_instance=RequestContext(request))	
 	
 def members(request, uni_name, org_name):
