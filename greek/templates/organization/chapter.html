@@ -28,9 +28,8 @@
 		<tr >
 			<td>
 				<div style="position:relative; right: 70px; top:12px;">
-				{% thumbnail member.get_profile.profile_picture "52x52" crop="center" as im %}
-<img src="/{{member.get_profile.profile_picture}}" height="{{im.height}}" width="{{im.width}}" link="{% url uni_org_profile uni org|slug member.id %}"></img> 
-{% endthumbnail %}</div>
+				<img src="{{member.get_profile.profile_picture}}" height="52px;" width="52px;" link="{% url uni_org_profile uni org|slug member.id %}"></img> 
+				</div>
 				<div style="position:relative; left:32px; bottom: 29px;">{{member.get_profile}}</div>
 			</td>
 			<td>{{member.get_profile.linkedin.graduate_year}}</td>	
