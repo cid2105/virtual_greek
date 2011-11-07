@@ -112,17 +112,17 @@ class Chapter(models.Model):
 		list = []
 		if self.president is not None:
 			list.append(['President', self.president.get_profile()])
-		if self.vice_president is not None
+		if self.vice_president is not None:
 			list.append(['Vice-President', self.vice_president.get_profile()])
-		if self.treasurer is not None
+		if self.treasurer is not None:
 			list.append(['Treasurer', self.treasurer.get_profile()])
-		if self.secretary is not None
+		if self.secretary is not None:
 			list.append(['Secretary', self.secretary.get_profile()])
-		if self.rush_chair is not None
+		if self.rush_chair is not None:
 			list.append(['Rush Chair', self.rush_chair.get_profile()])		
-		if self.social_chair is not None
+		if self.social_chair is not None:
 			list.append(['Social Chair', self.social_chair.get_profile()])
-		if self.house_manager is not None
+		if self.house_manager is not None:
 			list.append(['House Manager', self.house_manager.get_profile()])
 		
 		return list
