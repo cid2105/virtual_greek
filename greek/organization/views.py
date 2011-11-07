@@ -50,8 +50,8 @@ def getDict(request, uni_name, org_name, Title=True):
 	chapter = request.user.get_profile().chapter
 	title = 'home' if Title else 'members' 
 	dict = {'base_url': base_url, 'uni_name': uni_name, 'org_name':org_name, 'org':org, 'uni':uni, 'title':title, 'hash_tags':getHashes(), 'chapter':chapter}
-	if len(Announcement.objects.filter(university = uni, chapter=request.user.get_profile().chapter)) > 0:
-		dict = paginateCollection(request, dict, Announcement.objects.filter(university = uni, chapter=request.user.get_profile().chapter), 'announcements')
+	if len(Announcement.objects.filter(university = uni, chapter=chapter)) > 0:
+		dict = paginateCollection(request, dict, Announcement.objects.filter(university = uni, chapter=chapter), 'announcements')
 	return dict
 
 @csrf_exempt
@@ -200,13 +200,14 @@ def threads(request, uni_name, org_name):
 def new_announcement(request, uni_name, org_name):
 	if request.POST:
 		uni = request.user.get_profile().university
-		org = request.user.get_profile().chapter
+		org = request.user.get_profile().organization
+		chapter = request.user.get_profile().chapter
 		hash = request.POST['hash_tag']
 		content = request.POST['content']
-		announcement = Announcement(author=request.user, date=datetime.now(), content=content, hash=hash, university=uni, chapter=org)
+		announcement = Announcement(author=request.user, date=datetime.now(), content=content, hash=hash, university=uni, chapter=chapter)
 		announcement.save()
 	dict = getDict(request, uni_name, org_name)
-	topics = Topic.objects.filter(chapter=request.user.get_profile().chapter, members__id__contains = request.user.id)
+	topics = Topic.objects.filter(chapter=chapter, members__id__contains = request.user.id)
 	dict = paginateCollection(request, dict, topics, "topics")	
 	return render_to_response('users/index.html', dict, context_instance=RequestContext(request))	
 	

@@ -120,7 +120,7 @@ def updateProfile(request):
 
 def getPagedTopics(request, topics):
 	uni = request.user.get_profile().university
-	org = request.user.get_profile().chapter
+	org = request.user.get_profile().chapter.organization
 	chapter = request.user.get_profile().chapter
 	base_url = reverse('uni_org_index', args=[uni.name, slugify(org.name)])
 	paginator = Paginator(topics, PAGE_SIZE)
@@ -136,8 +136,8 @@ def getPagedTopics(request, topics):
 	except EmptyPage:
 		topics = paginator.page(paginator.num_pages)
 	dict = {'chapter':chapter, 'base_url':base_url, 'uni_name':uni.name, 'page':page,'title': 'home', 'topics':topics, 'uni':uni, 'org':org, 'hash_tags':getHashes()}
-	if len(Announcement.objects.filter(university = uni, chapter=org)) > 0:
-		dict = paginateCollection(request, dict, Announcement.objects.filter(university = uni, chapter=org), 'announcements')
+	if len(Announcement.objects.filter(university = uni, chapter=chapter)) > 0:
+		dict = paginateCollection(request, dict, Announcement.objects.filter(university = uni, chapter=chapter), 'announcements')
 	return dict
 
 
@@ -161,12 +161,12 @@ def message(request, conversation_id):
 	
 def getPagedConversations(request, conversations):
 	uni = request.user.get_profile().university
-	org = request.user.get_profile().chapter
+	org = request.user.get_profile().organization
 	base_url = reverse('uni_org_index', args=[uni.name, slugify(org.name)])
 	paginator = Paginator(conversations, PAGE_SIZE)
 	page = request.GET.get('page')	
 	chapter = request.user.get_profile().chapter
-	announcements = Announcement.objects.filter(university = uni, chapter=org)[:4]	
+	announcements = Announcement.objects.filter(university = uni, chapter=chapter)[:4]	
 	try:
 	 	conversations = paginator.page(page)
 	except PageNotAnInteger:
