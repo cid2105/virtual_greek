@@ -109,19 +109,27 @@ class Chapter(models.Model):
 		return str(self.organization) + " - " + str(self.name)
 	
 	def board(self):
-		return  [
-		    ['President', self.president.get_profile()],
-		    ['Vice-President', self.vice_president.get_profile()],
-		    ['Treasurer', self.treasurer.get_profile()],
-		    ['Secretary', self.secretary.get_profile()],
-		    ['Rush Chair', self.rush_chair.get_profile()],
-		    ['Social Chair', self.social_chair.get_profile()],
-		    ['House Manager', self.house_manager.get_profile()]
-		]
+		list = []
+		if self.president is not None:
+			list.append(['President', self.president.get_profile()])
+		if self.vice_president is not None
+			list.append(['Vice-President', self.vice_president.get_profile()])
+		if self.treasurer is not None
+			list.append(['Treasurer', self.treasurer.get_profile()])
+		if self.secretary is not None
+			list.append(['Secretary', self.secretary.get_profile()])
+		if self.rush_chair is not None
+			list.append(['Rush Chair', self.rush_chair.get_profile()])		
+		if self.social_chair is not None
+			list.append(['Social Chair', self.social_chair.get_profile()])
+		if self.house_manager is not None
+			list.append(['House Manager', self.house_manager.get_profile()])
+		
+		return list
 		
 	def positions(self):
 		return ['President', 'Vice-President', 'Treasurer', 'Secretary', 'Rush Chair', 'Social Chair', 'House Manager', 'Brother', 'Rush']
-	
+		
 	def exec_board(self):
 		return [self.president.get_profile(), self.vice_president.get_profile(), self.treasurer.get_profile(), self.secretary.get_profile(), self.rush_chair.get_profile(), self.social_chair.get_profile(), self.house_manager.get_profile()]
 		
