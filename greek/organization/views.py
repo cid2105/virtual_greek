@@ -45,17 +45,13 @@ def vote_reply(request, uni_name, org_name):
 def getDict(request, uni_name, org_name, Title=True):
 	base_url = reverse('uni_org_index', args=[uni_name, org_name])
 	org_name = re.sub('\-', ' ', org_name).title()
-	org = Organization.objects.get(university__name = uni_name, name = org_name)
+	org = Organization.objects.get(name = org_name)
 	uni = University.objects.get(name = uni_name)
+	chapter = request.user.get_profile().chapter
 	title = 'home' if Title else 'members' 
-	try:
-		chapter = Chapter.objects.get(university = uni, organization=org)
-	except Chapter.DoesNotExist:
-		chapter = Chapter(organization=org, university = uni)
-		chapter.save()
 	dict = {'base_url': base_url, 'uni_name': uni_name, 'org_name':org_name, 'org':org, 'uni':uni, 'title':title, 'hash_tags':getHashes(), 'chapter':chapter}
-	if len(Announcement.objects.filter(university = uni, organization=org)) > 0:
-		dict = paginateCollection(request, dict, Announcement.objects.filter(university = uni, organization=org), 'announcements')
+	if len(Announcement.objects.filter(university = uni, chapter=request.user.get_profile().chapter)) > 0:
+		dict = paginateCollection(request, dict, Announcement.objects.filter(university = uni, chapter=request.user.get_profile().chapter), 'announcements')
 	return dict
 
 @csrf_exempt
@@ -126,7 +122,7 @@ def chapter(request, uni_name, org_name):
 	
 def home(request, uni_name, org_name):
 	org_name = re.sub('\-', ' ', org_name).title()
-	org = Organization.objects.get(university__name = uni_name, name = org_name)
+	org = Chapter.objects.get(university__name = uni_name, name = org_name)
 	return render_to_response('organization/home.html', {'org':org, 'title': org_name}, context_instance=RequestContext(request))
 
 def getHashes():
@@ -142,8 +138,8 @@ def bulletin(request, uni_name, org_name):
 
 def album(request, uni_name, org_name, album_id):
 	dict = getDict(request, uni_name, org_name)
-	album = dict['org'].albums.get(id=album_id)	
-	albums = dict['org'].albums.all()
+	album = dict['chapter'].albums.get(id=album_id)	
+	albums = dict['chapter'].albums.all()
 	albums_by_year = {}
 	if albums:
 		for al in albums:
@@ -157,7 +153,7 @@ def album(request, uni_name, org_name, album_id):
 
 def gallery(request, uni_name, org_name):
 	dict = getDict(request, uni_name, org_name)
-	albums = dict['org'].albums.all()
+	albums = dict['chapter'].albums.all()
 	albums_by_year = {}
 	if albums:
 		for album in albums:
@@ -177,7 +173,7 @@ def new_album(request, uni_name, org_name):
 		album.save()
 		photo_list = []
 		for file in request.FILES.getlist('photos'):
-			key = '%s-%s' % (request.user.get_profile().organization.name, ''.join(file.name.split(' ')))
+			key = '%s-%s' % (request.user.get_profile().chapter.name, ''.join(file.name.split(' ')))
 			site_s3.save_s3_data(key, file, 'gg_organization_photos', file.content_type)
 			pic = Photo.objects.create(key = key)
 			pic.save()
@@ -187,10 +183,10 @@ def new_album(request, uni_name, org_name):
 			album.thumbnail = photo_list[0] 
 
   		album.save()
-		org = dict['org']
+		org = dict['chapter']
 		org.albums.add(album)
 		org.save()
-		dict['org'] = org
+		dict['chapter'] = org
 		return gallery(request, uni_name, org_name)	
 	dict['error'] = 'One or more fields are incomplete'
 	return render_to_response('organization/gallery.html', dict, context_instance=RequestContext(request))	
@@ -198,26 +194,26 @@ def new_album(request, uni_name, org_name):
 	
 def threads(request, uni_name, org_name):
 	dict = getDict(request, uni_name, org_name)
-	dict['topics'] = Topic.objects.filter(organization=request.user.get_profile().organization, university=request.user.get_profile().university, members__id__contains = request.user.id )
+	dict['topics'] = Topic.objects.filter(chapter=request.user.get_profile().chapter, members__id__contains = request.user.id )
 	return render_to_response('organization/threads.html', dict, context_instance=RequestContext(request))	
 	
 def new_announcement(request, uni_name, org_name):
 	if request.POST:
 		uni = request.user.get_profile().university
-		org = request.user.get_profile().organization
+		org = request.user.get_profile().chapter
 		hash = request.POST['hash_tag']
 		content = request.POST['content']
-		announcement = Announcement(author=request.user, date=datetime.now(), content=content, hash=hash, university=uni, organization=org)
+		announcement = Announcement(author=request.user, date=datetime.now(), content=content, hash=hash, university=uni, chapter=org)
 		announcement.save()
 	dict = getDict(request, uni_name, org_name)
-	topics = Topic.objects.filter(organization=request.user.get_profile().organization, university=request.user.get_profile().university, members = request.user)
+	topics = Topic.objects.filter(chapter=request.user.get_profile().chapter, members__id__contains = request.user.id)
 	dict = paginateCollection(request, dict, topics, "topics")	
 	return render_to_response('users/index.html', dict, context_instance=RequestContext(request))	
 	
 def members(request, uni_name, org_name):
 	if request.is_ajax():
 		org_name = re.sub('\-', ' ', org_name).title()
-		org = Organization.objects.get(university__name = uni_name, name = org_name)
+		org = Chapter.objects.get(university__name = uni_name, name = org_name)
 		return render_to_response('organization/members.html', {'org':org, 'title': org_name}, context_instance=RequestContext(request))
 	
 def topic(request, uni_name, org_name, topic_id):
@@ -249,20 +245,20 @@ def new_topic(request, uni_name, org_name):
 			for e in form.errors.iteritems():
 				errors += str(e[1])
 		members = request.POST['privacy']
-		org = request.user.get_profile().organization
+		chapter = request.user.get_profile().chapter
 		uni = request.user.get_profile().university
 		if members in ['Fraternity', 'Sorority', 'Society']:
-			members = User.objects.filter(userprofile__organization = org, userprofile__university = uni)
+			members = User.objects.filter(userprofile__chapter = chapter, userprofile__university = uni)
 		elif members in ['Brothers', 'Sisters', 'Members']:
-			members = User.objects.filter(userprofile__organization = org, userprofile__university = uni).filter(userprofile__role = 'Brother')						
+			members = User.objects.filter(userprofile__chapter = chapter, userprofile__university = uni).filter(userprofile__role = 'Brother')						
 		elif members == 'Pledges':
-			members = User.objects.filter(userprofile__organization = org, userprofile__university = uni).filter(userprofile__role = 'Pledge')						
+			members = User.objects.filter(userprofile__chapter = chapter, userprofile__university = uni).filter(userprofile__role = 'Pledge')						
 		elif members == 'Public':
 			members = User.objects.all()
 		else:
 			member_list = [x.strip() for x in members.split(",")]
 			members = User.objects.filter(userprofile__name__in = member_list)
-		topic = Topic(author = request.user, organization = org, date=datetime.now(), university=uni, topic=request.POST['topic'])
+		topic = Topic(author = request.user, chapter=chapter, date=datetime.now(), topic=request.POST['topic'])
 		topic.save()
 		reply = Reply(author = request.user, date=datetime.now(), topic = topic, content=request.POST['body'])
 		reply.save()

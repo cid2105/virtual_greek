@@ -152,8 +152,8 @@ jQuery(document).ready(function()
 {
 	  
 
-		$("#center_image").attr("href", "{% get_static_prefix %}images/{{user.get_profile.organization.name|chomp}}.png");
-		$("#center_image").attr("title", "{{user.get_profile.organization.name}}, {{user.get_profile.university.name}}");
+		$("#center_image").attr("href", "{% get_static_prefix %}images/{{user.get_profile.chapter.name|chomp}}.png");
+		$("#center_image").attr("title", "{{user.get_profile.chapter.name}}, {{user.get_profile.university.name}}");
          var currentImage = "";
          var interfaceLock = false; 
          var imageCaption = "";
@@ -177,7 +177,7 @@ jQuery(document).ready(function()
 			centerY: 60, 
 			animationEffect: 1, //(1:off, 5:light,10:heavy, 15:subtle)
 			selectEvent: "click", 	
-			centerImageSrc: "{% get_static_prefix %}images/{{user.get_profile.organization.name|chomp}}.png",
+			centerImageSrc: "{% get_static_prefix %}images/{{user.get_profile.chapter.name|chomp}}.png",
 			//on selecting/clicking an item on the wheel
 			onSelect: function($selected)
 			{  
@@ -404,7 +404,7 @@ var i=0;
 	top: 1px;left:9px;"><img src="{% get_static_prefix %}images/search.png"></span></td></div></tr></table>
 
 
-<a><h2 class="uiSideHeader" style="margin-top:20px;">{{user.get_profile.organization.name}}</h2></a>
+<a><h2 class="uiSideHeader" style="margin-top:20px;">{{user.get_profile.chapter.name}}</h2></a>
 </div>
 {% endblock %}
 -->

@@ -16,11 +16,11 @@ STATIC_URL = '/media/'
 
 def index(request):
 	if request.user.is_authenticated():
-		topics = Topic.objects.filter(organization=request.user.get_profile().organization, university=request.user.get_profile().university, members = request.user)
+		topics = Topic.objects.filter(chapter=request.user.get_profile().chapter.id, members__id__contains = request.user.id )
 		if topics:
 			dict = getPagedTopics(request, topics)
 		else:
-			dict = getDict(request, request.user.get_profile().university.name, slugify(request.user.get_profile().organization.name))
+			dict = getDict(request, request.user.get_profile().university.name, slugify(request.user.get_profile().chapter.organization.name))
 		dict.update({'title':home})
 		return render_to_response('users/index.html', dict, context_instance=RequestContext(request))
 	return render_to_response('home/index.html', {}, context_instance=RequestContext(request))
@@ -79,7 +79,7 @@ def register(request):
 				org.save()
 				user = User.objects.create_user(request.POST['email'], request.POST['email'], date.isoformat())
 				user.save()	
-				user.get_profile().organization = org
+				user.get_profile().chapter = org
 				user.get_profile().university = uni
 				user.get_profile().ip = request.META['REMOTE_ADDR']
 				user.get_profile().save

@@ -27,16 +27,16 @@
 	<form id="form" name="form" style="align:center;" >
 	{% csrf_token %}
 	<h1 >New Thread</h1>
-	<h2  id="new_topic_header" style="position:relative;left:4px;" >Thread will be visible to <select id="new_topic_privacy"><option value="{{user.get_profile.organization.type}}">Entire {{user.get_profile.organization.type}}</option>
+	<h2  id="new_topic_header" style="position:relative;left:4px;" >Thread will be visible to <select id="new_topic_privacy"><option value="{{user.get_profile.chapter.organization.type}}">Entire {{user.get_profile.chapter.organization.type}}</option>
 		
-	{% ifequal user.get_profile.organization.type|stringformat:"s" "Fraternity" %}
+	{% ifequal user.get_profile.chapter.type|stringformat:"s" "Fraternity" %}
 	
 	<option value="Brothers">	
 	Brothers
 	</option>
 	{% endifequal %}
 	
-	{% ifequal user.get_profile.organization.type|stringformat:"s" "Sorority" %}
+	{% ifequal user.get_profile.chapter.type|stringformat:"s" "Sorority" %}
 
 	<option value="Sisters">	
 	Sisters
@@ -94,7 +94,7 @@
 
 		$.ajax({
 		    type: "POST",
-		    url: "{% url new_topic user.get_profile.university.name|toString user.get_profile.organization.name|toString|slug %}",
+		    url: "{% url new_topic user.get_profile.university.name|toString user.get_profile.chapter.organization.name|toString|slug %}",
 		    data:{topic:topic, body:body, privacy:privacy, csrfmiddlewaretoken:token},
 		    complete: function(data) 
 			{		

@@ -48,7 +48,7 @@ def send_message(request):
 	
 def profile_base(request):
 	profile = request.user.get_profile()
-	dict = getDict(request, profile.university.name, slugify(profile.organization.name))
+	dict = getDict(request, profile.university.name, slugify(profile.chapter.organization.name))
 	FacebookPic = True if profile.profile_picture_key.find("graph.facebook.com") != -1 else False
 	dict.update({'FacebookPic': FacebookPic, 'title':'profile', 'curr_year':datetime.datetime.now().year, 'step':10 })
 	return render_to_response('users/profile.html',dict, context_instance=RequestContext(request))
@@ -71,14 +71,14 @@ def upload_profile_picture(request):
 		request.user.get_profile().save()
 		return profile_base(request)
 	profile = request.user.get_profile()
-	dict = getDict(request, profile.university.name, slugify(profile.organization.name))
+	dict = getDict(request, profile.university.name, slugify(profile.chapter.organization.name))
 	dict.update({'title':'profile', 'curr_year':datetime.datetime.now().year, 'step':10 })
 	return render_to_response('users/upload_picture.html',dict, context_instance=RequestContext(request))
 
 def brother_validation(request):
 	if 'to' in request.GET:
 		try:
-			member = request.user.get_profile().organization.members.get(userprofile__facebook_name__icontains=request.GET['to'])
+			member = request.user.get_profile().chapter.members.get(userprofile__facebook_name__icontains=request.GET['to'])
 			return HttpResponse(member.id)
 		except User.DoesNotExist:
 		   	return HttpResponse("failure")
@@ -120,7 +120,8 @@ def updateProfile(request):
 
 def getPagedTopics(request, topics):
 	uni = request.user.get_profile().university
-	org = request.user.get_profile().organization
+	org = request.user.get_profile().chapter
+	chapter = request.user.get_profile().chapter
 	base_url = reverse('uni_org_index', args=[uni.name, slugify(org.name)])
 	paginator = Paginator(topics, PAGE_SIZE)
 	page = request.GET.get('page')	
@@ -134,16 +135,16 @@ def getPagedTopics(request, topics):
 		topics = paginator.page(1)
 	except EmptyPage:
 		topics = paginator.page(paginator.num_pages)
-	dict = {'base_url':base_url, 'uni_name':uni.name, 'page':page,'title': 'home', 'topics':topics, 'uni':uni, 'org':org, 'hash_tags':getHashes()}
-	if len(Announcement.objects.filter(university = uni, organization=org)) > 0:
-		dict = paginateCollection(request, dict, Announcement.objects.filter(university = uni, organization=org), 'announcements')
+	dict = {'chapter':chapter, 'base_url':base_url, 'uni_name':uni.name, 'page':page,'title': 'home', 'topics':topics, 'uni':uni, 'org':org, 'hash_tags':getHashes()}
+	if len(Announcement.objects.filter(university = uni, chapter=org)) > 0:
+		dict = paginateCollection(request, dict, Announcement.objects.filter(university = uni, chapter=org), 'announcements')
 	return dict
 
 
 def message(request, conversation_id):
 	conversation = get_object_or_404(Conversation, pk=conversation_id)
 	profile = request.user.get_profile()
-	dict = getDict(request, profile.university.name, slugify(profile.organization.name))
+	dict = getDict(request, profile.university.name, slugify(profile.chapter.organization.name))
 	if 'message' in request.POST:
 		message = Message(author = request.user, content=request.POST['message'], recipient=conversation.partner)
 		message.save()
@@ -160,32 +161,32 @@ def message(request, conversation_id):
 	
 def getPagedConversations(request, conversations):
 	uni = request.user.get_profile().university
-	org = request.user.get_profile().organization
+	org = request.user.get_profile().chapter
 	base_url = reverse('uni_org_index', args=[uni.name, slugify(org.name)])
 	paginator = Paginator(conversations, PAGE_SIZE)
 	page = request.GET.get('page')	
-	announcements = Announcement.objects.filter(university = uni, organization=org)[:4]	
+	chapter = request.user.get_profile().chapter
+	announcements = Announcement.objects.filter(university = uni, chapter=org)[:4]	
 	try:
 	 	conversations = paginator.page(page)
 	except PageNotAnInteger:
 		conversations = paginator.page(1)
 	except EmptyPage:
 		conversations = paginator.page(paginator.num_pages)
-	return {'base_url':base_url, 'uni_name':uni.name, 'page':page, 'title': 'inbox', 'conversations':conversations, 'uni':uni, 'org':org, 'hash_tags':getHashes(), 'announcements':announcements}
+	return {'chapter':chapter, 'base_url':base_url, 'uni_name':uni.name, 'page':page, 'title': 'inbox', 'conversations':conversations, 'uni':uni, 'org':org, 'hash_tags':getHashes(), 'announcements':announcements}
 		
 def new_message(request):
 	profile = request.user.get_profile()
-	dict = getDict(request, profile.university.name, slugify(profile.organization.name))
+	dict = getDict(request, profile.university.name, slugify(profile.chapter.organization.name))
 	return render_to_response('users/new_message.html', dict, context_instance=RequestContext(request))
 
 def start(request):
 	profile = request.user.get_profile()
-	dict = getDict(request, profile.university.name, slugify(profile.organization.name))
+	dict = getDict(request, profile.university.name, slugify(profile.chapter.organization.name))
 	return render_to_response('users/start.html', dict, context_instance=RequestContext(request))
 	
 def home(request):
-	topics = Topic.objects.filter(organization=request.user.get_profile().organization, university=request.user.get_profile().university, members = request.user)
-	
+	topics = Topic.objects.filter(chapter=request.user.get_profile().chapter, members__id__contains = request.user.id )
 	dict = getPagedTopics(request, topics)
 	return render_to_response('users/index.html', dict, context_instance=RequestContext(request))
 	
@@ -194,7 +195,7 @@ def inbox(request):
 		conversations = request.user.get_profile().conversations.order_by('-pk')
 	conversations = request.user.get_profile().conversations.order_by('-pk')
 	profile = request.user.get_profile()
-	dict = getDict(request, profile.university.name, slugify(profile.organization.name))
+	dict = getDict(request, profile.university.name, slugify(profile.chapter.organization.name))
 	dict.update({'title':'inbox'})
 	dict = paginateCollection(request, dict, conversations, "conversations")
 	return render_to_response('users/inbox.html', dict, context_instance=RequestContext(request))

@@ -1,5 +1,5 @@
 from django.db import models
-from organization.models import Organization
+from organization.models import Chapter, Organization
 from unis.models import University
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
@@ -76,7 +76,7 @@ class UserProfile(models.Model):
 	full_name = models.CharField(max_length=100, blank=True)
 	nickname = models.CharField(max_length=100, blank=True)
 	profile_picture_key = models.CharField(max_length=100, blank=True, null=True)
-	organization = models.ForeignKey(Organization, null=True)
+	chapter = models.ForeignKey(Chapter, null=True)
 	university = models.ForeignKey(University, null=True)
 	about_me = models.TextField(blank=True, null=True)
 	description = models.TextField(blank=True, null=True)

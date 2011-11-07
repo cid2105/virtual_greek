@@ -24,7 +24,7 @@
 	</thead>
 	<tbody>
 
-{% for member in org.members.all %}
+{% for member in chapter.members.all %}
 		<tr >
 			<td>
 				<div style="position:relative; right: 70px; top:12px;">
@@ -35,7 +35,7 @@
 			<td>{{member.get_profile.linkedin.graduate_year}}</td>	
 			<td>
 				<select>
-				{% for role in org.status_choices %}
+				{% for role in chapter.status_choices %}
 				<option value="{{role}}" {% ifequal member.get_profile.role|stringformat:"s" role %} selected {% endifequal %}>{{role}}</option>
 				{% endfor %}
 				</select>

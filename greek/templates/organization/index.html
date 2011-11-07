@@ -23,15 +23,17 @@
 <script>
 
 	$("#example").livequery(function(){
-
+		
 		$('#example').dataTable({"bLengthChange": false});	
 		
 	});
 	
 
 		
-	$("[back], [edit_members]").livequery(function(){
+	$("[rel*='members'], [back], [edit_members]").livequery(function(){
 
+		$("[rel*='members']").fancybox({loadingImage : '{% get_static_prefix %}images/loading.gif',
+	      closeImage   : '{% get_static_prefix %}images/closelabel.png'});
 
 		var i=0;
 			$(function() {
@@ -82,7 +84,7 @@
 			centerY: 60, 
 			animationEffect: 1, //(1:off, 5:light,10:heavy, 15:subtle)
 			selectEvent: "click", 	
-			centerImageSrc: "{% get_static_prefix %}images/{{user.get_profile.organization.name|chomp}}.png",
+			centerImageSrc: "{{user.get_profile.chapter.organization.logo}}",
 			//on selecting/clicking an item on the wheel
 			onSelect: function($selected)
 			{  
@@ -318,8 +320,6 @@
 		});
 
 
-		$("[rel*='members']").fancybox({loadingImage : '{% get_static_prefix %}images/loading.gif',
-	      closeImage   : '{% get_static_prefix %}images/closelabel.png'});
 
 		//menu
 		$('#flyout').fgmenu({	content: $('#flyout').next().html(), flyOut: true });
@@ -342,7 +342,7 @@
 		  $(this).find('img').remove();
 		});
 
-		$("#center_image").attr("href", "{% get_static_prefix %}images/{{user.get_profile.organization.name|chomp}}.png");
+		$("#center_image").attr("href", "{{user.get_profile.chapter.organization.logo}}");
 		$("#center_image").attr("title", "{{org.name}}, {{uni.name}}");
          var currentImage = "";
          var interfaceLock = false; 
@@ -369,7 +369,7 @@
 		if(typeof($(antiselector)) !== 'undefined') 
 		{
 			
-			var center_src = "{% get_static_prefix %}images/{{user.get_profile.organization.name|chomp}}.png";
+			var center_src = "{{user.get_profile.chapter.organization.logo}}";
 			$(".centerImage").attr("href", center_src);
 			$(".centerImage").attr("src", center_src);
 			$(".roundrr_speech").show();
@@ -410,7 +410,7 @@
 
 $(document).ready(function()
 {
-
+	
 	  $.sticky2('<span style="text-align:center;">Is someone missing? Click <a href="{% url invite uni.name org|slug %}" rel="facebox">here</a> to invite them.</span>', {'autoclose':false, 'speed':'slow'});	
 });
 </script>
@@ -448,7 +448,7 @@ $(document).ready(function()
 	</div>
 	
 
-	<span class="button_newtopic" style="float:left; 	{% if not user.get_profile in org.exec_board %} display:none; {% endif %}" edit_members onclick="$('#organization_members').slideUp('slow').load('{% url uni_org_chapter uni org|slug %} #chapter').slideDown('slow');">Edit Members</span>
+	<span class="button_newtopic" style="float:left; 	{% if not user.get_profile in chapter.exec_board %} display:none; {% endif %}" edit_members onclick="$('#organization_members').slideUp('slow').load('{% url uni_org_chapter uni org|slug %} #chapter').slideDown('slow');">Edit Members</span>
 
 	
 	<input id="names" placeholder="Search..."/>
@@ -467,7 +467,7 @@ $(document).ready(function()
 		 </div>
 
 	  <!-- central image -->
-	<a id="center_image" rel="members" href="/{{member.get_profile.profile_picture}}" title="" > 
+	<a id="center_image" rel="members" href="{{member.get_profile.profile_picture}}" title="" > 
 	  <div class="roundrr_center" >
 
 	  </div>
@@ -486,7 +486,7 @@ $(document).ready(function()
 		<div id='roundrr_container'>
 			<ul class='list'>
 
-{% for member in org.members.all %}
+{% for member in chapter.members.all %}
 
 				<li class='item'>	
 				<div class='my_class'> 
@@ -523,18 +523,18 @@ $(document).ready(function()
 
 
 <h2 class="uiSideHeader" style="text-align:left;right:3px; "> 
-<div style="margin-left:3px;"><span style="position:relative; left:5px;">{{user.get_profile.organization.name}}</span>
+<div style="margin-left:3px;"><span style="position:relative; left:5px;">{{user.get_profile.chapter.name}}</span>
 	
 <!-- <a > -->
-{% ifequal org.president user %}	<a onclick="$('.my_class img').fadeIn(1000);"><p style="margin:0px 8px 6px 0px; float:right; font-size:12px;">See all</p></a> {% endifequal %}	</div>
+{% ifequal chapter.president user %}	<a onclick="$('.my_class img').fadeIn(1000);"><p style="margin:0px 8px 6px 0px; float:right; font-size:12px;">See all</p></a> {% endifequal %}	</div>
 </h2>
-<div class="about_organization">
+<div class="about_organization" >
 
 <a style="color:#666666;" rel="tipsy" title="Edit Executive Board" href="#edit_exec_board_facebox" edit_exec_board><b>Executive Board</b></a>
 
 <span class="spread" exec_board>
-{% for member in org.board %}
-	{{member.0}}: <a onclick="hideElement('member', '{{member.1}}');"> {{member.1}}</a><br/>
+{% for member in chapter.board %}
+	{{member.0}}:<br/> <a onclick="hideElement('member', '{{member.1}}');"> {{member.1}}</a><br/>
 {% endfor %}
 </span>
 
@@ -550,13 +550,13 @@ $(document).ready(function()
 <br/>
 <br/><hr/><p></p>
 <b edit><a title="Edit {{org.type}} Detail"  style="color:#666666;" rel="tipsy" edit_about>About</a></b><br/>
-<span class="spread">
-Chapter:<span class="normalize" attribute="chapter" {% if chapter.name %} editing="false" {% else %} editing="true" {% endif %}>{% ifequal org.president user %} {% if not chapter.name %}<input id="chapter"> {% else %} {{chapter.name}} {% endif %}</span>
+<span class="spread" style="display:none;">
+Chapter:<span class="normalize" attribute="chapter" {% if chapter.name %} editing="false" {% else %} editing="true" {% endif %}>{% ifequal chapter.president user %} {% if not chapter.name %}<input id="chapter"> {% else %} {{chapter.name}} {% endif %}</span>
 {% else %} {{chapter.name}} {% endifequal %}<br/>
-Year founded:<span class="normalize" attribute="year_founded" {% if chapter.name %} editing="false" {% else %} editing="true" {% endif %}>{% ifequal org.president user %} {% if not chapter.year_founded %}<input id="year_founded"> {% else %} {{chapter.year_founded}} {% endif %} {% else %} {{chapter.year_founded}}{% endifequal %}</span><br/>
-{{org.member_type}}{% ifnotequal org.member_type 'member' %}s{% endifnotequal %}: {{org.members.count}}<br/>
-Rushing: {{org.rushing.count}}<br/>
-Alumni: {{org.alumni.count}}<br/>
+Year founded:<span class="normalize" attribute="year_founded" {% if chapter.name %} editing="false" {% else %} editing="true" {% endif %}>{% ifequal chapter.president user %} {% if not chapter.year_founded %}<input id="year_founded"> {% else %} {{chapter.year_founded}} {% endif %} {% else %} {{chapter.year_founded}}{% endifequal %}</span><br/>
+{{org.member_type}}{% ifnotequal org.member_type 'member' %}s{% endifnotequal %}: {{chapter.members.count}}<br/>
+Rushing: {{chapter.rushing.count}}<br/>
+Alumni: {{chapter.alumni.count}}<br/>
 Description:
 <!-- {% ifequal org.president user %}<br/> 
 <textarea rel="resizeable1" id="about" class="countable"></textarea> {% else %}{% endifequal %} -->

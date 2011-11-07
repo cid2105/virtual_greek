@@ -65,9 +65,34 @@ class Album(models.Model):
 	
 	class Meta:
 		ordering = ['-date']
-	
+
 class Organization(models.Model):
- 	university = models.ForeignKey('unis.University')
+	name = models.CharField(max_length=200)
+	logo_key = models.CharField(max_length=500, blank=True, null=True)
+ 	type = models.CharField(max_length=100, choices=ORG_CHOICES)
+	nickname = models.CharField(max_length=100, blank=True, null=True)
+	
+	def _get_logo_url(self):
+	    return site_s3.get_s3_url('gg_organization_logos', self.logo_key)
+	logo = property(_get_logo_url)
+	
+	def __str__(self):
+		return self.name
+		
+	def member_type(self):
+		if self.type == "Fraternity":
+			return "Brother"
+		elif self.type == "Sorority":
+			return "Sister"
+		else:
+			return "Member"
+			
+class Chapter(models.Model):
+	name = models.CharField(max_length=200, blank=True, null=True)
+	about = models.TextField(blank=True, null=True)
+	year_founded = models.IntegerField(blank=True, null=True)
+ 	organization = models.ForeignKey(Organization)
+ 	university = models.ForeignKey('unis.University', unique=True)
 	members = models.ManyToManyField(User, related_name="organization_group_members", null=True, blank=True)
 	rushing = models.ManyToManyField(User, related_name="organization_group_rushing", null=True, blank=True)
 	alumni = models.ManyToManyField(User, related_name="organization_group_alumni", null=True, blank=True)
@@ -78,13 +103,10 @@ class Organization(models.Model):
 	rush_chair = models.ForeignKey(User, related_name="organization_rush_chair", null=True, blank=True)
 	social_chair = models.ForeignKey(User, related_name="organization_social_chair", null=True, blank=True)
 	house_manager = models.ForeignKey(User, related_name="organization_house_manager", null=True, blank=True)
-	name = models.CharField(max_length=200)
-	date = models.DateTimeField(auto_now_add=True)
- 	type = models.CharField(max_length=100, choices=ORG_CHOICES)
 	albums = models.ManyToManyField(Album, blank=True, null=True, related_name="organization_albums")
 	
 	def __unicode__(self):
-		return self.name
+		return str(self.organization) + " - " + str(self.name)
 	
 	def board(self):
 		return  [
@@ -104,22 +126,8 @@ class Organization(models.Model):
 		return [self.president.get_profile(), self.vice_president.get_profile(), self.treasurer.get_profile(), self.secretary.get_profile(), self.rush_chair.get_profile(), self.social_chair.get_profile(), self.house_manager.get_profile()]
 		
 	def status_choices(self):	
-		return ['Brother', 'Rush', 'Alumni', 'Inactive']
-		
-	def member_type(self):
-		if self.type == "Fraternity":
-			return "Brother"
-		elif self.type == "Sorority":
-			return "Sister"
-		else:
-			return "Member"
-
-class Chapter(models.Model):	
-	name = models.CharField(max_length=200, blank=True, null=True)
-	about = models.TextField(blank=True, null=True)
-	year_founded = models.IntegerField(blank=True, null=True)
-	organization = models.ForeignKey(Organization, blank=True, null=True)
-	university = models.ForeignKey(University, blank=True, null=True)
+		type = self.organization.member_type
+		return [type, 'Rush', 'Alumni', 'Inactive']
 	
 class Topic(models.Model):
 	author = models.ForeignKey(User)
@@ -127,7 +135,7 @@ class Topic(models.Model):
 	topic = models.CharField(max_length=250)
 	body = models.TextField()
 	members = models.ManyToManyField(User, related_name="privacy_group_members", null=True, blank=True)
-	organization = models.ForeignKey(Organization, null=True, blank=True)
+	chapter = models.ForeignKey(Chapter, null=True, blank=True)
 	university = models.ForeignKey(University, null=True, blank=True)
 	
 	def author_name(self):
@@ -167,7 +175,7 @@ class Reply(models.Model):
 class Announcement(models.Model):	
 	author = models.ForeignKey(User)
 	university = models.ForeignKey(University)
-	organization = models.ForeignKey(Organization)
+	chapter = models.ForeignKey(Chapter)
 	date = models.DateTimeField(auto_now_add=True)
 	content = models.TextField()
 	hash = models.CharField(max_length=100)

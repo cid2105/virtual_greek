@@ -221,7 +221,7 @@ $(document).ready(function()
 		
 		function cheese()
 		{			
-			window.location = "{% url uni_org_index uni.name org.name|slug %}";
+			window.location = "{% url uni_org_index uni.name chapter.organization.name|slug %}";
 			return true;
 		}
 		
@@ -279,10 +279,10 @@ $(document).ready(function()
 			{% block logo %}
 		<div style="">
 		<div class="logo">
-		<b onclick="cheese()">{{user.get_profile.organization.name}}<br/> {{user.get_profile.university.name}}</b>
+		<b onclick="cheese()">{{user.get_profile.chapter.organization.name}}<br/> {{user.get_profile.university.name}}</b>
 		</div><br/>
 
-		<img src="{% get_static_prefix %}images/{{user.get_profile.organization.name|chomp}}.png" width="75px;" title="{{user.get_profile.organization.name}} - {{user.get_profile.organization.university.name}}" />
+		<img src="{{user.get_profile.chapter.organization.logo}}" width="75px;" title="{{user.get_profile.chapter.name}} - {{user.get_profile.chapter.university.name}}" />
 		</div>
 		{% endblock %}
 		<div style="position:relative; bottom:35px;">
@@ -442,7 +442,7 @@ var qtip_content = '<span style="font-family:Century Gothic; font-size:11px; tex
 
 {% block content %}
 
-<div class="uiOrganizationHeader">{{user.get_profile.organization.name}}, {{user.get_profile.university.name}} </div>
+<div class="uiOrganizationHeader">{{user.get_profile.chapter.organization}}, {{user.get_profile.university.name}} </div>
 <div class="discussion-board">
 
 <div class="creation_buttons notes_button">
