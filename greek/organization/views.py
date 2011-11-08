@@ -200,7 +200,7 @@ def threads(request, uni_name, org_name):
 def new_announcement(request, uni_name, org_name):
 	if request.POST:
 		uni = request.user.get_profile().university
-		org = request.user.get_profile().organization
+		org = request.user.get_profile().chapter.organization
 		chapter = request.user.get_profile().chapter
 		hash = request.POST['hash_tag']
 		content = request.POST['content']

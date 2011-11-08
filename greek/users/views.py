@@ -161,7 +161,7 @@ def message(request, conversation_id):
 	
 def getPagedConversations(request, conversations):
 	uni = request.user.get_profile().university
-	org = request.user.get_profile().organization
+	org = request.user.get_profile().chapter.organization
 	base_url = reverse('uni_org_index', args=[uni.name, slugify(org.name)])
 	paginator = Paginator(conversations, PAGE_SIZE)
 	page = request.GET.get('page')	
